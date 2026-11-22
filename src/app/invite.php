@@ -50,13 +50,19 @@ final class Invite {
 
 	/**
 	 * Whether a site page should carry the banner: the app is on, the
-	 * setting allows it, the visitor is signed in (the app requires it) and
-	 * the request is not one of the app's own.
+	 * setting allows it, the request is not one of the app's own, and the
+	 * visitor is signed in or the setting also invites visitors who are not.
+	 * Those go to the login and then into the app.
+	 *
+	 * The markup is the same for every visitor who is not signed in and holds
+	 * no personal data, so a page cache that stores it serves nobody anything
+	 * they should not see.
 	 */
 	public static function bannerWanted(): bool {
+		$settings = Settings::get();
 		return Settings::enabled()
-			&& Settings::get()['site_banner']
-			&& is_user_logged_in()
+			&& $settings['site_banner']
+			&& ( is_user_logged_in() || $settings['site_banner_guests'] )
 			&& ! is_admin()
 			&& '' === Routes::current();
 	}

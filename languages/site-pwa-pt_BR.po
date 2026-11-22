@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-22 23:31+0000\n"
+"POT-Creation-Date: 2026-11-22 23:37+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -92,45 +92,49 @@ msgstr "Convite para o app"
 msgid "Show a \"Use the app\" banner on the site's pages"
 msgstr "Mostrar a faixa \"Use o app\" nas páginas do site"
 
-#: src/admin/settings-page.php:174
-msgid "Only on phones and tablets, only to signed-in visitors, and never inside the installed app. A visitor who closes it does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
-msgstr "Só em celulares e tablets, só para visitantes conectados, e nunca dentro do app instalado. Quem fecha a faixa não a vê de novo naquele aparelho por 30 dias. A tela inicial do app convida para instalá-lo da mesma forma."
-
 #: src/admin/settings-page.php:178
+msgid "Also show it to visitors who are not signed in"
+msgstr "Mostrar também para visitantes não conectados"
+
+#: src/admin/settings-page.php:180
+msgid "Only on phones and tablets, and never inside the installed app. A visitor who is not signed in goes to the login first, then into the app. A visitor who closes the banner does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
+msgstr "Só em celulares e tablets, e nunca dentro do app instalado. Um visitante não conectado passa primeiro pelo login e depois entra no app. Quem fecha a faixa não a vê de novo naquele aparelho por 30 dias. A tela inicial do app convida para instalá-lo da mesma forma."
+
+#: src/admin/settings-page.php:184
 msgid "Look"
 msgstr "Aparência"
 
-#: src/admin/settings-page.php:181
+#: src/admin/settings-page.php:187
 msgid "These settings"
 msgstr "Estas configurações"
 
-#: src/admin/settings-page.php:186
+#: src/admin/settings-page.php:192
 msgid "Where the app takes its accent colour and its corners from. While the chosen design is switched off, or its plugin is inactive, the app uses the theme colour below."
 msgstr "De onde o app tira a cor de destaque e os cantos. Enquanto o design escolhido estiver desligado, ou o plugin dele estiver inativo, o app usa a cor do tema abaixo."
 
 #. translators: 1: a colour such as #1d5e8c, 2: corner radius of cards in px, 3: corner radius of buttons in px
-#: src/admin/settings-page.php:193
+#: src/admin/settings-page.php:199
 #, php-format
 msgid "In use now: accent %1$s, cards %2$d px, buttons %3$d px."
 msgstr "Em uso agora: destaque %1$s, cartões %2$d px, botões %3$d px."
 
-#: src/admin/settings-page.php:204
+#: src/admin/settings-page.php:210
 msgid "Theme colour"
 msgstr "Cor do tema"
 
-#: src/admin/settings-page.php:208
+#: src/admin/settings-page.php:214
 msgid "Background colour"
 msgstr "Cor de fundo"
 
-#: src/admin/settings-page.php:211
+#: src/admin/settings-page.php:217
 msgid "Shown while the app opens."
 msgstr "Aparece enquanto o app abre."
 
-#: src/admin/settings-page.php:215
+#: src/admin/settings-page.php:221
 msgid "Icon"
 msgstr "Ícone"
 
-#: src/admin/settings-page.php:216
+#: src/admin/settings-page.php:222
 msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
 msgstr "O app usa o ícone do site, de Configurações → Geral; sem ele, usa o ícone do plugin."
 
@@ -156,7 +160,7 @@ msgstr "Início"
 msgid "Free Form Certificate: Public Design"
 msgstr "Free Form Certificate: Design Público"
 
-#: src/update/github-updater.php:335
+#: src/update/github-updater.php:338
 msgid "Update package integrity check (SHA-256) failed. Installation aborted."
 msgstr "A verificação de integridade do pacote de atualização (SHA-256) falhou. Instalação cancelada."
 
@@ -277,6 +281,9 @@ msgstr "Use o app"
 #. Plugin header: Description
 msgid "Turns the site into an installable app: a home-screen icon, an app shell for signed-in users and screens other plugins register."
 msgstr "Transforma o site em um app instalável: um ícone na tela inicial, uma estrutura de app para quem está conectado e telas que outros plugins registram."
+
+#~ msgid "Only on phones and tablets, only to signed-in visitors, and never inside the installed app. A visitor who closes it does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
+#~ msgstr "Só em celulares e tablets, só para visitantes conectados, e nunca dentro do app instalado. Quem fecha a faixa não a vê de novo naquele aparelho por 30 dias. A tela inicial do app convida para instalá-lo da mesma forma."
 
 #, php-format
 #~ msgid "Signed in as %s."
