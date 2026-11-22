@@ -15,7 +15,7 @@ namespace SitePwa;
  * The app is off until an administrator turns it on: a site that installs the
  * plugin gets no manifest and no service worker by surprise.
  *
- * @phpstan-type SettingsShape array{enabled: bool, name: string, short_name: string, theme_color: string, background_color: string}
+ * @phpstan-type SettingsShape array{enabled: bool, replace_confirmed: bool, name: string, short_name: string, theme_color: string, background_color: string}
  */
 final class Settings {
 
@@ -38,11 +38,12 @@ final class Settings {
 	public static function defaults(): array {
 		$name = wp_strip_all_tags( (string) get_bloginfo( 'name' ) );
 		return array(
-			'enabled'          => false,
-			'name'             => $name,
-			'short_name'       => self::shorten( $name ),
-			'theme_color'      => '#1d5e8c',
-			'background_color' => '#ffffff',
+			'enabled'           => false,
+			'replace_confirmed' => false,
+			'name'              => $name,
+			'short_name'        => self::shorten( $name ),
+			'theme_color'       => '#1d5e8c',
+			'background_color'  => '#ffffff',
 		);
 	}
 
@@ -57,10 +58,12 @@ final class Settings {
 	}
 
 	/**
-	 * Whether the app is on.
+	 * Whether the app is on: turned on, and either no known plugin competes
+	 * for the root service worker or the administrator confirmed replacing it.
 	 */
 	public static function enabled(): bool {
-		return self::get()['enabled'];
+		$settings = self::get();
+		return $settings['enabled'] && ( $settings['replace_confirmed'] || array() === App\Conflicts::active() );
 	}
 
 	/**
@@ -80,11 +83,12 @@ final class Settings {
 		$short_name = '' === $short_name ? self::shorten( $name ) : self::shorten( $short_name );
 
 		return array(
-			'enabled'          => ! empty( $input['enabled'] ),
-			'name'             => $name,
-			'short_name'       => $short_name,
-			'theme_color'      => self::color( $input['theme_color'] ?? '', $defaults['theme_color'] ),
-			'background_color' => self::color( $input['background_color'] ?? '', $defaults['background_color'] ),
+			'enabled'           => ! empty( $input['enabled'] ),
+			'replace_confirmed' => ! empty( $input['replace_confirmed'] ),
+			'name'              => $name,
+			'short_name'        => $short_name,
+			'theme_color'       => self::color( $input['theme_color'] ?? '', $defaults['theme_color'] ),
+			'background_color'  => self::color( $input['background_color'] ?? '', $defaults['background_color'] ),
 		);
 	}
 

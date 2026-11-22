@@ -46,7 +46,9 @@ final class ServiceWorker {
 	 * The worker that serves the app.
 	 */
 	public static function script(): string {
-		return 'self.SITE_PWA_CONFIG = ' . wp_json_encode( self::config(), JSON_UNESCAPED_SLASHES ) . ";\n" . self::file( 'assets/js/sw.js' );
+		$imports = Conflicts::imports();
+		$prefix  = array() === $imports ? '' : 'importScripts(' . implode( ', ', array_map( static fn( string $url ): string => (string) wp_json_encode( $url, JSON_UNESCAPED_SLASHES ), $imports ) ) . ");\n";
+		return $prefix . 'self.SITE_PWA_CONFIG = ' . wp_json_encode( self::config(), JSON_UNESCAPED_SLASHES ) . ";\n" . self::file( 'assets/js/sw.js' );
 	}
 
 	/**
