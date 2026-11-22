@@ -104,6 +104,16 @@ The same standard as Free Form Certificate (its `CLAUDE.md` → "Issues, pull re
 
 The zip ships no Composer or npm dependency. The autoloader is inline in the main plugin file. Anything new at the repository root that should not ship goes into `.distignore`.
 
+## Deploy to testes
+
+Every push to `develop` goes to the testes site: `.github/workflows/deploy-develop.yml` rsyncs the working tree over SSH with `--delete`, leaving out what `.distignore` leaves out of the release zip, so testes runs what a release ships. It can also be run by hand (Actions → Deploy develop to testes → Run workflow).
+
+- **Secrets, set in this repository** (GitHub secrets are per repository, so Free Form Certificate's do not reach here): `TESTES_SSH_HOST` (host name only), `TESTES_SSH_USER`, `TESTES_SSH_KEY` (a private key with no passphrase), `TESTES_SSH_PORT` (optional, default 22) and `TESTES_REMOTE_PATH`. The same key FFC deploys with works, if its public half is on the host.
+- **The path is checked before anything is sent.** It must be absolute and end in `/wp-content/plugins/site-pwa`, because `--delete` empties whatever directory it is pointed at. Telling testes from production on one hosting account stays the secret's job.
+- **After the rsync, `.github/scripts/testes-smoke.php` runs on the host** from a scratch directory and is removed. It boots WordPress and fails the job when the plugin is not active, when its live `SITE_PWA_VERSION` differs from the commit's, or when the worker's rewrite rule is missing. It also fails when the boot ends before the verdict, because `wp_die()` on an unreachable database exits 0. It reports whether the app is switched on without judging it, since that is a setting. A timeout (no answer in 120 s) is a warning, not a failure: the rsync already succeeded. A host whose PHP CLI is below the plugin's floor skips with an explanation.
+- **The first deploy fails the smoke on purpose until the plugin is activated once** on the testes site; that is the check doing its job, not a broken deploy.
+- **A merge reaches the browser without a version bump:** `Plugin::assetVersion()` adds each file's time to `?ver=`. `SCRIPT_DEBUG` on testes only swaps the minified assets for the readable ones.
+
 ## Quality gates
 
 These run in CI on every PR and on pushes to `main` and `develop`:
