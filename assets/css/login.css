@@ -1,0 +1,55 @@
+/**
+ * The WordPress login inside the installed app. Every rule sits under
+ * `display-mode: standalone`, so the login in a browser tab is untouched;
+ * the form and what other plugins add to it are only restyled, never
+ * replaced. `--site-pwa-logo` and `--site-pwa-accent` come from the
+ * plugin's settings.
+ */
+
+@media (display-mode: standalone) {
+	body.login {
+		background: #f4f6f8;
+		font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+	}
+
+	.login #login {
+		width: min(360px, calc(100% - 32px));
+		padding-top: calc(48px + env(safe-area-inset-top));
+	}
+
+	.login h1 a {
+		width: 72px;
+		height: 72px;
+		border-radius: 16px;
+		background-image: var(--site-pwa-logo);
+		background-size: cover;
+	}
+
+	.login form {
+		border: 0;
+		border-radius: 12px;
+		box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+	}
+
+	.login form .input,
+	.login input[type="text"],
+	.login input[type="password"] {
+		min-height: 44px;
+		border-radius: 8px;
+		font-size: 16px;
+	}
+
+	.login .button-primary {
+		min-height: 44px;
+		padding: 0 20px;
+		border: 0;
+		border-radius: 8px;
+		background: var(--site-pwa-accent);
+		font-size: 16px;
+	}
+
+	/* A browser tab to the public site has no place in the installed app. */
+	.login #backtoblog {
+		display: none;
+	}
+}

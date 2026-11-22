@@ -36,7 +36,7 @@ final class Routes {
 	 * Bumped whenever the rules change, so an install that updated without
 	 * an activation still gets them: a GitHub update runs no activation hook.
 	 */
-	public const REVISION = 1;
+	public const REVISION = 2;
 
 	/**
 	 * Option holding the rules revision last flushed. Deleted by uninstall.php.
@@ -46,7 +46,12 @@ final class Routes {
 	/**
 	 * The routes and the path each one answers under the prefix.
 	 */
-	public const ROUTES = array( 'home', 'offline', 'manifest' );
+	public const ROUTES = array( 'home', 'account', 'offline', 'manifest' );
+
+	/**
+	 * The routes drawn inside the app frame; they need a signed-in user.
+	 */
+	public const SCREENS = array( 'home', 'account' );
 
 	/**
 	 * Wire the rules and the handler.
@@ -81,6 +86,7 @@ final class Routes {
 		add_rewrite_rule( '^' . preg_quote( self::SW_FILE, '/' ) . '$', 'index.php?' . self::QUERY_VAR . '=sw', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/manifest\.webmanifest$', 'index.php?' . self::QUERY_VAR . '=manifest', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/offline/?$', 'index.php?' . self::QUERY_VAR . '=offline', 'top' );
+		add_rewrite_rule( '^' . $prefix . '/account/?$', 'index.php?' . self::QUERY_VAR . '=account', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/?$', 'index.php?' . self::QUERY_VAR . '=home', 'top' );
 	}
 
@@ -110,7 +116,7 @@ final class Routes {
 	/**
 	 * The URL of a route.
 	 *
-	 * @param string $route `home`, `offline`, `manifest` or `sw`.
+	 * @param string $route `home`, `account`, `offline`, `manifest` or `sw`.
 	 */
 	public static function url( string $route ): string {
 		if ( 'sw' === $route ) {
@@ -118,6 +124,7 @@ final class Routes {
 		}
 		$path = array(
 			'home'     => '/',
+			'account'  => '/account/',
 			'offline'  => '/offline/',
 			'manifest' => '/manifest.webmanifest',
 		);
@@ -169,23 +176,40 @@ final class Routes {
 			);
 		}
 
-		// No page of the app may sit in a shared cache: the home page names the
+		// No page of the app may sit in a shared cache: a screen names the
 		// signed-in user, and the offline page is the worker's to keep.
+		$headers = array(
+			'Content-Type'  => 'text/html; charset=utf-8',
+			'Cache-Control' => 'private, no-store',
+		);
+
+		if ( in_array( $route, self::SCREENS, true ) && ! is_user_logged_in() ) {
+			return array(
+				'status'  => 302,
+				'headers' => $headers + array( 'Location' => wp_login_url( self::url( $route ) ) ),
+				'body'    => '',
+			);
+		}
+
 		return array(
 			'status'  => 200,
-			'headers' => array(
-				'Content-Type'  => 'text/html; charset=utf-8',
-				'Cache-Control' => 'private, no-store',
-			),
-			'body'    => Pages::render( $route ),
+			'headers' => $headers,
+			'body'    => in_array( $route, self::SCREENS, true ) ? Frame::render( $route ) : Pages::render(),
 		);
+	}
+
+	/**
+	 * The app route of the current request, or '' outside the app.
+	 */
+	public static function current(): string {
+		return (string) get_query_var( self::QUERY_VAR );
 	}
 
 	/**
 	 * Answer an app route and stop, or mark the request as not found.
 	 */
 	public static function dispatch(): void {
-		$route = (string) get_query_var( self::QUERY_VAR );
+		$route = self::current();
 		if ( '' === $route ) {
 			return;
 		}

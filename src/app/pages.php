@@ -15,9 +15,8 @@ use SitePwa\Settings;
 /**
  * Renders the app's pages from `templates/`.
  *
- * The home page is a placeholder until the app frame (rpgmem/site-pwa#3)
- * replaces it. The offline page carries no user data and no nonce, because
- * the service worker keeps a copy of it.
+ * The offline page: its own small document, with no user data and no nonce,
+ * because the service worker keeps a copy of it. Screens are drawn by Frame.
  */
 final class Pages {
 
@@ -36,14 +35,11 @@ final class Pages {
 	}
 
 	/**
-	 * Render a page.
-	 *
-	 * @param string $route `home` or `offline`.
+	 * Render the offline page.
 	 */
-	public static function render( string $route ): string {
-		$template = 'offline' === $route ? 'offline' : 'app-home';
+	public static function render(): string {
+		$template = 'offline';
 		$settings = Settings::get();
-		$user     = 'home' === $route ? wp_get_current_user() : null;
 
 		$vars = array(
 			'lang'        => (string) get_bloginfo( 'language' ),
@@ -56,9 +52,6 @@ final class Pages {
 			'sw'          => Routes::url( 'sw' ),
 			'scope'       => Routes::scope(),
 			'home'        => Routes::url( 'home' ),
-			'user_name'   => ( null !== $user && $user->exists() ) ? $user->display_name : '',
-			'login_url'   => wp_login_url( Routes::url( 'home' ) ),
-			'logout_url'  => 'home' === $route ? wp_logout_url( Routes::url( 'home' ) ) : '',
 		);
 
 		ob_start();

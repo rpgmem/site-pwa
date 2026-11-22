@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-22 22:05+0000\n"
+"POT-Creation-Date: 2026-11-22 22:16+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -47,7 +47,7 @@ msgstr "Ligar o app o substitui. Confirme a substituição abaixo para continuar
 msgid "The app is on at"
 msgstr "O app está ligado em"
 
-#: src/admin/settings-page.php:135
+#: src/admin/settings-page.php:135 templates/frame.php:35
 msgid "App"
 msgstr "App"
 
@@ -71,7 +71,7 @@ msgstr "Substituir o service worker de outro plugin"
 msgid "Only needed when another plugin registers a worker at the site root. A push service that wants to keep working can load its script through the site_pwa_sw_imports filter instead."
 msgstr "Só é necessário quando outro plugin registra um worker na raiz do site. Um serviço de push que precise continuar funcionando pode, em vez disso, carregar o próprio script pelo filtro site_pwa_sw_imports."
 
-#: src/admin/settings-page.php:155
+#: src/admin/settings-page.php:155 templates/screen-account.php:20
 msgid "Name"
 msgstr "Nome"
 
@@ -103,27 +103,21 @@ msgstr "Ícone"
 msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
 msgstr "O app usa o ícone do site, de Configurações → Geral; sem ele, usa o ícone do plugin."
 
-#: src/update/github-updater.php:326
+#: src/app/navigation.php:33
+msgid "Home"
+msgstr "Início"
+
+#: src/app/navigation.php:39 templates/screen-account.php:16
+msgid "Account"
+msgstr "Conta"
+
+#: src/update/github-updater.php:331
 msgid "Update package integrity check (SHA-256) failed. Installation aborted."
 msgstr "A verificação de integridade do pacote de atualização (SHA-256) falhou. Instalação cancelada."
 
-#. translators: %s: the signed-in user's display name
-#: templates/app-home.php:27
-#, php-format
-msgid "Signed in as %s."
-msgstr "Conectado como %s."
-
-#: templates/app-home.php:30
-msgid "Sign out"
-msgstr "Sair"
-
-#: templates/app-home.php:32
-msgid "Sign in to use the app."
-msgstr "Entre para usar o app."
-
-#: templates/app-home.php:33
-msgid "Sign in"
-msgstr "Entrar"
+#: templates/frame.php:25
+msgid "Skip to content"
+msgstr "Pular para o conteúdo"
 
 #: templates/offline.php:20 templates/offline.php:24
 msgid "No connection"
@@ -137,6 +131,46 @@ msgstr "Esta página precisa de internet. Confira a conexão e tente de novo."
 msgid "Try again"
 msgstr "Tentar de novo"
 
+#: templates/screen-account.php:18
+msgid "Signed in as"
+msgstr "Conectado como"
+
+#: templates/screen-account.php:22
+msgid "Email"
+msgstr "E-mail"
+
+#: templates/screen-account.php:26
+msgid "Edit profile"
+msgstr "Editar perfil"
+
+#: templates/screen-account.php:27
+msgid "Sign out"
+msgstr "Sair"
+
+#. translators: %s: the signed-in user's first name
+#: templates/screen-home.php:17
+#, php-format
+msgid "Hello, %s"
+msgstr "Olá, %s"
+
+#: templates/screen-home.php:21
+msgid "Your screens"
+msgstr "Suas telas"
+
+#: templates/screen-home.php:22
+msgid "Nothing here yet. The screens other plugins add to the app appear here."
+msgstr "Nada aqui ainda. As telas que outros plugins acrescentam ao app aparecem aqui."
+
 #. Plugin header: Description
 msgid "Turns the site into an installable app: a home-screen icon, an app shell for signed-in users and screens other plugins register."
 msgstr "Transforma o site em um app instalável: um ícone na tela inicial, uma estrutura de app para quem está conectado e telas que outros plugins registram."
+
+#, php-format
+#~ msgid "Signed in as %s."
+#~ msgstr "Conectado como %s."
+
+#~ msgid "Sign in to use the app."
+#~ msgstr "Entre para usar o app."
+
+#~ msgid "Sign in"
+#~ msgstr "Entrar"
