@@ -6,7 +6,7 @@ Transforma o site em um app instalável: um ícone na tela inicial, uma estrutur
 
 O Site PWA torna um site WordPress instalável no celular ou no computador, como um app com ícone e janela próprios. Quem está conectado abre a estrutura do app, e outros plugins acrescentam suas telas a ela por um contrato de registro.
 
-Configurações → Site PWA liga o app; até lá ele fica desligado. O app é para usuários conectados: abre na sua própria estrutura, independente do tema, com a tela inicial e a conta, e o login do WordPress ganha a aparência do app dentro do app instalado. O app fica em `/app/` (alterável pelo filtro `site_pwa_app_prefix`), com o ícone do site de Configurações → Geral, ou o do plugin, na tela inicial. Sem conexão, o app mostra uma página offline. As telas do app chegam nas versões seguintes.
+Configurações → Site PWA liga o app; até lá ele fica desligado. O app é para usuários conectados: abre na sua própria estrutura, independente do tema, com a tela inicial e a conta, e o login do WordPress ganha a aparência do app dentro do app instalado. Um post ou página abre dentro do app em `/app/?p=ID`; Compartilhar e Copiar link entregam o endereço normal no site, e uma página feita com construtor de páginas ou modelo de página abre no site. O app fica em `/app/` (alterável pelo filtro `site_pwa_app_prefix`), com o ícone do site de Configurações → Geral, ou o do plugin, na tela inicial. Sem conexão, o app mostra uma página offline. As telas do app chegam nas versões seguintes.
 
 == Installation ==
 
@@ -19,6 +19,7 @@ Configurações → Site PWA liga o app; até lá ele fica desligado. O app é p
 2. A tela da conta: quem está conectado, editar perfil, sair.
 3. O login do WordPress dentro do app instalado.
 4. A tela da conta no tema escuro.
+5. Um post aberto dentro do app, com Copiar link e Abrir no site.
 
 == Outros service workers ==
 

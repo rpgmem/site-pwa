@@ -33,6 +33,11 @@ final class Frame {
 	public const REGISTER_HANDLE = 'site-pwa-register';
 
 	/**
+	 * Handle of the Share / Copy link script on a post.
+	 */
+	public const SHARE_HANDLE = 'site-pwa-share';
+
+	/**
 	 * Wire the hooks that only act on an app screen.
 	 */
 	public static function register(): void {
@@ -58,11 +63,13 @@ final class Frame {
 	/**
 	 * Render a screen in the frame.
 	 *
-	 * @param string $route A screen route.
+	 * @param string $route A screen route, or `missing` for a post the app
+	 *                      cannot show.
 	 */
 	public static function render( string $route ): string {
 		$settings = Settings::get();
 		$user     = wp_get_current_user();
+		$post     = 'post' === $route ? Content::current() : null;
 
 		$screen = self::template(
 			'screen-' . $route,
@@ -71,6 +78,9 @@ final class Frame {
 				'first_name'  => '' !== (string) $user->first_name ? (string) $user->first_name : (string) $user->display_name,
 				'profile_url' => get_edit_profile_url( $user->ID ),
 				'logout_url'  => wp_logout_url( Routes::url( 'home' ) ),
+				'home'        => Routes::url( 'home' ),
+				'permalink'   => null === $post ? '' : (string) get_permalink( $post ),
+				'post_title'  => null === $post ? '' : wp_strip_all_tags( get_the_title( $post ) ),
 			)
 		);
 
@@ -131,14 +141,34 @@ final class Frame {
 				'strategy'  => 'defer',
 			)
 		);
+		if ( 'post' === Routes::current() ) {
+			$share = Plugin::asset( 'assets/js/share.js' );
+			wp_enqueue_script(
+				self::SHARE_HANDLE,
+				Plugin::url() . $share,
+				array(),
+				Plugin::assetVersion( $share ),
+				array(
+					'in_footer' => true,
+					'strategy'  => 'defer',
+				)
+			);
+		}
 	}
 
 	/**
-	 * The manifest, the theme colour and the home-screen icon.
+	 * The title, the manifest, the theme colour and the home-screen icon.
+	 *
+	 * WordPress prints the title only for a theme that declares `title-tag`,
+	 * and a block theme declares it only while it renders its own template,
+	 * which the frame never does: without this line the app has no title.
 	 */
 	public static function head(): void {
 		if ( ! self::active() ) {
 			return;
+		}
+		if ( ! current_theme_supports( 'title-tag' ) ) {
+			printf( '<title>%s</title>' . "\n", esc_html( wp_get_document_title() ) );
 		}
 		printf( '<link rel="manifest" href="%s">' . "\n", esc_url( Routes::url( 'manifest' ) ) );
 		printf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( Settings::get()['theme_color'] ) );
@@ -190,7 +220,12 @@ final class Frame {
 		if ( ! self::active() ) {
 			return $title;
 		}
-		return Navigation::label( Routes::current() ) . ' – ' . Settings::get()['name'];
+		$label = Navigation::label( Routes::current() );
+		if ( 'post' === Routes::current() ) {
+			$post  = Content::current();
+			$label = null === $post ? __( 'Not available', 'site-pwa' ) : wp_strip_all_tags( get_the_title( $post ) );
+		}
+		return $label . ' – ' . Settings::get()['name'];
 	}
 
 	/**

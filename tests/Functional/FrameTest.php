@@ -89,6 +89,18 @@ final class FrameTest extends WP_UnitTestCase {
 		self::assertStringContainsString( 'site-pwa-app-css', $html );
 	}
 
+	public function test_the_frame_prints_its_own_title_once_whatever_the_theme_declares(): void {
+		remove_theme_support( 'title-tag' );
+		$html = $this->screen( 'account' );
+		self::assertSame( 1, substr_count( $html, '<title>' ) );
+		self::assertStringContainsString( '<title>Account – Escola Viva</title>', $html );
+
+		// Set directly: add_theme_support() refuses `title-tag` after wp_loaded.
+		$GLOBALS['_wp_theme_features']['title-tag'] = true;
+		self::assertSame( 1, substr_count( $this->screen( 'account' ), '<title>' ) );
+		unset( $GLOBALS['_wp_theme_features']['title-tag'] );
+	}
+
 	public function test_the_themes_assets_are_taken_out_and_other_plugins_stay(): void {
 		set_query_var( Routes::QUERY_VAR, 'home' );
 		wp_enqueue_style( 'theme-style', get_stylesheet_directory_uri() . '/style.css', array(), '1' );
