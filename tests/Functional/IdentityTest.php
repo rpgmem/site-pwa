@@ -160,7 +160,7 @@ final class IdentityTest extends WP_UnitTestCase {
 		set_query_var( Routes::QUERY_VAR, '' );
 
 		self::assertStringContainsString( '<meta name="theme-color" content="#b32d2e">', $html );
-		self::assertMatchesRegularExpression( '#site-pwa-app-css[^>]*>\s*<style id=["\']site-pwa-app-inline-css["\']>\s*' . preg_quote( Identity::css(), '#' ) . '#', $html );
+		self::assertMatchesRegularExpression( '#site-pwa-app-css[^>]*>\s*<style id=["\']site-pwa-app-inline-css["\'][^>]*>\s*' . preg_quote( Identity::css(), '#' ) . '#', $html );
 	}
 
 	public function test_changing_the_look_renews_the_workers_cache_so_the_offline_page_follows(): void {
