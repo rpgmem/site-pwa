@@ -7,13 +7,30 @@ namespace SitePwa\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Everything the plugin stores is deleted on uninstall: today that is the
- * update cache alone, and the scan fails when the code starts writing an
- * option nobody listed here.
+ * Everything the plugin stores is deleted on uninstall. The scan reads the
+ * option names the code passes to update_option()/add_option(), and fails on
+ * one this test does not know or uninstall.php does not delete.
  *
  * @coversNothing
  */
 final class UninstallTest extends TestCase {
+
+	/**
+	 * The option each write expression names. The settings option is written
+	 * by options.php through register_setting(), which the scan cannot see,
+	 * so it is listed here directly.
+	 */
+	private const KNOWN = array(
+		'Settings::OPTION'        => \SitePwa\Settings::OPTION,
+		'self::REVISION_OPTION'   => \SitePwa\App\Routes::REVISION_OPTION,
+	);
+
+	public function test_every_known_option_is_deleted(): void {
+		$uninstall = (string) file_get_contents( __DIR__ . '/../../uninstall.php' );
+		foreach ( self::KNOWN as $option ) {
+			self::assertStringContainsString( "delete_option( '{$option}' )", $uninstall, "uninstall.php does not delete {$option}." );
+		}
+	}
 
 	public function test_the_update_cache_is_deleted(): void {
 		$uninstall = (string) file_get_contents( __DIR__ . '/../../uninstall.php' );
@@ -28,9 +45,7 @@ final class UninstallTest extends TestCase {
 			$code = (string) file_get_contents( $file->getPathname() );
 			preg_match_all( '/\b(?:update_option|add_option)\s*\(\s*([^,)]+)/', $code, $writes );
 			foreach ( $writes[1] as $option ) {
-				// The plugin writes no option yet; the first one joins a list here
-				// and a delete_option() in uninstall.php in the same change.
-				self::fail( $file->getPathname() . " writes {$option}; list it here and in uninstall.php." );
+				self::assertArrayHasKey( trim( $option ), self::KNOWN, $file->getPathname() . " writes {$option}; list it here and in uninstall.php." );
 			}
 		}
 		self::assertGreaterThan( 0, $found );

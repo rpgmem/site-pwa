@@ -40,9 +40,11 @@ final class TranslationCoverageTest extends TestCase {
 	 */
 	private function sourceStrings(): array {
 		$files = array( self::ROOT . '/site-pwa.php' );
-		$it    = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( self::ROOT . '/src', \FilesystemIterator::SKIP_DOTS ) );
-		foreach ( $it as $file ) {
-			$files[] = $file->getPathname();
+		foreach ( array( '/src', '/templates' ) as $dir ) {
+			$it = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( self::ROOT . $dir, \FilesystemIterator::SKIP_DOTS ) );
+			foreach ( $it as $file ) {
+				$files[] = $file->getPathname();
+			}
 		}
 		$strings = array();
 		foreach ( $files as $file ) {

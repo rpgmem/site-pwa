@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-22 21:11+0000\n"
+"POT-Creation-Date: 2026-11-22 21:57+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -16,9 +16,92 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Domain: site-pwa\n"
 
+#: src/admin/settings-page.php:41 src/admin/settings-page.php:42
+#: src/admin/settings-page.php:75
+msgid "Site PWA"
+msgstr "Site PWA"
+
+#: src/admin/settings-page.php:79
+msgid "The app is on at"
+msgstr "O app está ligado em"
+
+#: src/admin/settings-page.php:88
+msgid "App"
+msgstr "App"
+
+#: src/admin/settings-page.php:92
+msgid "Turn the installable app on"
+msgstr "Ligar o app instalável"
+
+#: src/admin/settings-page.php:94
+msgid "While it is off, the site serves no manifest, and a browser that installed the app removes its service worker on its next visit."
+msgstr "Enquanto estiver desligado, o site não oferece o manifest, e um navegador que instalou o app remove o service worker na próxima visita."
+
+#: src/admin/settings-page.php:98
+msgid "Name"
+msgstr "Nome"
+
+#: src/admin/settings-page.php:102
+msgid "Short name"
+msgstr "Nome curto"
+
+#: src/admin/settings-page.php:105
+msgid "Shown under the icon on a home screen."
+msgstr "Aparece sob o ícone na tela inicial."
+
+#: src/admin/settings-page.php:109
+msgid "Theme colour"
+msgstr "Cor do tema"
+
+#: src/admin/settings-page.php:113
+msgid "Background colour"
+msgstr "Cor de fundo"
+
+#: src/admin/settings-page.php:116
+msgid "Shown while the app opens."
+msgstr "Aparece enquanto o app abre."
+
+#: src/admin/settings-page.php:120
+msgid "Icon"
+msgstr "Ícone"
+
+#: src/admin/settings-page.php:121
+msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
+msgstr "O app usa o ícone do site, de Configurações → Geral; sem ele, usa o ícone do plugin."
+
 #: src/update/github-updater.php:326
 msgid "Update package integrity check (SHA-256) failed. Installation aborted."
 msgstr "A verificação de integridade do pacote de atualização (SHA-256) falhou. Instalação cancelada."
+
+#. translators: %s: the signed-in user's display name
+#: templates/app-home.php:27
+#, php-format
+msgid "Signed in as %s."
+msgstr "Conectado como %s."
+
+#: templates/app-home.php:30
+msgid "Sign out"
+msgstr "Sair"
+
+#: templates/app-home.php:32
+msgid "Sign in to use the app."
+msgstr "Entre para usar o app."
+
+#: templates/app-home.php:33
+msgid "Sign in"
+msgstr "Entrar"
+
+#: templates/offline.php:20 templates/offline.php:24
+msgid "No connection"
+msgstr "Sem conexão"
+
+#: templates/offline.php:25
+msgid "This page needs the internet. Check the connection and try again."
+msgstr "Esta página precisa de internet. Confira a conexão e tente de novo."
+
+#: templates/offline.php:26
+msgid "Try again"
+msgstr "Tentar de novo"
 
 #. Plugin header: Description
 msgid "Turns the site into an installable app: a home-screen icon, an app shell for signed-in users and screens other plugins register."

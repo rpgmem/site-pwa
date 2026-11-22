@@ -25,7 +25,7 @@ xgettext --language=PHP --from-code=UTF-8 --sort-by-file --no-wrap \
 	--add-comments=translators: \
 	--package-name="Site PWA" --package-version="$version" \
 	--msgid-bugs-address="https://github.com/rpgmem/site-pwa/issues" \
-	-o "$pot" site-pwa.php $(find src -name "*.php" | sort)
+	-o "$pot" site-pwa.php $(find src templates -name "*.php" | sort)
 
 # xgettext leaves the charset as a placeholder; the sources are UTF-8.
 sed -i 's/charset=CHARSET/charset=UTF-8/' "$pot"

@@ -13,4 +13,6 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
+delete_option( 'site_pwa_settings' );
+delete_option( 'site_pwa_rewrite_revision' );
 delete_site_transient( 'site_pwa_github_update' );

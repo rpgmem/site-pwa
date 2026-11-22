@@ -169,4 +169,12 @@ npm run build   # after editing assets/css or assets/js
 - **CSS lives in `assets/css` and JS in `assets/js`, never inline**, each minified by `npm run build` and enqueued as the `.min` build unless `SCRIPT_DEBUG` is on.
 - Escape on output; check a nonce and a capability on every request entry point; sanitize every setting on save.
 - **Every option the plugin writes is deleted in `uninstall.php`**, in the same change that adds it; `UninstallTest` fails on an option it was not told about.
-- **No personal data in a cache.** The service worker the app will register caches the app's own assets only, never a page or a response that carries a user's data; this is a decision of the umbrella issue, not an optimisation to revisit.
+- **No personal data in a cache.** The service worker caches the offline page and the app's stylesheet, and nothing else: an app page goes network-first and is never stored, because it may carry a user's data or a nonce. The offline page is built with no user data and no nonce for that reason, and `AppRoutesTest` pins it. This is a decision of the umbrella issue, not an optimisation to revisit.
+
+## The app's routes and the service worker
+
+- **Routes.** Every app page lives under one prefix, `/app/` unless `site_pwa_app_prefix` says otherwise; the worker script is `/site-pwa-sw.js` at the site root, because a worker reaches only the paths at and below its own file. `App\Routes` owns the rewrite rules. Bump `Routes::REVISION` when they change: an install updated from GitHub runs no activation hook, and the revision is what flushes them.
+- **What the worker touches** is decided by `route()` in `assets/js/sw.js`, a pure function the Vitest suite drives: a navigation under the app path is answered network-first with the offline page as fallback; a precached file comes from the cache; everything else, posts, `wp-admin`, `wp-login`, the REST API and `admin-ajax` included, is not answered at all. A new kind of request the worker should handle starts with a case there.
+- **Off means cleaned up, not abandoned.** While the app is off the worker URL keeps answering, with `assets/js/sw-retire.js`, which deletes the app's caches and unregisters itself. A 404 there would leave every installed copy running the last worker it saw.
+- **The login URL is always `wp_login_url()`**; `LoginUrlTest` refuses `wp-login.php` in the PHP and the templates, because a site that moves its login page filters that function.
+- **App pages are their own document** (`templates/`), printed without the theme and without `wp_head()` until the app frame replaces the placeholder home; their CSS and JS are linked directly, with a PHPCS ignore saying so.
