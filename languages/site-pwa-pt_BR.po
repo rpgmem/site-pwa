@@ -1,0 +1,25 @@
+# Brazilian Portuguese translations for Site PWA.
+# This file is distributed under the same license as the Site PWA package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Site PWA 0.1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
+"POT-Creation-Date: 2026-11-22 21:11+0000\n"
+"PO-Revision-Date: 2026-11-22 00:00+0000\n"
+"Last-Translator: Alex Meusburger\n"
+"Language-Team: Português do Brasil\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Domain: site-pwa\n"
+
+#: src/update/github-updater.php:326
+msgid "Update package integrity check (SHA-256) failed. Installation aborted."
+msgstr "A verificação de integridade do pacote de atualização (SHA-256) falhou. Instalação cancelada."
+
+#. Plugin header: Description
+msgid "Turns the site into an installable app: a home-screen icon, an app shell for signed-in users and screens other plugins register."
+msgstr "Transforma o site em um app instalável: um ícone na tela inicial, uma estrutura de app para quem está conectado e telas que outros plugins registram."

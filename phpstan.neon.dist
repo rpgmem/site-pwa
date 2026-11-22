@@ -1,0 +1,14 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+    level: 8
+    paths:
+        - site-pwa.php
+        - uninstall.php
+        - src/
+        - bin/po-catalogue.php
+    excludePaths:
+        - tests/*
+        - vendor/*
+    treatPhpDocTypesAsCertain: false
