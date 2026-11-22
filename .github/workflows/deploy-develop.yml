@@ -45,8 +45,30 @@ jobs:
             exit 1
           fi
           mkdir -p ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/deploy_key
+          # A key pasted from Windows carries CRLF line ends, which OpenSSH
+          # reads as a broken key ("error in libcrypto"); drop the CRs, and
+          # make sure the file ends in a newline.
+          printf '%s\n' "$SSH_KEY" | tr -d '\r' > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
+          # Check the key before connecting, so a bad secret says what is
+          # wrong with it instead of a bare "Permission denied". Only counts
+          # and yes/no answers are printed, never any part of the key.
+          if ! CHECK=$(ssh-keygen -y -P '' -f ~/.ssh/deploy_key 2>&1 >/dev/null); then
+            LINES=$(wc -l < ~/.ssh/deploy_key)
+            BEGIN=$(grep -c -- '-----BEGIN .*PRIVATE KEY-----' ~/.ssh/deploy_key || true)
+            END=$(grep -c -- '-----END .*PRIVATE KEY-----' ~/.ssh/deploy_key || true)
+            echo "TESTES_SSH_KEY is not a usable private key: ${LINES} lines, BEGIN line: ${BEGIN}, END line: ${END}."
+            if grep -qE '^(ssh-(ed25519|rsa|dss)|ecdsa-sha2-)' ~/.ssh/deploy_key; then
+              echo "::error::TESTES_SSH_KEY holds a PUBLIC key (ssh-ed25519 …). Paste the private key file instead."
+            elif echo "$CHECK" | grep -qi passphrase; then
+              echo "::error::TESTES_SSH_KEY is protected by a passphrase. Actions cannot type one: use a key made with ssh-keygen -N \"\"."
+            elif [ "$BEGIN" = 0 ] || [ "$END" = 0 ]; then
+              echo "::error::TESTES_SSH_KEY is missing its -----BEGIN/END … PRIVATE KEY----- lines. Paste the whole file."
+            else
+              echo "::error::TESTES_SSH_KEY could not be read as a private key (cut short or altered when pasted). Paste the whole file again."
+            fi
+            exit 1
+          fi
           # Optional: managed hosting often serves SSH on a high port.
           PORT="${SSH_PORT:-22}"
           # Best effort; the steps below fall back to accept-new (trust on
