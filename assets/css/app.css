@@ -309,10 +309,88 @@
 	outline-offset: -2px;
 }
 
+.site-pwa-card + .site-pwa-card {
+	margin-top: 16px;
+}
+
+/* News: an image beside the title, the date and an excerpt. */
+.site-pwa-news {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.site-pwa-news li + li {
+	border-top: 1px solid var(--site-pwa-border);
+}
+
+.site-pwa-news a {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	padding: 12px 0;
+	color: inherit;
+	text-decoration: none;
+}
+
+.site-pwa-card-list > .site-pwa-news a {
+	padding: 12px 20px;
+}
+
+.site-pwa-news a:focus-visible {
+	outline: 2px solid var(--site-pwa-accent);
+	outline-offset: -2px;
+}
+
+.site-pwa-news img {
+	flex: 0 0 auto;
+	width: 72px;
+	height: 72px;
+	border-radius: var(--site-pwa-control-radius);
+	object-fit: cover;
+}
+
+.site-pwa-news-text {
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
+}
+
+.site-pwa-news-text .site-pwa-muted {
+	font-size: 13px;
+}
+
+.site-pwa-news-excerpt {
+	display: -webkit-box;
+	overflow: hidden;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	line-clamp: 3;
+}
+
+.site-pwa-more-link {
+	margin-top: 8px;
+}
+
+.site-pwa-more-link a {
+	color: var(--site-pwa-accent);
+	font-weight: 600;
+}
+
+.site-pwa-pager {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin-top: 16px;
+}
+
 /* The invite to install, on the home screen. */
 .site-pwa-install {
 	position: relative;
-	margin-top: 16px;
 }
 
 .site-pwa-install h2 {

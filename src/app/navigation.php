@@ -70,6 +70,6 @@ final class Navigation {
 			$in_bar = in_array( $screen, array_column( Screens::split()['nav'], 'id' ), true );
 			return $in_bar ? 'screen:' . $screen : 'more';
 		}
-		return in_array( $route, array( 'more', 'account' ), true ) ? 'more' : '';
+		return in_array( $route, array( 'more', 'account', 'news' ), true ) ? 'more' : '';
 	}
 }

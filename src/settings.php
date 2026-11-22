@@ -15,7 +15,7 @@ namespace SitePwa;
  * The app is off until an administrator turns it on: a site that installs the
  * plugin gets no manifest and no service worker by surprise.
  *
- * @phpstan-type SettingsShape array{enabled: bool, replace_confirmed: bool, name: string, short_name: string, theme_color: string, background_color: string, identity_source: string, site_banner: bool, site_banner_guests: bool}
+ * @phpstan-type SettingsShape array{enabled: bool, replace_confirmed: bool, name: string, short_name: string, theme_color: string, background_color: string, identity_source: string, site_banner: bool, site_banner_guests: bool, news_categories: list<int>, app_pages: array<int, bool>}
  */
 final class Settings {
 
@@ -47,6 +47,8 @@ final class Settings {
 			'identity_source'    => App\Identity::OWN,
 			'site_banner'        => true,
 			'site_banner_guests' => true,
+			'news_categories'    => array(),
+			'app_pages'          => array(),
 		);
 	}
 
@@ -97,6 +99,8 @@ final class Settings {
 			// a hidden 0 before the checkbox, so unticking it is a real false.
 			'site_banner'        => array_key_exists( 'site_banner', $input ) ? ! empty( $input['site_banner'] ) : $defaults['site_banner'],
 			'site_banner_guests' => array_key_exists( 'site_banner_guests', $input ) ? ! empty( $input['site_banner_guests'] ) : $defaults['site_banner_guests'],
+			'news_categories'    => self::ids( $input['news_categories'] ?? array() ),
+			'app_pages'          => self::pages( $input['app_pages'] ?? array() ),
 		);
 	}
 
@@ -109,6 +113,57 @@ final class Settings {
 	private static function color( $value, string $fallback ): string {
 		$color = sanitize_hex_color( is_string( $value ) ? $value : '' );
 		return is_string( $color ) && '' !== $color ? strtolower( $color ) : $fallback;
+	}
+
+	/**
+	 * Positive integer ids, unique, in their order. An empty list of news
+	 * categories means every category.
+	 *
+	 * @param mixed $value Raw value.
+	 * @return list<int>
+	 */
+	private static function ids( $value ): array {
+		if ( ! is_array( $value ) ) {
+			return array();
+		}
+		$ids = array();
+		foreach ( $value as $id ) {
+			// A negative or non-numeric entry is dropped, not turned positive.
+			if ( is_numeric( $id ) && (int) $id > 0 ) {
+				$ids[] = (int) $id;
+			}
+		}
+		return array_values( array_unique( $ids ) );
+	}
+
+	/**
+	 * The pages chosen for the app: page id => whether it opens on the site.
+	 *
+	 * Stored as `id => bool`; the settings form posts `id => [show, site]`,
+	 * where a page without `show` is left out.
+	 *
+	 * @param mixed $value Raw value.
+	 * @return array<int, bool>
+	 */
+	private static function pages( $value ): array {
+		if ( ! is_array( $value ) ) {
+			return array();
+		}
+		$pages = array();
+		foreach ( $value as $id => $choice ) {
+			if ( ! is_numeric( $id ) || (int) $id <= 0 ) {
+				continue;
+			}
+			$id = (int) $id;
+			if ( is_array( $choice ) ) {
+				if ( ! empty( $choice['show'] ) ) {
+					$pages[ $id ] = ! empty( $choice['site'] );
+				}
+				continue;
+			}
+			$pages[ $id ] = (bool) $choice;
+		}
+		return $pages;
 	}
 
 	/**

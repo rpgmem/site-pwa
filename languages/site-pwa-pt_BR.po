@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-22 23:37+0000\n"
+"POT-Creation-Date: 2026-11-22 23:44+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -100,59 +100,102 @@ msgstr "Mostrar também para visitantes não conectados"
 msgid "Only on phones and tablets, and never inside the installed app. A visitor who is not signed in goes to the login first, then into the app. A visitor who closes the banner does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
 msgstr "Só em celulares e tablets, e nunca dentro do app instalado. Um visitante não conectado passa primeiro pelo login e depois entra no app. Quem fecha a faixa não a vê de novo naquele aparelho por 30 dias. A tela inicial do app convida para instalá-lo da mesma forma."
 
-#: src/admin/settings-page.php:184
+#: src/admin/settings-page.php:184 src/app/frame.php:249
+#: templates/screen-more.php:19 templates/screen-news.php:19
+msgid "News"
+msgstr "Notícias"
+
+#: src/admin/settings-page.php:187
+msgid "Categories shown in the app"
+msgstr "Categorias mostradas no app"
+
+#: src/admin/settings-page.php:198
+msgid "The app shows the posts of the ticked categories, newest first: the three latest on the home screen and all of them under More → News. With none ticked, it shows every post."
+msgstr "O app mostra os posts das categorias marcadas, do mais recente ao mais antigo: os três últimos na tela inicial e todos em Mais → Notícias. Sem nenhuma marcada, mostra todos os posts."
+
+#: src/admin/settings-page.php:202 templates/screen-home.php:54
+msgid "Pages"
+msgstr "Páginas"
+
+#: src/admin/settings-page.php:207
+msgid "The site has no published pages."
+msgstr "O site não tem páginas publicadas."
+
+#: src/admin/settings-page.php:212
+msgid "In the app"
+msgstr "No app"
+
+#: src/admin/settings-page.php:213 templates/screen-post.php:43
+msgid "Open on the site"
+msgstr "Abrir no site"
+
+#: src/admin/settings-page.php:221
+msgid "(no title)"
+msgstr "(sem título)"
+
+#. translators: %s: a page title
+#: src/admin/settings-page.php:236
+#, php-format
+msgid "Open %s on the site"
+msgstr "Abrir %s no site"
+
+#: src/admin/settings-page.php:246
+msgid "The ticked pages appear under More and on the home screen. A page opens inside the app, unless it is marked to open on the site, as a page built with a page builder should be."
+msgstr "As páginas marcadas aparecem em Mais e na tela inicial. Uma página abre dentro do app, a menos que esteja marcada para abrir no site, como deve ser uma página feita com um construtor de páginas."
+
+#: src/admin/settings-page.php:250
 msgid "Look"
 msgstr "Aparência"
 
-#: src/admin/settings-page.php:187
+#: src/admin/settings-page.php:253
 msgid "These settings"
 msgstr "Estas configurações"
 
-#: src/admin/settings-page.php:192
+#: src/admin/settings-page.php:258
 msgid "Where the app takes its accent colour and its corners from. While the chosen design is switched off, or its plugin is inactive, the app uses the theme colour below."
 msgstr "De onde o app tira a cor de destaque e os cantos. Enquanto o design escolhido estiver desligado, ou o plugin dele estiver inativo, o app usa a cor do tema abaixo."
 
 #. translators: 1: a colour such as #1d5e8c, 2: corner radius of cards in px, 3: corner radius of buttons in px
-#: src/admin/settings-page.php:199
+#: src/admin/settings-page.php:265
 #, php-format
 msgid "In use now: accent %1$s, cards %2$d px, buttons %3$d px."
 msgstr "Em uso agora: destaque %1$s, cartões %2$d px, botões %3$d px."
 
-#: src/admin/settings-page.php:210
+#: src/admin/settings-page.php:276
 msgid "Theme colour"
 msgstr "Cor do tema"
 
-#: src/admin/settings-page.php:214
+#: src/admin/settings-page.php:280
 msgid "Background colour"
 msgstr "Cor de fundo"
 
-#: src/admin/settings-page.php:217
+#: src/admin/settings-page.php:283
 msgid "Shown while the app opens."
 msgstr "Aparece enquanto o app abre."
 
-#: src/admin/settings-page.php:221
+#: src/admin/settings-page.php:287
 msgid "Icon"
 msgstr "Ícone"
 
-#: src/admin/settings-page.php:222
+#: src/admin/settings-page.php:288
 msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
 msgstr "O app usa o ícone do site, de Configurações → Geral; sem ele, usa o ícone do plugin."
 
-#: src/app/frame.php:241 templates/screen-account.php:16
-#: templates/screen-more.php:25
+#: src/app/frame.php:245 templates/screen-account.php:16
+#: templates/screen-more.php:40
 msgid "Account"
 msgstr "Conta"
 
-#: src/app/frame.php:243 src/app/navigation.php:47 templates/screen-more.php:30
-#: templates/screen-more.php:31
+#: src/app/frame.php:247 src/app/navigation.php:47 templates/screen-more.php:45
+#: templates/screen-more.php:46
 msgid "More"
 msgstr "Mais"
 
-#: src/app/frame.php:246 src/app/frame.php:249
+#: src/app/frame.php:252 src/app/frame.php:255
 msgid "Not available"
 msgstr "Indisponível"
 
-#: src/app/frame.php:251 src/app/navigation.php:32
+#: src/app/frame.php:257 src/app/navigation.php:32
 msgid "Home"
 msgstr "Início"
 
@@ -210,31 +253,47 @@ msgstr "Suas telas"
 msgid "Nothing here yet. The screens other plugins add to the app appear here."
 msgstr "Nada aqui ainda. As telas que outros plugins acrescentam ao app aparecem aqui."
 
-#: templates/screen-home.php:42 templates/site-banner.php:24
+#: templates/screen-home.php:42
+msgid "Latest news"
+msgstr "Últimas notícias"
+
+#: templates/screen-home.php:44 templates/screen-news.php:22
+msgid "No news yet."
+msgstr "Ainda não há notícias."
+
+#: templates/screen-home.php:50
+msgid "See all news"
+msgstr "Ver todas as notícias"
+
+#: templates/screen-home.php:56
+msgid "No pages yet. The pages chosen in the app's settings appear here."
+msgstr "Ainda não há páginas. As páginas escolhidas nas configurações do app aparecem aqui."
+
+#: templates/screen-home.php:73 templates/site-banner.php:24
 msgid "Not now"
 msgstr "Agora não"
 
-#: templates/screen-home.php:45
+#: templates/screen-home.php:76
 msgid "Install the app"
 msgstr "Instale o app"
 
-#: templates/screen-home.php:47
+#: templates/screen-home.php:78
 msgid "Open it from your home screen, full screen, like any other app."
 msgstr "Abra pela tela inicial, em tela cheia, como qualquer outro app."
 
-#: templates/screen-home.php:51
+#: templates/screen-home.php:82
 msgid "Install app"
 msgstr "Instalar app"
 
-#: templates/screen-home.php:56
+#: templates/screen-home.php:87
 msgid "Add it to your home screen to open it like any other app:"
 msgstr "Adicione à tela de início para abrir como qualquer outro app:"
 
-#: templates/screen-home.php:60
+#: templates/screen-home.php:91
 msgid "Tap Share in Safari’s toolbar."
 msgstr "Toque em Compartilhar, na barra do Safari."
 
-#: templates/screen-home.php:64
+#: templates/screen-home.php:95
 msgid "Choose Add to Home Screen."
 msgstr "Escolha Adicionar à Tela de Início."
 
@@ -249,6 +308,24 @@ msgstr "Ela pode ter sido removida, ou você pode não ter acesso a ela."
 #: templates/screen-missing.php:19
 msgid "Back to the home screen"
 msgstr "Voltar à tela inicial"
+
+#: templates/screen-news.php:32
+msgid "News pages"
+msgstr "Páginas de notícias"
+
+#: templates/screen-news.php:34
+msgid "Newer news"
+msgstr "Notícias mais recentes"
+
+#. translators: 1: the current page number, 2: the number of pages
+#: templates/screen-news.php:39
+#, php-format
+msgid "Page %1$d of %2$d"
+msgstr "Página %1$d de %2$d"
+
+#: templates/screen-news.php:43
+msgid "Older news"
+msgstr "Notícias mais antigas"
 
 #: templates/screen-post.php:32
 msgid "Copy this link:"
@@ -265,10 +342,6 @@ msgstr "Compartilhar"
 #: templates/screen-post.php:39
 msgid "Copy link"
 msgstr "Copiar link"
-
-#: templates/screen-post.php:43
-msgid "Open on the site"
-msgstr "Abrir no site"
 
 #: templates/site-banner.php:21
 msgid "Faster in the app."

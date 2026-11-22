@@ -61,7 +61,7 @@ final class Screens {
 	/**
 	 * Ids the app's own screens and routes use.
 	 */
-	public const RESERVED = array( 'home', 'account', 'more', 'post', 'offline', 'manifest', 'sw', 's' );
+	public const RESERVED = array( 'home', 'account', 'more', 'news', 'post', 'offline', 'manifest', 'sw', 's' );
 
 	/**
 	 * The icon of a screen that names none, or one the app does not draw.

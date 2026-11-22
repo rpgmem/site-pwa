@@ -71,6 +71,8 @@ final class GithubUpdater {
 		'9-install-android.png',
 		'10-install-ios.png',
 		'11-site-banner.png',
+		'12-home-news.png',
+		'13-news.png',
 	);
 
 	/**
