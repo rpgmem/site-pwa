@@ -68,6 +68,9 @@ final class GithubUpdater {
 		'6-account-ffc-look.png',
 		'7-more.png',
 		'8-screen.png',
+		'9-install-android.png',
+		'10-install-ios.png',
+		'11-site-banner.png',
 	);
 
 	/**

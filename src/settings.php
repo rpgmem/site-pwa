@@ -15,7 +15,7 @@ namespace SitePwa;
  * The app is off until an administrator turns it on: a site that installs the
  * plugin gets no manifest and no service worker by surprise.
  *
- * @phpstan-type SettingsShape array{enabled: bool, replace_confirmed: bool, name: string, short_name: string, theme_color: string, background_color: string, identity_source: string}
+ * @phpstan-type SettingsShape array{enabled: bool, replace_confirmed: bool, name: string, short_name: string, theme_color: string, background_color: string, identity_source: string, site_banner: bool}
  */
 final class Settings {
 
@@ -45,6 +45,7 @@ final class Settings {
 			'theme_color'       => '#1d5e8c',
 			'background_color'  => '#ffffff',
 			'identity_source'   => App\Identity::OWN,
+			'site_banner'       => true,
 		);
 	}
 
@@ -91,6 +92,9 @@ final class Settings {
 			'theme_color'       => self::color( $input['theme_color'] ?? '', $defaults['theme_color'] ),
 			'background_color'  => self::color( $input['background_color'] ?? '', $defaults['background_color'] ),
 			'identity_source'   => self::source( $input['identity_source'] ?? '' ),
+			// Absent means "never saved", so the default holds; the form posts
+			// a hidden 0 before the checkbox, so unticking it is a real false.
+			'site_banner'       => array_key_exists( 'site_banner', $input ) ? ! empty( $input['site_banner'] ) : $defaults['site_banner'],
 		);
 	}
 

@@ -275,7 +275,7 @@ final class Frame {
 	 * @param string               $name   Template name, without `.php`.
 	 * @param array<string, mixed> $values What the template reads as `$site_pwa`.
 	 */
-	private static function template( string $name, array $values ): string {
+	public static function template( string $name, array $values ): string {
 		ob_start();
 		( static function ( string $site_pwa_file, array $site_pwa ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- the included template reads $site_pwa.
 			include $site_pwa_file;
