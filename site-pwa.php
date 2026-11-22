@@ -51,3 +51,4 @@ spl_autoload_register(
 );
 
 \SitePwa\Plugin::boot( __FILE__ );
+register_deactivation_hook( __FILE__, array( \SitePwa\Plugin::class, 'deactivate' ) );

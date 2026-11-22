@@ -54,8 +54,25 @@ final class Plugin {
 		// "loaded too early" notice since WordPress 6.7; default priority.
 		add_action( 'init', array( self::class, 'loadTextdomain' ) );
 
+		// The app's routes answer on the front end; the worker script too.
+		App\Routes::register();
+
+		if ( is_admin() ) {
+			Admin\SettingsPage::register();
+		}
+
 		// Not behind is_admin(): WordPress also scans for updates from cron.
 		Update\GithubUpdater::register();
+	}
+
+	/**
+	 * On deactivation, drop the app's rewrite rules: the stored rules are
+	 * deleted so WordPress rebuilds them without ours on the next request,
+	 * and the revision is forgotten so a reactivation flushes again.
+	 */
+	public static function deactivate(): void {
+		delete_option( App\Routes::REVISION_OPTION );
+		delete_option( 'rewrite_rules' );
 	}
 
 	/**
@@ -84,5 +101,32 @@ final class Plugin {
 	 */
 	public static function url(): string {
 		return plugin_dir_url( self::$file );
+	}
+
+	/**
+	 * The path of one of the plugin's own CSS or JS files as it should load:
+	 * the `.min` build in production, the readable source when `SCRIPT_DEBUG`
+	 * is on. `npm run build` writes the `.min` files, and CI fails when one is
+	 * older than its source.
+	 *
+	 * @param string $relative Source path under the plugin directory, e.g. `assets/js/x.js`.
+	 */
+	public static function asset( string $relative ): string {
+		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			return $relative;
+		}
+		return (string) preg_replace( '/\.(css|js)$/', '.min.$1', $relative );
+	}
+
+	/**
+	 * The `?ver=` of one of the plugin's own assets: the plugin version plus
+	 * the file's modification time, so a deploy of the same version still
+	 * reaches browsers that hold the previous file.
+	 *
+	 * @param string $relative Path under the plugin directory, e.g. `assets/js/x.js`.
+	 */
+	public static function assetVersion( string $relative ): string {
+		$time = @filemtime( self::dir() . $relative ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- a missing file falls back to the version.
+		return false === $time ? self::VERSION : self::VERSION . '.' . $time;
 	}
 }

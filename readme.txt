@@ -14,7 +14,7 @@ Turns the site into an installable app: a home-screen icon, an app shell for sig
 
 Site PWA makes a WordPress site installable on a phone or a computer, as an app with its own icon and window. Signed-in users open it on an app shell, and other plugins add their screens to it through a registration contract.
 
-This first release is the plugin's foundation: it installs, updates itself from GitHub Releases and stores nothing yet. The app itself arrives in the releases that follow.
+Settings → Site PWA turns the app on; it is off until then. The app lives under `/app/` (filterable with `site_pwa_app_prefix`), with the site icon from Settings → General, or the plugin's own, on the home screen. Without a connection, the app shows an offline page. The app's screens arrive in the releases that follow.
 
 == Installation ==
 
@@ -23,7 +23,7 @@ This first release is the plugin's foundation: it installs, updates itself from 
 
 == Privacy ==
 
-The plugin stores no personal data. It keeps one cache of the latest GitHub release, in a site transient deleted with the plugin.
+The plugin stores no personal data. It keeps its settings, the revision of its URL rules and one cache of the latest GitHub release, all deleted with the plugin. In the browser, the app's service worker caches only the offline page and the app's stylesheet: never a page, so nothing a signed-in user sees stays on the device.
 
 == Changelog ==
 
