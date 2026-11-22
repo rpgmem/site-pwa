@@ -15,7 +15,7 @@ namespace SitePwa;
  * The app is off until an administrator turns it on: a site that installs the
  * plugin gets no manifest and no service worker by surprise.
  *
- * @phpstan-type SettingsShape array{enabled: bool, replace_confirmed: bool, name: string, short_name: string, theme_color: string, background_color: string, identity_source: string, site_banner: bool}
+ * @phpstan-type SettingsShape array{enabled: bool, replace_confirmed: bool, name: string, short_name: string, theme_color: string, background_color: string, identity_source: string, site_banner: bool, site_banner_guests: bool}
  */
 final class Settings {
 
@@ -38,14 +38,15 @@ final class Settings {
 	public static function defaults(): array {
 		$name = wp_strip_all_tags( (string) get_bloginfo( 'name' ) );
 		return array(
-			'enabled'           => false,
-			'replace_confirmed' => false,
-			'name'              => $name,
-			'short_name'        => self::shorten( $name ),
-			'theme_color'       => '#1d5e8c',
-			'background_color'  => '#ffffff',
-			'identity_source'   => App\Identity::OWN,
-			'site_banner'       => true,
+			'enabled'            => false,
+			'replace_confirmed'  => false,
+			'name'               => $name,
+			'short_name'         => self::shorten( $name ),
+			'theme_color'        => '#1d5e8c',
+			'background_color'   => '#ffffff',
+			'identity_source'    => App\Identity::OWN,
+			'site_banner'        => true,
+			'site_banner_guests' => true,
 		);
 	}
 
@@ -85,16 +86,17 @@ final class Settings {
 		$short_name = '' === $short_name ? self::shorten( $name ) : self::shorten( $short_name );
 
 		return array(
-			'enabled'           => ! empty( $input['enabled'] ),
-			'replace_confirmed' => ! empty( $input['replace_confirmed'] ),
-			'name'              => $name,
-			'short_name'        => $short_name,
-			'theme_color'       => self::color( $input['theme_color'] ?? '', $defaults['theme_color'] ),
-			'background_color'  => self::color( $input['background_color'] ?? '', $defaults['background_color'] ),
-			'identity_source'   => self::source( $input['identity_source'] ?? '' ),
+			'enabled'            => ! empty( $input['enabled'] ),
+			'replace_confirmed'  => ! empty( $input['replace_confirmed'] ),
+			'name'               => $name,
+			'short_name'         => $short_name,
+			'theme_color'        => self::color( $input['theme_color'] ?? '', $defaults['theme_color'] ),
+			'background_color'   => self::color( $input['background_color'] ?? '', $defaults['background_color'] ),
+			'identity_source'    => self::source( $input['identity_source'] ?? '' ),
 			// Absent means "never saved", so the default holds; the form posts
 			// a hidden 0 before the checkbox, so unticking it is a real false.
-			'site_banner'       => array_key_exists( 'site_banner', $input ) ? ! empty( $input['site_banner'] ) : $defaults['site_banner'],
+			'site_banner'        => array_key_exists( 'site_banner', $input ) ? ! empty( $input['site_banner'] ) : $defaults['site_banner'],
+			'site_banner_guests' => array_key_exists( 'site_banner_guests', $input ) ? ! empty( $input['site_banner_guests'] ) : $defaults['site_banner_guests'],
 		);
 	}
 

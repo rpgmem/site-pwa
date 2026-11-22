@@ -62,11 +62,23 @@ final class InviteTest extends WP_UnitTestCase {
 		self::assertStringContainsString( '--site-pwa-accent:#1d5e8c;--site-pwa-on-accent:#ffffff', implode( '', wp_styles()->get_data( Invite::BANNER_STYLE, 'after' ) ) );
 	}
 
-	public function test_no_banner_for_visitors_who_are_not_signed_in(): void {
+	public function test_visitors_who_are_not_signed_in_get_the_banner_by_default(): void {
+		self::assertTrue( Invite::bannerWanted() );
+		self::assertStringContainsString( 'href="' . esc_url( Routes::url( 'home' ) ) . '">Use the app</a>', $this->footer() );
+		Invite::enqueue();
+		self::assertTrue( wp_script_is( Invite::SCRIPT, 'enqueued' ) );
+	}
+
+	public function test_with_the_guest_option_off_only_signed_in_visitors_get_it(): void {
+		update_option( Settings::OPTION, array( 'enabled' => true, 'short_name' => 'Viva', 'site_banner_guests' => '0' ) );
+
 		self::assertFalse( Invite::bannerWanted() );
 		self::assertSame( '', $this->footer() );
 		Invite::enqueue();
 		self::assertFalse( wp_script_is( Invite::SCRIPT, 'enqueued' ) );
+
+		$this->signIn();
+		self::assertTrue( Invite::bannerWanted() );
 	}
 
 	public function test_no_banner_while_the_app_is_off_or_the_setting_is_unticked(): void {
@@ -120,5 +132,8 @@ final class InviteTest extends WP_UnitTestCase {
 		self::assertTrue( Settings::sanitize( array() )['site_banner'] );
 		self::assertFalse( Settings::sanitize( array( 'site_banner' => '0' ) )['site_banner'] );
 		self::assertTrue( Settings::sanitize( array( 'site_banner' => '1' ) )['site_banner'] );
+		self::assertTrue( Settings::defaults()['site_banner_guests'] );
+		self::assertTrue( Settings::sanitize( array() )['site_banner_guests'] );
+		self::assertFalse( Settings::sanitize( array( 'site_banner_guests' => '0' ) )['site_banner_guests'] );
 	}
 }

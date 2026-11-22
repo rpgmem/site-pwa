@@ -171,7 +171,13 @@ final class SettingsPage {
 								<input type="checkbox" id="site-pwa-site-banner" name="<?php echo esc_attr( $field( 'site_banner' ) ); ?>" value="1" <?php checked( $settings['site_banner'] ); ?>>
 								<?php esc_html_e( 'Show a "Use the app" banner on the site\'s pages', 'site-pwa' ); ?>
 							</label>
-							<p class="description"><?php esc_html_e( 'Only on phones and tablets, only to signed-in visitors, and never inside the installed app. A visitor who closes it does not see it again on that device for 30 days. The app\'s home screen invites to install it the same way.', 'site-pwa' ); ?></p>
+							<br>
+							<input type="hidden" name="<?php echo esc_attr( $field( 'site_banner_guests' ) ); ?>" value="0">
+							<label>
+								<input type="checkbox" id="site-pwa-site-banner-guests" name="<?php echo esc_attr( $field( 'site_banner_guests' ) ); ?>" value="1" <?php checked( $settings['site_banner_guests'] ); ?>>
+								<?php esc_html_e( 'Also show it to visitors who are not signed in', 'site-pwa' ); ?>
+							</label>
+							<p class="description"><?php esc_html_e( 'Only on phones and tablets, and never inside the installed app. A visitor who is not signed in goes to the login first, then into the app. A visitor who closes the banner does not see it again on that device for 30 days. The app\'s home screen invites to install it the same way.', 'site-pwa' ); ?></p>
 						</td>
 					</tr>
 					<tr>

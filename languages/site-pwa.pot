@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-22 23:31+0000\n"
+"POT-Creation-Date: 2026-11-22 23:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -93,45 +93,49 @@ msgstr ""
 msgid "Show a \"Use the app\" banner on the site's pages"
 msgstr ""
 
-#: src/admin/settings-page.php:174
-msgid "Only on phones and tablets, only to signed-in visitors, and never inside the installed app. A visitor who closes it does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
+#: src/admin/settings-page.php:178
+msgid "Also show it to visitors who are not signed in"
 msgstr ""
 
-#: src/admin/settings-page.php:178
+#: src/admin/settings-page.php:180
+msgid "Only on phones and tablets, and never inside the installed app. A visitor who is not signed in goes to the login first, then into the app. A visitor who closes the banner does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
+msgstr ""
+
+#: src/admin/settings-page.php:184
 msgid "Look"
 msgstr ""
 
-#: src/admin/settings-page.php:181
+#: src/admin/settings-page.php:187
 msgid "These settings"
 msgstr ""
 
-#: src/admin/settings-page.php:186
+#: src/admin/settings-page.php:192
 msgid "Where the app takes its accent colour and its corners from. While the chosen design is switched off, or its plugin is inactive, the app uses the theme colour below."
 msgstr ""
 
 #. translators: 1: a colour such as #1d5e8c, 2: corner radius of cards in px, 3: corner radius of buttons in px
-#: src/admin/settings-page.php:193
+#: src/admin/settings-page.php:199
 #, php-format
 msgid "In use now: accent %1$s, cards %2$d px, buttons %3$d px."
 msgstr ""
 
-#: src/admin/settings-page.php:204
+#: src/admin/settings-page.php:210
 msgid "Theme colour"
 msgstr ""
 
-#: src/admin/settings-page.php:208
+#: src/admin/settings-page.php:214
 msgid "Background colour"
 msgstr ""
 
-#: src/admin/settings-page.php:211
+#: src/admin/settings-page.php:217
 msgid "Shown while the app opens."
 msgstr ""
 
-#: src/admin/settings-page.php:215
+#: src/admin/settings-page.php:221
 msgid "Icon"
 msgstr ""
 
-#: src/admin/settings-page.php:216
+#: src/admin/settings-page.php:222
 msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
 msgstr ""
 
@@ -157,7 +161,7 @@ msgstr ""
 msgid "Free Form Certificate: Public Design"
 msgstr ""
 
-#: src/update/github-updater.php:335
+#: src/update/github-updater.php:338
 msgid "Update package integrity check (SHA-256) failed. Installation aborted."
 msgstr ""
 
