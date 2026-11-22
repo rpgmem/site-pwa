@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-22 22:16+0000\n"
+"POT-Creation-Date: 2026-11-22 22:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,6 +104,10 @@ msgstr ""
 msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
 msgstr ""
 
+#: src/app/frame.php:226
+msgid "Not available"
+msgstr ""
+
 #: src/app/navigation.php:33
 msgid "Home"
 msgstr ""
@@ -112,7 +116,7 @@ msgstr ""
 msgid "Account"
 msgstr ""
 
-#: src/update/github-updater.php:331
+#: src/update/github-updater.php:332
 msgid "Update package integrity check (SHA-256) failed. Installation aborted."
 msgstr ""
 
@@ -160,6 +164,38 @@ msgstr ""
 
 #: templates/screen-home.php:22
 msgid "Nothing here yet. The screens other plugins add to the app appear here."
+msgstr ""
+
+#: templates/screen-missing.php:16
+msgid "This page is not available"
+msgstr ""
+
+#: templates/screen-missing.php:18
+msgid "It may have been removed, or you may not have access to it."
+msgstr ""
+
+#: templates/screen-missing.php:19
+msgid "Back to the home screen"
+msgstr ""
+
+#: templates/screen-post.php:32
+msgid "Copy this link:"
+msgstr ""
+
+#: templates/screen-post.php:32
+msgid "Link copied."
+msgstr ""
+
+#: templates/screen-post.php:35
+msgid "Share"
+msgstr ""
+
+#: templates/screen-post.php:39
+msgid "Copy link"
+msgstr ""
+
+#: templates/screen-post.php:43
+msgid "Open on the site"
 msgstr ""
 
 #. Plugin header: Description

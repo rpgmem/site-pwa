@@ -16,6 +16,8 @@ describe( 'route()', () => {
 		expect( route( at( '/app/' ), 'GET', 'navigate', config ) ).toBe( 'app' );
 		expect( route( at( '/app' ), 'GET', 'navigate', config ) ).toBe( 'app' );
 		expect( route( at( '/app/offline/' ), 'GET', 'navigate', config ) ).toBe( 'app' );
+		// A post drawn in the app: still a navigation network-first, never cached.
+		expect( route( at( '/app/?p=42' ), 'GET', 'navigate', config ) ).toBe( 'app' );
 	} );
 
 	it( 'serves a precached file from the cache, whatever its version query', () => {

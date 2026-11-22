@@ -15,3 +15,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Another plugin's service worker keeps the app off** (#2). OneSignal, SuperPWA, PWA for WP or the PWA plugin, while active, keep the app off until the replacement is confirmed; the settings screen names them and lists the workers the browser already holds. A push service can share the root through `site_pwa_sw_imports` instead.
 - **The app has its own frame** (#3). `/app/` and `/app/account/` need a signed-in user and draw a header, the screen and a bottom navigation, with landmarks, a skip link and `aria-current`; `wp_head()`/`wp_footer()` run, but the theme's stylesheets and scripts are taken out.
 - **The login looks like the app inside the installed app** (#3). The WordPress login keeps its form and every plugin on it; styles apply only under `display-mode: standalone`, and the logo links back to the app when the login came from it.
+- **Posts and pages open inside the app** at `/app/?p=ID` (#3), signed-in only, through the main query so shortcodes and their assets work. Canonical, Share, Copy link and Open on the site carry the permalink; a page-builder layout or page template opens on the site (`site_pwa_opens_in_app`).
+
+### Fixed
+
+- **The app's screens have a title on a block theme** (#3). WordPress prints `<title>` only for a theme declaring `title-tag`, which a block theme does only inside its own template; the frame now prints it itself.
+

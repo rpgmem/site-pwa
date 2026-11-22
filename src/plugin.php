@@ -57,6 +57,7 @@ final class Plugin {
 		// The app's routes answer on the front end; the worker script too.
 		App\Routes::register();
 		App\Frame::register();
+		App\Content::register();
 		App\Login::register();
 
 		if ( is_admin() ) {

@@ -170,9 +170,17 @@
 	padding: 0 18px;
 	border-radius: 8px;
 	background: var(--site-pwa-accent);
+	border: 0;
 	color: var(--site-pwa-on-accent);
+	font: inherit;
 	font-weight: 600;
 	text-decoration: none;
+	cursor: pointer;
+}
+
+/* `display` above would otherwise outrank the attribute. */
+.site-pwa-button[hidden] {
+	display: none;
 }
 
 .site-pwa-button-neutral {
@@ -190,6 +198,57 @@
 .site-pwa-nav a:focus-visible {
 	outline: 2px solid var(--site-pwa-accent);
 	outline-offset: 2px;
+}
+
+/* A post or page drawn in the app. Core's block styles stay loaded; these
+   rules only give the content a reading width and keep media inside it. */
+.site-pwa-article {
+	margin-bottom: 24px;
+	line-height: 1.6;
+	overflow-wrap: break-word;
+}
+
+.site-pwa-content > * {
+	max-width: 100%;
+}
+
+.site-pwa-content img,
+.site-pwa-content video,
+.site-pwa-content iframe {
+	max-width: 100%;
+	height: auto;
+}
+
+.site-pwa-content a {
+	color: var(--site-pwa-accent);
+}
+
+.site-pwa-content blockquote {
+	margin: 16px 0;
+	padding: 4px 0 4px 16px;
+	border-left: 4px solid var(--site-pwa-border);
+}
+
+.site-pwa-content th,
+.site-pwa-content td {
+	padding: 6px 8px;
+	border: 1px solid var(--site-pwa-border);
+}
+
+.site-pwa-content pre,
+.site-pwa-content table {
+	display: block;
+	overflow-x: auto;
+}
+
+.site-pwa-share-status {
+	flex-basis: 100%;
+	margin: 0;
+	overflow-wrap: anywhere;
+}
+
+.site-pwa-share-status:empty {
+	display: none;
 }
 
 /* Bottom navigation. */

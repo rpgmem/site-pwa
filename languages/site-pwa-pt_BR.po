@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-22 22:16+0000\n"
+"POT-Creation-Date: 2026-11-22 22:25+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -103,6 +103,10 @@ msgstr "Ícone"
 msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
 msgstr "O app usa o ícone do site, de Configurações → Geral; sem ele, usa o ícone do plugin."
 
+#: src/app/frame.php:226
+msgid "Not available"
+msgstr "Indisponível"
+
 #: src/app/navigation.php:33
 msgid "Home"
 msgstr "Início"
@@ -111,7 +115,7 @@ msgstr "Início"
 msgid "Account"
 msgstr "Conta"
 
-#: src/update/github-updater.php:331
+#: src/update/github-updater.php:332
 msgid "Update package integrity check (SHA-256) failed. Installation aborted."
 msgstr "A verificação de integridade do pacote de atualização (SHA-256) falhou. Instalação cancelada."
 
@@ -160,6 +164,38 @@ msgstr "Suas telas"
 #: templates/screen-home.php:22
 msgid "Nothing here yet. The screens other plugins add to the app appear here."
 msgstr "Nada aqui ainda. As telas que outros plugins acrescentam ao app aparecem aqui."
+
+#: templates/screen-missing.php:16
+msgid "This page is not available"
+msgstr "Esta página não está disponível"
+
+#: templates/screen-missing.php:18
+msgid "It may have been removed, or you may not have access to it."
+msgstr "Ela pode ter sido removida, ou você pode não ter acesso a ela."
+
+#: templates/screen-missing.php:19
+msgid "Back to the home screen"
+msgstr "Voltar à tela inicial"
+
+#: templates/screen-post.php:32
+msgid "Copy this link:"
+msgstr "Copie este link:"
+
+#: templates/screen-post.php:32
+msgid "Link copied."
+msgstr "Link copiado."
+
+#: templates/screen-post.php:35
+msgid "Share"
+msgstr "Compartilhar"
+
+#: templates/screen-post.php:39
+msgid "Copy link"
+msgstr "Copiar link"
+
+#: templates/screen-post.php:43
+msgid "Open on the site"
+msgstr "Abrir no site"
 
 #. Plugin header: Description
 msgid "Turns the site into an installable app: a home-screen icon, an app shell for signed-in users and screens other plugins register."

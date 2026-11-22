@@ -46,12 +46,13 @@ final class Routes {
 	/**
 	 * The routes and the path each one answers under the prefix.
 	 */
-	public const ROUTES = array( 'home', 'account', 'offline', 'manifest' );
+	public const ROUTES = array( 'home', 'account', 'post', 'offline', 'manifest' );
 
 	/**
 	 * The routes drawn inside the app frame; they need a signed-in user.
+	 * `post` is the home URL with `?p=ID` (see Content::request()).
 	 */
-	public const SCREENS = array( 'home', 'account' );
+	public const SCREENS = array( 'home', 'account', 'post' );
 
 	/**
 	 * Wire the rules and the handler.
@@ -184,11 +185,30 @@ final class Routes {
 		);
 
 		if ( in_array( $route, self::SCREENS, true ) && ! is_user_logged_in() ) {
+			$back = 'post' === $route ? Content::url( Content::requested() ) : self::url( $route );
 			return array(
 				'status'  => 302,
-				'headers' => $headers + array( 'Location' => wp_login_url( self::url( $route ) ) ),
+				'headers' => $headers + array( 'Location' => wp_login_url( $back ) ),
 				'body'    => '',
 			);
+		}
+
+		if ( 'post' === $route ) {
+			$post = Content::current();
+			if ( null === $post ) {
+				return array(
+					'status'  => 404,
+					'headers' => $headers,
+					'body'    => Frame::render( 'missing' ),
+				);
+			}
+			if ( ! Content::opensInApp( $post ) ) {
+				return array(
+					'status'  => 302,
+					'headers' => $headers + array( 'Location' => (string) get_permalink( $post ) ),
+					'body'    => '',
+				);
+			}
 		}
 
 		return array(
