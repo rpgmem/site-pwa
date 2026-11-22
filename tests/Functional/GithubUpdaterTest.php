@@ -214,7 +214,7 @@ final class GithubUpdaterTest extends WP_UnitTestCase {
 		$info = GithubUpdater::pluginInfo( false, 'plugin_information', (object) array( 'slug' => GithubUpdater::SLUG ) );
 		remove_filter( 'locale', array( $this, 'portuguese' ) );
 
-		self::assertStringContainsString( 'navegador do visitante', $info->sections['description'], 'The installed languages/readme-pt_BR.txt is the fallback.' );
+		self::assertStringContainsString( 'estrutura do app', $info->sections['description'], 'The installed languages/readme-pt_BR.txt is the fallback.' );
 	}
 
 	public function test_a_locale_with_no_translation_reads_english(): void {
