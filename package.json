@@ -1,0 +1,32 @@
+{
+  "name": "site-pwa",
+  "private": true,
+  "description": "Dev tooling for Site PWA (linting, tests and builds; nothing here ships in the plugin).",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "build:css": "for f in assets/css/*.css; do [ -e \"$f\" ] || continue; case \"$f\" in *.min.css) continue;; esac; npx cleancss -o \"${f%.css}.min.css\" --source-map \"$f\"; done && echo 'CSS minified.'",
+    "build:js": "for f in assets/js/*.js; do [ -e \"$f\" ] || continue; case \"$f\" in *.min.js) continue;; esac; npx terser \"$f\" -o \"${f%.js}.min.js\" --compress --mangle --source-map \"url='$(basename ${f%.js}.min.js.map)'\"; done && echo 'JS minified.'",
+    "build": "npm run build:css && npm run build:js",
+    "lint:js": "eslint --no-error-on-unmatched-pattern \"assets/js/**/*.js\"",
+    "lint:js:fix": "eslint --no-error-on-unmatched-pattern \"assets/js/**/*.js\" --fix",
+    "lint:css": "stylelint --allow-empty-input \"assets/css/*.css\"",
+    "lint:css:fix": "stylelint --allow-empty-input \"assets/css/*.css\" --fix",
+    "lint": "npm run lint:js && npm run lint:css",
+    "test": "vitest run --passWithNoTests",
+    "test:coverage": "vitest run --coverage --passWithNoTests"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^5.1.0",
+    "clean-css-cli": "^5.6.3",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "jsdom": "^30.1.3",
+    "stylelint": "^17.16.0",
+    "stylelint-config-recommended": "^18.0.0",
+    "terser": "^5.51.2",
+    "vitest": "^5.1.0"
+  },
+  "overrides": {
+    "minimatch": "^11.0.1"
+  }
+}
