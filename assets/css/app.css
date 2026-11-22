@@ -309,6 +309,73 @@
 	outline-offset: -2px;
 }
 
+/* The invite to install, on the home screen. */
+.site-pwa-install {
+	position: relative;
+	margin-top: 16px;
+}
+
+.site-pwa-install h2 {
+	padding-right: 40px;
+}
+
+.site-pwa-install-close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	border: 0;
+	border-radius: var(--site-pwa-control-radius);
+	background: transparent;
+	color: var(--site-pwa-muted);
+	cursor: pointer;
+}
+
+.site-pwa-install-close:focus-visible {
+	outline: 2px solid var(--site-pwa-accent);
+	outline-offset: 2px;
+}
+
+.site-pwa-steps {
+	display: grid;
+	gap: 12px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	counter-reset: site-pwa-step;
+}
+
+.site-pwa-steps li {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	counter-increment: site-pwa-step;
+}
+
+.site-pwa-steps li::before {
+	content: counter(site-pwa-step);
+	display: inline-flex;
+	flex: 0 0 auto;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	background: var(--site-pwa-neutral-bg);
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.site-pwa-steps .site-pwa-icon {
+	flex: 0 0 auto;
+	color: var(--site-pwa-accent);
+}
+
 /* Bottom navigation. */
 .site-pwa-nav {
 	position: fixed;

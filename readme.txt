@@ -14,7 +14,7 @@ Turns the site into an installable app: a home-screen icon, an app shell for sig
 
 Site PWA makes a WordPress site installable on a phone or a computer, as an app with its own icon and window. Signed-in users open it on an app shell, and other plugins add their screens to it through a registration contract.
 
-Settings → Site PWA turns the app on; it is off until then. The app is for signed-in users: it opens on its own frame, independent of the theme, with a home screen and the account, and the WordPress login takes the app's look inside the installed app. A post or page opens inside the app at `/app/?p=ID`; Share and Copy link hand out its normal address on the site, and a page built with a page builder or a page template opens on the site instead. The app's accent colour and corners come from its own settings or, under Look, from another plugin's design: Free Form Certificate's Public Design is built in. Other plugins add their screens to the app through the `site_pwa_register_screens` action: the bottom navigation holds Home, up to three of them and More, and each screen shows only to whoever may open it. The app lives under `/app/` (filterable with `site_pwa_app_prefix`), with the site icon from Settings → General, or the plugin's own, on the home screen. Without a connection, the app shows an offline page. The app's screens arrive in the releases that follow.
+Settings → Site PWA turns the app on; it is off until then. The app is for signed-in users: it opens on its own frame, independent of the theme, with a home screen and the account, and the WordPress login takes the app's look inside the installed app. A post or page opens inside the app at `/app/?p=ID`; Share and Copy link hand out its normal address on the site, and a page built with a page builder or a page template opens on the site instead. The app's accent colour and corners come from its own settings or, under Look, from another plugin's design: Free Form Certificate's Public Design is built in. Other plugins add their screens to the app through the `site_pwa_register_screens` action: the bottom navigation holds Home, up to three of them and More, and each screen shows only to whoever may open it. On phones, the app's home screen invites to install it (the browser's own button on Android, the two steps on iPhone), and signed-in visitors see a "Use the app" banner on the site; neither shows on a computer or inside the installed app. The app lives under `/app/` (filterable with `site_pwa_app_prefix`), with the site icon from Settings → General, or the plugin's own, on the home screen. Without a connection, the app shows an offline page. The app's screens arrive in the releases that follow.
 
 == Installation ==
 
@@ -31,6 +31,9 @@ Settings → Site PWA turns the app on; it is off until then. The app is for sig
 6. The account screen taking its accent and corners from Free Form Certificate's Public Design.
 7. More: the screens that do not fit the bottom navigation, then the account.
 8. A screen another plugin registered, drawn inside the app.
+9. The invite to install on Android: the browser's own install button.
+10. The invite to install on iPhone: the two steps in Safari.
+11. The "Use the app" banner on the site's pages, on a phone.
 
 == Other service workers ==
 

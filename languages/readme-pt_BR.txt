@@ -6,7 +6,7 @@ Transforma o site em um app instalável: um ícone na tela inicial, uma estrutur
 
 O Site PWA torna um site WordPress instalável no celular ou no computador, como um app com ícone e janela próprios. Quem está conectado abre a estrutura do app, e outros plugins acrescentam suas telas a ela por um contrato de registro.
 
-Configurações → Site PWA liga o app; até lá ele fica desligado. O app é para usuários conectados: abre na sua própria estrutura, independente do tema, com a tela inicial e a conta, e o login do WordPress ganha a aparência do app dentro do app instalado. Um post ou página abre dentro do app em `/app/?p=ID`; Compartilhar e Copiar link entregam o endereço normal no site, e uma página feita com construtor de páginas ou modelo de página abre no site. A cor de destaque e os cantos do app vêm das próprias configurações ou, em Aparência, do design de outro plugin: o Design Público do Free Form Certificate já vem incluído. Outros plugins adicionam suas telas ao app pela action `site_pwa_register_screens`: a navegação inferior tem Início, até três delas e Mais, e cada tela aparece só para quem pode abri-la. O app fica em `/app/` (alterável pelo filtro `site_pwa_app_prefix`), com o ícone do site de Configurações → Geral, ou o do plugin, na tela inicial. Sem conexão, o app mostra uma página offline. As telas do app chegam nas versões seguintes.
+Configurações → Site PWA liga o app; até lá ele fica desligado. O app é para usuários conectados: abre na sua própria estrutura, independente do tema, com a tela inicial e a conta, e o login do WordPress ganha a aparência do app dentro do app instalado. Um post ou página abre dentro do app em `/app/?p=ID`; Compartilhar e Copiar link entregam o endereço normal no site, e uma página feita com construtor de páginas ou modelo de página abre no site. A cor de destaque e os cantos do app vêm das próprias configurações ou, em Aparência, do design de outro plugin: o Design Público do Free Form Certificate já vem incluído. Outros plugins adicionam suas telas ao app pela action `site_pwa_register_screens`: a navegação inferior tem Início, até três delas e Mais, e cada tela aparece só para quem pode abri-la. No celular, a tela inicial do app convida para instalá-lo (o botão do próprio navegador no Android, os dois passos no iPhone), e visitantes conectados veem a faixa "Use o app" no site; nenhum dos dois aparece no computador ou dentro do app instalado. O app fica em `/app/` (alterável pelo filtro `site_pwa_app_prefix`), com o ícone do site de Configurações → Geral, ou o do plugin, na tela inicial. Sem conexão, o app mostra uma página offline. As telas do app chegam nas versões seguintes.
 
 == Installation ==
 
@@ -23,6 +23,9 @@ Configurações → Site PWA liga o app; até lá ele fica desligado. O app é p
 6. A tela da conta com a cor de destaque e os cantos do Design Público do Free Form Certificate.
 7. Mais: as telas que não cabem na navegação inferior, e depois a conta.
 8. Uma tela registrada por outro plugin, desenhada dentro do app.
+9. O convite para instalar no Android: o botão de instalação do próprio navegador.
+10. O convite para instalar no iPhone: os dois passos no Safari.
+11. A faixa "Use o app" nas páginas do site, no celular.
 
 == Outros service workers ==
 

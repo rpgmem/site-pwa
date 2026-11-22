@@ -164,6 +164,17 @@ final class SettingsPage {
 						</td>
 					</tr>
 					<tr>
+						<th scope="row"><?php esc_html_e( 'Invite to the app', 'site-pwa' ); ?></th>
+						<td>
+							<input type="hidden" name="<?php echo esc_attr( $field( 'site_banner' ) ); ?>" value="0">
+							<label>
+								<input type="checkbox" id="site-pwa-site-banner" name="<?php echo esc_attr( $field( 'site_banner' ) ); ?>" value="1" <?php checked( $settings['site_banner'] ); ?>>
+								<?php esc_html_e( 'Show a "Use the app" banner on the site\'s pages', 'site-pwa' ); ?>
+							</label>
+							<p class="description"><?php esc_html_e( 'Only on phones and tablets, only to signed-in visitors, and never inside the installed app. A visitor who closes it does not see it again on that device for 30 days. The app\'s home screen invites to install it the same way.', 'site-pwa' ); ?></p>
+						</td>
+					</tr>
+					<tr>
 						<th scope="row"><label for="site-pwa-identity-source"><?php esc_html_e( 'Look', 'site-pwa' ); ?></label></th>
 						<td>
 							<select id="site-pwa-identity-source" name="<?php echo esc_attr( $field( 'identity_source' ) ); ?>">

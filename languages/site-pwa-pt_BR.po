@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-22 22:47+0000\n"
+"POT-Creation-Date: 2026-11-22 23:31+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -48,6 +48,7 @@ msgid "The app is on at"
 msgstr "O app está ligado em"
 
 #: src/admin/settings-page.php:136 templates/frame.php:35
+#: templates/site-banner.php:17
 msgid "App"
 msgstr "App"
 
@@ -84,40 +85,52 @@ msgid "Shown under the icon on a home screen."
 msgstr "Aparece sob o ícone na tela inicial."
 
 #: src/admin/settings-page.php:167
+msgid "Invite to the app"
+msgstr "Convite para o app"
+
+#: src/admin/settings-page.php:172
+msgid "Show a \"Use the app\" banner on the site's pages"
+msgstr "Mostrar a faixa \"Use o app\" nas páginas do site"
+
+#: src/admin/settings-page.php:174
+msgid "Only on phones and tablets, only to signed-in visitors, and never inside the installed app. A visitor who closes it does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
+msgstr "Só em celulares e tablets, só para visitantes conectados, e nunca dentro do app instalado. Quem fecha a faixa não a vê de novo naquele aparelho por 30 dias. A tela inicial do app convida para instalá-lo da mesma forma."
+
+#: src/admin/settings-page.php:178
 msgid "Look"
 msgstr "Aparência"
 
-#: src/admin/settings-page.php:170
+#: src/admin/settings-page.php:181
 msgid "These settings"
 msgstr "Estas configurações"
 
-#: src/admin/settings-page.php:175
+#: src/admin/settings-page.php:186
 msgid "Where the app takes its accent colour and its corners from. While the chosen design is switched off, or its plugin is inactive, the app uses the theme colour below."
 msgstr "De onde o app tira a cor de destaque e os cantos. Enquanto o design escolhido estiver desligado, ou o plugin dele estiver inativo, o app usa a cor do tema abaixo."
 
 #. translators: 1: a colour such as #1d5e8c, 2: corner radius of cards in px, 3: corner radius of buttons in px
-#: src/admin/settings-page.php:182
+#: src/admin/settings-page.php:193
 #, php-format
 msgid "In use now: accent %1$s, cards %2$d px, buttons %3$d px."
 msgstr "Em uso agora: destaque %1$s, cartões %2$d px, botões %3$d px."
 
-#: src/admin/settings-page.php:193
+#: src/admin/settings-page.php:204
 msgid "Theme colour"
 msgstr "Cor do tema"
 
-#: src/admin/settings-page.php:197
+#: src/admin/settings-page.php:208
 msgid "Background colour"
 msgstr "Cor de fundo"
 
-#: src/admin/settings-page.php:200
+#: src/admin/settings-page.php:211
 msgid "Shown while the app opens."
 msgstr "Aparece enquanto o app abre."
 
-#: src/admin/settings-page.php:204
+#: src/admin/settings-page.php:215
 msgid "Icon"
 msgstr "Ícone"
 
-#: src/admin/settings-page.php:205
+#: src/admin/settings-page.php:216
 msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
 msgstr "O app usa o ícone do site, de Configurações → Geral; sem ele, usa o ícone do plugin."
 
@@ -143,7 +156,7 @@ msgstr "Início"
 msgid "Free Form Certificate: Public Design"
 msgstr "Free Form Certificate: Design Público"
 
-#: src/update/github-updater.php:333
+#: src/update/github-updater.php:335
 msgid "Update package integrity check (SHA-256) failed. Installation aborted."
 msgstr "A verificação de integridade do pacote de atualização (SHA-256) falhou. Instalação cancelada."
 
@@ -180,18 +193,46 @@ msgid "Sign out"
 msgstr "Sair"
 
 #. translators: %s: the signed-in user's first name
-#: templates/screen-home.php:19
+#: templates/screen-home.php:20
 #, php-format
 msgid "Hello, %s"
 msgstr "Olá, %s"
 
-#: templates/screen-home.php:23
+#: templates/screen-home.php:24
 msgid "Your screens"
 msgstr "Suas telas"
 
-#: templates/screen-home.php:25
+#: templates/screen-home.php:26
 msgid "Nothing here yet. The screens other plugins add to the app appear here."
 msgstr "Nada aqui ainda. As telas que outros plugins acrescentam ao app aparecem aqui."
+
+#: templates/screen-home.php:42 templates/site-banner.php:24
+msgid "Not now"
+msgstr "Agora não"
+
+#: templates/screen-home.php:45
+msgid "Install the app"
+msgstr "Instale o app"
+
+#: templates/screen-home.php:47
+msgid "Open it from your home screen, full screen, like any other app."
+msgstr "Abra pela tela inicial, em tela cheia, como qualquer outro app."
+
+#: templates/screen-home.php:51
+msgid "Install app"
+msgstr "Instalar app"
+
+#: templates/screen-home.php:56
+msgid "Add it to your home screen to open it like any other app:"
+msgstr "Adicione à tela de início para abrir como qualquer outro app:"
+
+#: templates/screen-home.php:60
+msgid "Tap Share in Safari’s toolbar."
+msgstr "Toque em Compartilhar, na barra do Safari."
+
+#: templates/screen-home.php:64
+msgid "Choose Add to Home Screen."
+msgstr "Escolha Adicionar à Tela de Início."
 
 #: templates/screen-missing.php:16
 msgid "This page is not available"
@@ -224,6 +265,14 @@ msgstr "Copiar link"
 #: templates/screen-post.php:43
 msgid "Open on the site"
 msgstr "Abrir no site"
+
+#: templates/site-banner.php:21
+msgid "Faster in the app."
+msgstr "Mais rápido no app."
+
+#: templates/site-banner.php:23
+msgid "Use the app"
+msgstr "Use o app"
 
 #. Plugin header: Description
 msgid "Turns the site into an installable app: a home-screen icon, an app shell for signed-in users and screens other plugins register."

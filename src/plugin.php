@@ -58,6 +58,7 @@ final class Plugin {
 		App\Routes::register();
 		App\Frame::register();
 		App\Content::register();
+		App\Invite::register();
 		App\Login::register();
 
 		if ( is_admin() ) {
