@@ -61,6 +61,11 @@ final class GithubUpdaterTest extends WP_UnitTestCase {
 				if ( null === $response ) {
 					return new \WP_Error( 'http', 'down' );
 				}
+				// download_url() streams to a temporary file; write the body
+				// there, as the transport would.
+				if ( ! empty( $args['stream'] ) && ! empty( $args['filename'] ) ) {
+					file_put_contents( (string) $args['filename'], $response['body'] );
+				}
 				return array(
 					'headers'  => array( 'etag' => $response['etag'] ?? '' ),
 					'body'     => $response['body'],
@@ -247,6 +252,150 @@ final class GithubUpdaterTest extends WP_UnitTestCase {
 	public function test_the_hooks_are_registered(): void {
 		self::assertNotFalse( has_filter( 'pre_set_site_transient_update_plugins', array( GithubUpdater::class, 'checkForUpdate' ) ) );
 		self::assertNotFalse( has_filter( 'upgrader_pre_download', array( GithubUpdater::class, 'verifyDownload' ) ) );
+	}
+
+	public function test_a_package_matching_its_digest_is_installed_from_the_verified_file(): void {
+		$zip                                     = 'PK fake package';
+		$this->responses['releases/download']    = array(
+			'code' => 200,
+			'body' => $zip,
+		);
+		$release                                 = $this->release();
+		$release['assets'][1]['digest']          = 'sha256:' . strtoupper( hash( 'sha256', $zip ) );
+		$this->responses['api.github.com']['body'] = (string) wp_json_encode( $release );
+
+		$file = GithubUpdater::verifyDownload( false, self::ZIP );
+
+		self::assertIsString( $file, 'A matching package short-circuits the download with the verified file.' );
+		self::assertSame( $zip, file_get_contents( $file ) );
+		wp_delete_file( $file );
+	}
+
+	public function test_a_package_that_does_not_match_its_digest_is_refused_and_deleted(): void {
+		$this->responses['releases/download'] = array(
+			'code' => 200,
+			'body' => 'PK tampered package',
+		);
+		$deleted                              = array();
+		$track                                = static function ( string $file ) use ( &$deleted ): string {
+			$deleted[] = $file;
+			return $file;
+		};
+		add_filter( 'wp_delete_file', $track );
+
+		$result = GithubUpdater::verifyDownload( false, self::ZIP );
+		remove_filter( 'wp_delete_file', $track );
+
+		self::assertWPError( $result );
+		self::assertSame( 'site_pwa_updater_checksum', $result->get_error_code() );
+		self::assertCount( 1, $deleted, 'The tampered download is deleted.' );
+		self::assertFileDoesNotExist( $deleted[0] );
+	}
+
+	public function test_a_package_that_cannot_be_downloaded_returns_the_error(): void {
+		$this->responses['releases/download'] = null;
+		self::assertWPError( GithubUpdater::verifyDownload( false, self::ZIP ) );
+	}
+
+	public function test_a_release_without_a_digest_is_not_intercepted(): void {
+		$release = $this->release();
+		unset( $release['assets'][1]['digest'] );
+		$this->responses['api.github.com']['body'] = (string) wp_json_encode( $release );
+
+		self::assertFalse( GithubUpdater::verifyDownload( false, self::ZIP ) );
+	}
+
+	public function test_a_finished_update_drops_the_cache(): void {
+		GithubUpdater::checkForUpdate( $this->transient( Plugin::VERSION ) );
+		self::assertNotFalse( get_site_transient( GithubUpdater::CACHE_KEY ) );
+
+		GithubUpdater::flushCache();
+
+		self::assertFalse( get_site_transient( GithubUpdater::CACHE_KEY ) );
+	}
+
+	public function test_check_again_asks_github_instead_of_the_cache(): void {
+		GithubUpdater::checkForUpdate( $this->transient( Plugin::VERSION ) );
+		$count = count( $this->requested );
+
+		$_GET['force-check'] = '1';
+		GithubUpdater::checkForUpdate( $this->transient( Plugin::VERSION ) );
+		unset( $_GET['force-check'] );
+
+		self::assertGreaterThan( $count, count( $this->requested ) );
+	}
+
+	public function test_an_expired_cache_answered_304_keeps_the_payload_and_renews_the_ttl(): void {
+		GithubUpdater::checkForUpdate( $this->transient( Plugin::VERSION ) );
+		$cache               = get_site_transient( GithubUpdater::CACHE_KEY );
+		$cache['fetched_at'] = 1;
+		set_site_transient( GithubUpdater::CACHE_KEY, $cache );
+		$this->responses['api.github.com'] = array(
+			'code' => 304,
+			'body' => '',
+		);
+
+		$result = GithubUpdater::checkForUpdate( $this->transient( Plugin::VERSION ) );
+
+		self::assertSame( '9.0.0', current( $result->response )->new_version );
+		self::assertGreaterThan( 1, get_site_transient( GithubUpdater::CACHE_KEY )['fetched_at'] );
+	}
+
+	/**
+	 * @return array<string, array{0: array{code: int, body: string}}>
+	 */
+	public function unusable_responses(): array {
+		return array(
+			'server error'  => array(
+				array(
+					'code' => 500,
+					'body' => '',
+				),
+			),
+			'not JSON'      => array(
+				array(
+					'code' => 200,
+					'body' => 'oops',
+				),
+			),
+			'no tag'        => array(
+				array(
+					'code' => 200,
+					'body' => '{"assets":[]}',
+				),
+			),
+			'no zip asset'  => array(
+				array(
+					'code' => 200,
+					'body' => '{"tag_name":"v9.0.0","assets":["not an asset"]}',
+				),
+			),
+		);
+	}
+
+	/**
+	 * @dataProvider unusable_responses
+	 *
+	 * @param array{code: int, body: string} $response What GitHub answers.
+	 */
+	public function test_an_unusable_answer_offers_nothing( array $response ): void {
+		$this->responses['api.github.com'] = $response;
+		$result                            = GithubUpdater::checkForUpdate( $this->transient( Plugin::VERSION ) );
+		self::assertObjectNotHasProperty( 'response', $result );
+	}
+
+	public function test_a_readme_without_an_upgrade_notice_entry_offers_no_notice(): void {
+		$this->responses['raw.githubusercontent.com']['body'] = "=== Site PWA ===\n\n== Upgrade Notice ==\n\nNo entry heading.\n";
+		$result = GithubUpdater::checkForUpdate( $this->transient( Plugin::VERSION ) );
+		self::assertSame( '', current( $result->response )->upgrade_notice );
+	}
+
+	public function test_registering_wires_the_four_hooks(): void {
+		remove_all_filters( 'upgrader_process_complete' );
+		GithubUpdater::register();
+
+		self::assertSame( 10, has_filter( 'plugins_api', array( GithubUpdater::class, 'pluginInfo' ) ) );
+		self::assertSame( 10, has_action( 'upgrader_process_complete', array( GithubUpdater::class, 'flushCache' ) ) );
 	}
 
 	private function transient( string $installed ): \stdClass {

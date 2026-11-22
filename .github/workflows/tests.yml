@@ -180,8 +180,7 @@ jobs:
     env:
       # Merged line coverage of the unit and functional suites. The floor is the
       # highest of 90%, the measured figure minus 5 points, and its current
-      # value; it is never lowered (CLAUDE.md). Raised 88 -> 90 in #52, measured
-      # 93.26% when set.
+      # value; it is never lowered (CLAUDE.md). Set at 90 in #1, measured 94.00%.
       COVERAGE_FLOOR_LINES: '90'
     services:
       mysql:
