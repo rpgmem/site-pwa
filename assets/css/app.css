@@ -14,6 +14,7 @@
 	--site-pwa-on-accent: #fff;
 	--site-pwa-neutral-bg: #e9edf1;
 	--site-pwa-radius: 12px;
+	--site-pwa-control-radius: 8px;
 	--site-pwa-nav-height: 64px;
 	color-scheme: light dark;
 }
@@ -64,7 +65,7 @@
 	top: -48px;
 	z-index: 20;
 	padding: 8px 12px;
-	border-radius: 8px;
+	border-radius: var(--site-pwa-control-radius);
 	background: var(--site-pwa-accent);
 	color: var(--site-pwa-on-accent);
 }
@@ -168,7 +169,7 @@
 	gap: 8px;
 	min-height: 44px;
 	padding: 0 18px;
-	border-radius: 8px;
+	border-radius: var(--site-pwa-control-radius);
 	background: var(--site-pwa-accent);
 	border: 0;
 	color: var(--site-pwa-on-accent);

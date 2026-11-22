@@ -34,7 +34,7 @@ final class Manifest {
 			'scope'            => $home,
 			'display'          => 'standalone',
 			'background_color' => $settings['background_color'],
-			'theme_color'      => $settings['theme_color'],
+			'theme_color'      => Identity::current()['accent'],
 			'lang'             => (string) get_bloginfo( 'language' ),
 			'dir'              => is_rtl() ? 'rtl' : 'ltr',
 			'icons'            => self::icons(),

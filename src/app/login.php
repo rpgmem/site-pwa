@@ -54,14 +54,18 @@ final class Login {
 		if ( ! Settings::enabled() ) {
 			return;
 		}
-		$css = Plugin::asset( 'assets/css/login.css' );
+		$look = Identity::current();
+		$css  = Plugin::asset( 'assets/css/login.css' );
 		wp_enqueue_style( self::HANDLE, Plugin::url() . $css, array( 'login' ), Plugin::assetVersion( $css ) );
 		wp_add_inline_style(
 			self::HANDLE,
 			sprintf(
-				':root{--site-pwa-logo:url("%1$s");--site-pwa-accent:%2$s}',
+				':root{--site-pwa-logo:url("%1$s");--site-pwa-accent:%2$s;--site-pwa-on-accent:%3$s;--site-pwa-radius:%4$dpx;--site-pwa-control-radius:%5$dpx}',
 				esc_url_raw( Manifest::touchIcon() ),
-				Settings::get()['theme_color']
+				$look['accent'],
+				Identity::onAccent( $look['accent'] ),
+				$look['radius'],
+				$look['control_radius']
 			)
 		);
 	}
