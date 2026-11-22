@@ -28,6 +28,11 @@ final class Routes {
 	public const QUERY_VAR = 'site_pwa_route';
 
 	/**
+	 * The query var that names a registered screen, for the `screen` route.
+	 */
+	public const SCREEN_VAR = 'site_pwa_screen';
+
+	/**
 	 * The service worker's file name, at the site root.
 	 */
 	public const SW_FILE = 'site-pwa-sw.js';
@@ -36,7 +41,7 @@ final class Routes {
 	 * Bumped whenever the rules change, so an install that updated without
 	 * an activation still gets them: a GitHub update runs no activation hook.
 	 */
-	public const REVISION = 2;
+	public const REVISION = 3;
 
 	/**
 	 * Option holding the rules revision last flushed. Deleted by uninstall.php.
@@ -46,13 +51,14 @@ final class Routes {
 	/**
 	 * The routes and the path each one answers under the prefix.
 	 */
-	public const ROUTES = array( 'home', 'account', 'post', 'offline', 'manifest' );
+	public const ROUTES = array( 'home', 'account', 'more', 'screen', 'post', 'offline', 'manifest' );
 
 	/**
 	 * The routes drawn inside the app frame; they need a signed-in user.
-	 * `post` is the home URL with `?p=ID` (see Content::request()).
+	 * `post` is the home URL with `?p=ID` (see Content::request()); `screen`
+	 * is one registered by another plugin (see Screens).
 	 */
-	public const SCREENS = array( 'home', 'account', 'post' );
+	public const SCREENS = array( 'home', 'account', 'more', 'screen', 'post' );
 
 	/**
 	 * Wire the rules and the handler.
@@ -88,6 +94,8 @@ final class Routes {
 		add_rewrite_rule( '^' . $prefix . '/manifest\.webmanifest$', 'index.php?' . self::QUERY_VAR . '=manifest', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/offline/?$', 'index.php?' . self::QUERY_VAR . '=offline', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/account/?$', 'index.php?' . self::QUERY_VAR . '=account', 'top' );
+		add_rewrite_rule( '^' . $prefix . '/more/?$', 'index.php?' . self::QUERY_VAR . '=more', 'top' );
+		add_rewrite_rule( '^' . $prefix . '/s/([a-z0-9-]+)/?$', 'index.php?' . self::QUERY_VAR . '=screen&' . self::SCREEN_VAR . '=$matches[1]', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/?$', 'index.php?' . self::QUERY_VAR . '=home', 'top' );
 	}
 
@@ -111,13 +119,14 @@ final class Routes {
 	 */
 	public static function queryVars( array $vars ): array {
 		$vars[] = self::QUERY_VAR;
+		$vars[] = self::SCREEN_VAR;
 		return $vars;
 	}
 
 	/**
 	 * The URL of a route.
 	 *
-	 * @param string $route `home`, `account`, `offline`, `manifest` or `sw`.
+	 * @param string $route `home`, `account`, `more`, `offline`, `manifest` or `sw`.
 	 */
 	public static function url( string $route ): string {
 		if ( 'sw' === $route ) {
@@ -126,6 +135,7 @@ final class Routes {
 		$path = array(
 			'home'     => '/',
 			'account'  => '/account/',
+			'more'     => '/more/',
 			'offline'  => '/offline/',
 			'manifest' => '/manifest.webmanifest',
 		);
@@ -185,12 +195,29 @@ final class Routes {
 		);
 
 		if ( in_array( $route, self::SCREENS, true ) && ! is_user_logged_in() ) {
-			$back = 'post' === $route ? Content::url( Content::requested() ) : self::url( $route );
+			$back = self::url( $route );
+			if ( 'post' === $route ) {
+				$back = Content::url( Content::requested() );
+			} elseif ( 'screen' === $route ) {
+				$back = home_url( '/' . self::prefix() . '/s/' . sanitize_key( self::screen() ) . '/' );
+			}
 			return array(
 				'status'  => 302,
 				'headers' => $headers + array( 'Location' => wp_login_url( $back ) ),
 				'body'    => '',
 			);
+		}
+
+		// An unknown screen, one the user may not open, and a URL screen
+		// (which opens at its own address) are one answer.
+		if ( 'screen' === $route ) {
+			if ( null === Screens::page( self::screen() ) ) {
+				return array(
+					'status'  => 404,
+					'headers' => $headers,
+					'body'    => Frame::render( 'missing' ),
+				);
+			}
 		}
 
 		if ( 'post' === $route ) {
@@ -223,6 +250,13 @@ final class Routes {
 	 */
 	public static function current(): string {
 		return (string) get_query_var( self::QUERY_VAR );
+	}
+
+	/**
+	 * The screen id of a `screen` request, or ''.
+	 */
+	public static function screen(): string {
+		return (string) get_query_var( self::SCREEN_VAR );
 	}
 
 	/**
