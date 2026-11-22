@@ -104,24 +104,27 @@ final class AppRoutesTest extends WP_UnitTestCase {
 		self::assertSame( get_site_icon_url( 192 ), Manifest::touchIcon() );
 	}
 
-	public function test_the_home_page_is_private_and_sends_a_signed_out_visitor_to_the_login_url(): void {
+	public function test_a_screen_sends_a_signed_out_visitor_to_the_login_url_and_back(): void {
 		$this->turnOn();
-		$response = Routes::response( 'home' );
+		foreach ( array( 'home', 'account' ) as $route ) {
+			$response = Routes::response( $route );
 
-		self::assertSame( 'private, no-store', $response['headers']['Cache-Control'] );
-		self::assertStringContainsString( esc_url( wp_login_url( Routes::url( 'home' ) ) ), $response['body'] );
-		self::assertStringContainsString( 'rel="manifest"', $response['body'] );
-		self::assertStringContainsString( 'data-sw="' . esc_url( Routes::url( 'sw' ) ) . '"', $response['body'] );
+			self::assertSame( 302, $response['status'] );
+			self::assertSame( wp_login_url( Routes::url( $route ) ), $response['headers']['Location'] );
+			self::assertSame( 'private, no-store', $response['headers']['Cache-Control'] );
+		}
 	}
 
-	public function test_the_home_page_names_the_signed_in_user(): void {
+	public function test_a_screen_is_private_for_a_signed_in_user(): void {
 		$this->turnOn();
 		wp_set_current_user( self::factory()->user->create( array( 'display_name' => 'Maria Souza' ) ) );
+		set_query_var( Routes::QUERY_VAR, 'home' );
 
-		$body = Routes::response( 'home' )['body'];
+		$response = Routes::response( 'home' );
 
-		self::assertStringContainsString( 'Maria Souza', $body );
-		self::assertStringContainsString( 'action=logout', $body );
+		self::assertSame( 200, $response['status'] );
+		self::assertSame( 'private, no-store', $response['headers']['Cache-Control'] );
+		self::assertStringContainsString( 'Maria Souza', $response['body'] );
 	}
 
 	public function test_the_offline_page_carries_no_user_data_and_no_nonce(): void {
@@ -138,6 +141,13 @@ final class AppRoutesTest extends WP_UnitTestCase {
 	public function test_an_unknown_route_answers_nothing(): void {
 		$this->turnOn();
 		self::assertNull( Routes::response( 'wp-admin' ) );
+	}
+
+	public function test_the_account_route_has_its_rule(): void {
+		Routes::addRules();
+		global $wp_rewrite;
+		self::assertSame( 'index.php?site_pwa_route=account', $wp_rewrite->extra_rules_top['^app/account/?$'] );
+		self::assertSame( home_url( '/app/account/' ), Routes::url( 'account' ) );
 	}
 
 	public function test_the_rules_reach_each_route(): void {

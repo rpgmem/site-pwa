@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-22 22:05+0000\n"
+"POT-Creation-Date: 2026-11-22 22:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,7 +48,7 @@ msgstr ""
 msgid "The app is on at"
 msgstr ""
 
-#: src/admin/settings-page.php:135
+#: src/admin/settings-page.php:135 templates/frame.php:35
 msgid "App"
 msgstr ""
 
@@ -72,7 +72,7 @@ msgstr ""
 msgid "Only needed when another plugin registers a worker at the site root. A push service that wants to keep working can load its script through the site_pwa_sw_imports filter instead."
 msgstr ""
 
-#: src/admin/settings-page.php:155
+#: src/admin/settings-page.php:155 templates/screen-account.php:20
 msgid "Name"
 msgstr ""
 
@@ -104,26 +104,20 @@ msgstr ""
 msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
 msgstr ""
 
-#: src/update/github-updater.php:326
+#: src/app/navigation.php:33
+msgid "Home"
+msgstr ""
+
+#: src/app/navigation.php:39 templates/screen-account.php:16
+msgid "Account"
+msgstr ""
+
+#: src/update/github-updater.php:331
 msgid "Update package integrity check (SHA-256) failed. Installation aborted."
 msgstr ""
 
-#. translators: %s: the signed-in user's display name
-#: templates/app-home.php:27
-#, php-format
-msgid "Signed in as %s."
-msgstr ""
-
-#: templates/app-home.php:30
-msgid "Sign out"
-msgstr ""
-
-#: templates/app-home.php:32
-msgid "Sign in to use the app."
-msgstr ""
-
-#: templates/app-home.php:33
-msgid "Sign in"
+#: templates/frame.php:25
+msgid "Skip to content"
 msgstr ""
 
 #: templates/offline.php:20 templates/offline.php:24
@@ -136,6 +130,36 @@ msgstr ""
 
 #: templates/offline.php:26
 msgid "Try again"
+msgstr ""
+
+#: templates/screen-account.php:18
+msgid "Signed in as"
+msgstr ""
+
+#: templates/screen-account.php:22
+msgid "Email"
+msgstr ""
+
+#: templates/screen-account.php:26
+msgid "Edit profile"
+msgstr ""
+
+#: templates/screen-account.php:27
+msgid "Sign out"
+msgstr ""
+
+#. translators: %s: the signed-in user's first name
+#: templates/screen-home.php:17
+#, php-format
+msgid "Hello, %s"
+msgstr ""
+
+#: templates/screen-home.php:21
+msgid "Your screens"
+msgstr ""
+
+#: templates/screen-home.php:22
+msgid "Nothing here yet. The screens other plugins add to the app appear here."
 msgstr ""
 
 #. Plugin header: Description

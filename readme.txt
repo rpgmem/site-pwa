@@ -14,12 +14,19 @@ Turns the site into an installable app: a home-screen icon, an app shell for sig
 
 Site PWA makes a WordPress site installable on a phone or a computer, as an app with its own icon and window. Signed-in users open it on an app shell, and other plugins add their screens to it through a registration contract.
 
-Settings → Site PWA turns the app on; it is off until then. The app lives under `/app/` (filterable with `site_pwa_app_prefix`), with the site icon from Settings → General, or the plugin's own, on the home screen. Without a connection, the app shows an offline page. The app's screens arrive in the releases that follow.
+Settings → Site PWA turns the app on; it is off until then. The app is for signed-in users: it opens on its own frame, independent of the theme, with a home screen and the account, and the WordPress login takes the app's look inside the installed app. The app lives under `/app/` (filterable with `site_pwa_app_prefix`), with the site icon from Settings → General, or the plugin's own, on the home screen. Without a connection, the app shows an offline page. The app's screens arrive in the releases that follow.
 
 == Installation ==
 
 1. Download `site-pwa-X.Y.Z.zip` from the latest GitHub release.
 2. In WordPress, go to Plugins → Add New → Upload Plugin, choose the zip and activate it.
+
+== Screenshots ==
+
+1. The app's home screen, with the bottom navigation.
+2. The account screen: who is signed in, edit profile, sign out.
+3. The WordPress login inside the installed app.
+4. The account screen in the dark theme.
 
 == Other service workers ==
 

@@ -59,7 +59,12 @@ final class GithubUpdater {
 	 * the zip. `PluginDetailsAssetsTest` holds this list to the folder and to
 	 * the number of captions.
 	 */
-	public const SCREENSHOTS = array();
+	public const SCREENSHOTS = array(
+		'1-home.png',
+		'2-account.png',
+		'3-login.png',
+		'4-account-dark.png',
+	);
 
 	/**
 	 * Register the update hooks.
