@@ -1,0 +1,159 @@
+name: Deploy develop to testes
+
+# Every push to `develop` (a merged PR) goes to the testes site over SSH, so a
+# change can be tried on a real host within a minute: the service worker needs
+# HTTPS, installing needs a phone, and the Free Form Certificate integration
+# needs both plugins on one site. The secrets and the first activation are
+# described in CLAUDE.md ("Deploy to testes").
+
+on:
+  push:
+    branches: [develop]
+  # A manual re-deploy, for when the testes site was reset or the last
+  # deploy failed and develop has not moved since.
+  workflow_dispatch:
+
+concurrency:
+  # Two rsyncs over one directory would race; only the newest push wins.
+  group: deploy-develop-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: rsync to testes
+    runs-on: ubuntu-latest
+    # Three rsync attempts of at most 300 s with two 120 s waits, plus the
+    # smoke's 120 s: 25 minutes stops a hung job well after the worst case.
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # rsync sends the working tree; history is not needed.
+          fetch-depth: 1
+
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.TESTES_SSH_KEY }}
+          SSH_HOST: ${{ secrets.TESTES_SSH_HOST }}
+          SSH_PORT: ${{ secrets.TESTES_SSH_PORT }}
+        run: |
+          if [ -z "$SSH_KEY" ] || [ -z "$SSH_HOST" ]; then
+            echo "::error::The TESTES_SSH_* secrets are not set in this repository. See CLAUDE.md, \"Deploy to testes\"."
+            exit 1
+          fi
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          # Optional: managed hosting often serves SSH on a high port.
+          PORT="${SSH_PORT:-22}"
+          # Best effort; the steps below fall back to accept-new (trust on
+          # first use) when the scan fails behind a firewall or a CDN.
+          ssh-keyscan -p "$PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      # `--delete` empties whatever directory it is pointed at, so the path is
+      # checked before anything is sent: absolute, and ending in
+      # `/wp-content/plugins/site-pwa`. rsync creates only the last component,
+      # so a wrong prefix fails rather than building a tree. Telling testes
+      # from production on one hosting account stays the secret's job.
+      - name: Check the target path
+        env:
+          REMOTE_PATH: ${{ secrets.TESTES_REMOTE_PATH }}
+          SLUG: site-pwa
+        run: |
+          TARGET="${REMOTE_PATH%/}"
+          PLUGINS="$(dirname "$TARGET")"
+          case "$TARGET" in
+            /*) ;;
+            *) echo "::error::TESTES_REMOTE_PATH must be an absolute path."; exit 1 ;;
+          esac
+          if [ "$(basename "$TARGET")" != "$SLUG" ] \
+            || [ "$(basename "$PLUGINS")" != "plugins" ] \
+            || [ "$(basename "$(dirname "$PLUGINS")")" != "wp-content" ]; then
+            echo "::error::TESTES_REMOTE_PATH must end in /wp-content/plugins/${SLUG}. Nothing was sent."
+            exit 1
+          fi
+          echo "Target path has the expected shape."
+
+      - name: Rsync to testes
+        env:
+          SSH_HOST: ${{ secrets.TESTES_SSH_HOST }}
+          SSH_USER: ${{ secrets.TESTES_SSH_USER }}
+          SSH_PORT: ${{ secrets.TESTES_SSH_PORT }}
+          REMOTE_PATH: ${{ secrets.TESTES_REMOTE_PATH }}
+        run: |
+          PORT="${SSH_PORT:-22}"
+          # `.distignore` is what the release zip leaves out, so testes runs
+          # what a release ships and the two lists cannot drift apart.
+          # BatchMode: never wait for a password prompt the runner cannot
+          # answer. ConnectTimeout + three attempts 120 s apart: a managed
+          # host's restart outlasts a short backoff (FFC's #628). `timeout`
+          # stops an attempt that stalls after connecting.
+          SSH_CMD="ssh -i ~/.ssh/deploy_key -p $PORT -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o ConnectTimeout=30 -o ServerAliveInterval=15 -o ServerAliveCountMax=4"
+          attempt=1
+          max_attempts=3
+          until timeout 300 rsync -avz --delete \
+            --exclude-from=.distignore \
+            -e "$SSH_CMD" \
+            ./ "${SSH_USER}@${SSH_HOST}:${REMOTE_PATH%/}/"; do
+            status=$?
+            if [ "$attempt" -ge "$max_attempts" ]; then
+              echo "::error::rsync to testes failed after ${max_attempts} attempts (last exit ${status})."
+              exit "$status"
+            fi
+            echo "::warning::rsync attempt ${attempt} failed (exit ${status}); retrying in 120s."
+            sleep 120
+            attempt=$((attempt + 1))
+          done
+
+      # An alarm, not a gate: the merge already happened. It answers what
+      # only the host can: did the deploy land, and is the plugin running.
+      - name: Smoke test the deployed site
+        env:
+          SSH_HOST: ${{ secrets.TESTES_SSH_HOST }}
+          SSH_USER: ${{ secrets.TESTES_SSH_USER }}
+          SSH_PORT: ${{ secrets.TESTES_SSH_PORT }}
+          REMOTE_PATH: ${{ secrets.TESTES_REMOTE_PATH }}
+        run: |
+          PORT="${SSH_PORT:-22}"
+          SSH_CMD="ssh -i ~/.ssh/deploy_key -p $PORT -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o ConnectTimeout=30"
+
+          # The version this commit carries, read from the commit, not the host.
+          VERSION=$(grep -oE "define\( 'SITE_PWA_VERSION', '[^']+'" site-pwa.php | grep -oE "'[^']+'$" | tr -d "'")
+          if [ -z "$VERSION" ]; then
+            echo "::error::could not read SITE_PWA_VERSION from site-pwa.php"
+            exit 1
+          fi
+
+          # The script is CI tooling: it goes to a scratch directory and is
+          # removed afterwards, never into the plugin directory.
+          REMOTE_DIR="/tmp/site-pwa-smoke-${GITHUB_RUN_ID}"
+          $SSH_CMD "${SSH_USER}@${SSH_HOST}" "mkdir -p ${REMOTE_DIR}"
+          scp -i ~/.ssh/deploy_key -P "$PORT" -o BatchMode=yes -o StrictHostKeyChecking=accept-new \
+            .github/scripts/testes-smoke.php "${SSH_USER}@${SSH_HOST}:${REMOTE_DIR}/"
+
+          set +e
+          timeout 120 $SSH_CMD "${SSH_USER}@${SSH_HOST}" \
+            "php ${REMOTE_DIR}/testes-smoke.php '${REMOTE_PATH%/}' '${VERSION}'"
+          STATUS=$?
+          set -e
+
+          $SSH_CMD "${SSH_USER}@${SSH_HOST}" "rm -rf ${REMOTE_DIR}" || true
+
+          # 124: the host did not answer in 120 s. The rsync already
+          # succeeded, so that is latency, not a defect, and stays a warning;
+          # an alarm that reddens on latency is one people learn to skip.
+          if [ "$STATUS" -eq 124 ]; then
+            echo "::warning::smoke timed out after 120s; the deploy itself succeeded."
+            exit 0
+          fi
+          if [ "$STATUS" -ne 0 ]; then
+            echo "::error::post-deploy smoke failed on the testes host (exit ${STATUS}). See the report above."
+          fi
+          exit "$STATUS"
+
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
