@@ -53,7 +53,7 @@ final class FrameTest extends WP_UnitTestCase {
 		self::assertStringContainsString( '<main id="site-pwa-main" class="site-pwa-main" tabindex="-1">', $html );
 		self::assertStringContainsString( '<nav class="site-pwa-nav" aria-label="App">', $html );
 		self::assertSame( 1, substr_count( $html, 'aria-current="page"' ) );
-		self::assertMatchesRegularExpression( '#href="' . preg_quote( Routes::url( 'account' ), '#' ) . '" aria-current="page"#', $html );
+		self::assertMatchesRegularExpression( '#href="' . preg_quote( Routes::url( 'more' ), '#' ) . '" aria-current="page"#', $html );
 	}
 
 	public function test_the_skip_link_comes_before_the_header_and_the_navigation_after_the_content(): void {
@@ -140,12 +140,13 @@ final class FrameTest extends WP_UnitTestCase {
 		self::assertSame( 'Account – Escola Viva', Frame::title( '' ) );
 	}
 
-	public function test_navigation_lists_home_then_account_with_one_current(): void {
+	public function test_without_screens_the_navigation_is_home_then_more_with_one_current(): void {
 		$items = Navigation::items( 'home' );
 
-		self::assertSame( array( 'home', 'account' ), array_column( $items, 'id' ) );
+		self::assertSame( array( 'home', 'more' ), array_column( $items, 'id' ) );
 		self::assertSame( array( true, false ), array_column( $items, 'current' ) );
-		self::assertSame( '', Navigation::label( 'unknown' ) );
+		self::assertSame( 'more', Navigation::key( 'account' ) );
+		self::assertSame( '', Navigation::key( 'post' ) );
 	}
 
 	public function test_icons_are_a_closed_set_hidden_from_assistive_technology(): void {

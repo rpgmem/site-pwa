@@ -252,6 +252,63 @@
 	display: none;
 }
 
+/* A list of screens: home's "Your screens" and More. */
+.site-pwa-card-list {
+	padding: 4px 0;
+}
+
+.site-pwa-card h2 + .site-pwa-list {
+	margin-top: 8px;
+}
+
+.site-pwa-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.site-pwa-list li + li {
+	border-top: 1px solid var(--site-pwa-border);
+}
+
+.site-pwa-list a {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	min-height: 48px;
+	padding: 0 20px;
+	color: inherit;
+	text-decoration: none;
+}
+
+.site-pwa-card > .site-pwa-list a {
+	padding: 0;
+}
+
+.site-pwa-card-list > .site-pwa-list a {
+	padding: 0 20px;
+}
+
+.site-pwa-list span {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.site-pwa-list .site-pwa-icon:first-child {
+	color: var(--site-pwa-accent);
+}
+
+.site-pwa-list .site-pwa-icon:last-child {
+	width: 18px;
+	height: 18px;
+	color: var(--site-pwa-muted);
+}
+
+.site-pwa-list a:focus-visible {
+	outline: 2px solid var(--site-pwa-accent);
+	outline-offset: -2px;
+}
+
 /* Bottom navigation. */
 .site-pwa-nav {
 	position: fixed;

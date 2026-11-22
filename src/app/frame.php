@@ -63,17 +63,23 @@ final class Frame {
 	/**
 	 * Render a screen in the frame.
 	 *
-	 * @param string $route A screen route, or `missing` for a post the app
-	 *                      cannot show.
+	 * @param string $route A screen route, or `missing` for a post or a
+	 *                      screen the app cannot show.
 	 */
 	public static function render( string $route ): string {
 		$settings = Settings::get();
 		$user     = wp_get_current_user();
 		$post     = 'post' === $route ? Content::current() : null;
+		$screen   = 'screen' === $route ? Screens::page( Routes::screen() ) : null;
 
-		$screen = self::template(
+		$content = self::template(
 			'screen-' . $route,
 			array(
+				'screens'     => Screens::visible(),
+				'more'        => Screens::split()['more'],
+				'account_url' => Routes::url( 'account' ),
+				'screen'      => $screen,
+				'screen_html' => null === $screen ? '' : self::screenHtml( $screen ),
 				'user'        => $user,
 				'first_name'  => '' !== (string) $user->first_name ? (string) $user->first_name : (string) $user->display_name,
 				'profile_url' => get_edit_profile_url( $user->ID ),
@@ -90,8 +96,8 @@ final class Frame {
 				'name'       => $settings['name'],
 				'icon'       => Manifest::touchIcon(),
 				'home'       => Routes::url( 'home' ),
-				'navigation' => Navigation::items( $route ),
-				'content'    => $screen,
+				'navigation' => Navigation::items( Navigation::key( $route, Routes::screen() ) ),
+				'content'    => $content,
 			)
 		);
 	}
@@ -221,12 +227,46 @@ final class Frame {
 		if ( ! self::active() ) {
 			return $title;
 		}
-		$label = Navigation::label( Routes::current() );
-		if ( 'post' === Routes::current() ) {
-			$post  = Content::current();
-			$label = null === $post ? __( 'Not available', 'site-pwa' ) : wp_strip_all_tags( get_the_title( $post ) );
+		return self::label( Routes::current() ) . ' – ' . Settings::get()['name'];
+	}
+
+	/**
+	 * The name of what a route shows, for the document title.
+	 *
+	 * @param string $route A screen route.
+	 */
+	private static function label( string $route ): string {
+		switch ( $route ) {
+			case 'account':
+				return __( 'Account', 'site-pwa' );
+			case 'more':
+				return __( 'More', 'site-pwa' );
+			case 'post':
+				$post = Content::current();
+				return null === $post ? __( 'Not available', 'site-pwa' ) : wp_strip_all_tags( get_the_title( $post ) );
+			case 'screen':
+				$screen = Screens::page( Routes::screen() );
+				return null === $screen ? __( 'Not available', 'site-pwa' ) : $screen['label'];
+			default:
+				return __( 'Home', 'site-pwa' );
 		}
-		return $label . ' – ' . Settings::get()['name'];
+	}
+
+	/**
+	 * A registered screen's HTML: what its callback prints, then what it
+	 * returns. It is the consumer's markup, drawn as the consumer wrote it;
+	 * escaping it is the consumer's job, as with a shortcode.
+	 *
+	 * @param array{render: callable|null} $screen The screen.
+	 */
+	private static function screenHtml( array $screen ): string {
+		if ( null === $screen['render'] ) {
+			return '';
+		}
+		ob_start();
+		$returned = call_user_func( $screen['render'] );
+		$printed  = (string) ob_get_clean();
+		return $printed . ( is_string( $returned ) ? $returned : '' );
 	}
 
 	/**
