@@ -25,6 +25,9 @@ export default [
 			sourceType: 'script',
 			globals: {
 				...globals.browser,
+				// A script exports itself for the Vitest suite when loaded as
+				// CommonJS.
+				module: 'readonly',
 			},
 		},
 		rules: {

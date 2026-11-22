@@ -9,7 +9,9 @@ declare(strict_types=1);
 
 namespace SitePwa\Admin;
 
+use SitePwa\App\Conflicts;
 use SitePwa\App\Routes;
+use SitePwa\Plugin;
 use SitePwa\Settings;
 
 /**
@@ -31,6 +33,21 @@ final class SettingsPage {
 	public static function register(): void {
 		add_action( 'admin_menu', array( self::class, 'addMenu' ) );
 		add_action( 'admin_init', array( self::class, 'registerSetting' ) );
+		add_action( 'admin_enqueue_scripts', array( self::class, 'enqueue' ) );
+	}
+
+	/**
+	 * On this screen only, the script that asks the browser which service
+	 * workers it already has.
+	 *
+	 * @param string $hook The admin page hook.
+	 */
+	public static function enqueue( string $hook ): void {
+		if ( 'settings_page_' . self::SLUG !== $hook ) {
+			return;
+		}
+		$file = Plugin::asset( 'assets/js/admin-conflicts.js' );
+		wp_enqueue_script( 'site-pwa-admin-conflicts', Plugin::url() . $file, array(), Plugin::assetVersion( $file ), array( 'in_footer' => true ) );
 	}
 
 	/**
@@ -68,12 +85,42 @@ final class SettingsPage {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
-		$settings = Settings::get();
-		$field    = static fn( string $key ): string => Settings::OPTION . '[' . $key . ']';
+		$settings  = Settings::get();
+		$conflicts = Conflicts::active();
+		$field     = static fn( string $key ): string => Settings::OPTION . '[' . $key . ']';
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Site PWA', 'site-pwa' ); ?></h1>
-			<?php if ( $settings['enabled'] ) : ?>
+			<?php if ( array() !== $conflicts ) : ?>
+				<div class="notice <?php echo esc_attr( Settings::enabled() ? 'notice-info' : 'notice-warning' ); ?> inline">
+					<p>
+						<?php
+						echo esc_html(
+							sprintf(
+								/* translators: %s: plugin names, comma-separated */
+								__( 'Also registering a service worker at the site root: %s. A browser keeps only one there, so the two would replace each other on every visit.', 'site-pwa' ),
+								implode( ', ', $conflicts )
+							)
+						);
+						?>
+					</p>
+					<p>
+						<?php
+						if ( $settings['enabled'] && ! $settings['replace_confirmed'] ) {
+							esc_html_e( 'The app stays off until you confirm the replacement below, or that plugin is deactivated.', 'site-pwa' );
+						} elseif ( $settings['replace_confirmed'] ) {
+							esc_html_e( 'Replacement confirmed: the app\'s worker takes the root, and that plugin\'s worker stops working.', 'site-pwa' );
+						}
+						?>
+					</p>
+				</div>
+			<?php endif; ?>
+			<div id="site-pwa-sw-check" class="notice notice-warning inline" data-own="<?php echo esc_url( Routes::url( 'sw' ) ); ?>" hidden>
+				<p><?php esc_html_e( 'This browser already has another service worker for this site:', 'site-pwa' ); ?></p>
+				<ul class="site-pwa-sw-list"></ul>
+				<p><?php esc_html_e( 'Turning the app on replaces it. Confirm the replacement below to continue.', 'site-pwa' ); ?></p>
+			</div>
+			<?php if ( Settings::enabled() ) : ?>
 				<div class="notice notice-success inline">
 					<p>
 						<?php esc_html_e( 'The app is on at', 'site-pwa' ); ?>
@@ -88,10 +135,20 @@ final class SettingsPage {
 						<th scope="row"><?php esc_html_e( 'App', 'site-pwa' ); ?></th>
 						<td>
 							<label>
-								<input type="checkbox" name="<?php echo esc_attr( $field( 'enabled' ) ); ?>" value="1" <?php checked( $settings['enabled'] ); ?>>
+								<input type="checkbox" id="site-pwa-enabled" name="<?php echo esc_attr( $field( 'enabled' ) ); ?>" value="1" <?php checked( $settings['enabled'] ); ?>>
 								<?php esc_html_e( 'Turn the installable app on', 'site-pwa' ); ?>
 							</label>
 							<p class="description"><?php esc_html_e( 'While it is off, the site serves no manifest, and a browser that installed the app removes its service worker on its next visit.', 'site-pwa' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Other service workers', 'site-pwa' ); ?></th>
+						<td>
+							<label>
+								<input type="checkbox" id="site-pwa-replace" name="<?php echo esc_attr( $field( 'replace_confirmed' ) ); ?>" value="1" <?php checked( $settings['replace_confirmed'] ); ?>>
+								<?php esc_html_e( 'Replace another plugin\'s service worker', 'site-pwa' ); ?>
+							</label>
+							<p class="description"><?php esc_html_e( 'Only needed when another plugin registers a worker at the site root. A push service that wants to keep working can load its script through the site_pwa_sw_imports filter instead.', 'site-pwa' ); ?></p>
 						</td>
 					</tr>
 					<tr>

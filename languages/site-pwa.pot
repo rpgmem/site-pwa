@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-22 22:01+0000\n"
+"POT-Creation-Date: 2026-11-22 22:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,56 +17,90 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/admin/settings-page.php:41 src/admin/settings-page.php:42
-#: src/admin/settings-page.php:75
+#: src/admin/settings-page.php:58 src/admin/settings-page.php:59
+#: src/admin/settings-page.php:93
 msgid "Site PWA"
 msgstr ""
 
-#: src/admin/settings-page.php:79
-msgid "The app is on at"
+#. translators: %s: plugin names, comma-separated
+#: src/admin/settings-page.php:101
+#, php-format
+msgid "Also registering a service worker at the site root: %s. A browser keeps only one there, so the two would replace each other on every visit."
 msgstr ""
 
-#: src/admin/settings-page.php:88
-msgid "App"
+#: src/admin/settings-page.php:110
+msgid "The app stays off until you confirm the replacement below, or that plugin is deactivated."
 msgstr ""
 
-#: src/admin/settings-page.php:92
-msgid "Turn the installable app on"
+#: src/admin/settings-page.php:112
+msgid "Replacement confirmed: the app's worker takes the root, and that plugin's worker stops working."
 msgstr ""
 
-#: src/admin/settings-page.php:94
-msgid "While it is off, the site serves no manifest, and a browser that installed the app removes its service worker on its next visit."
-msgstr ""
-
-#: src/admin/settings-page.php:98
-msgid "Name"
-msgstr ""
-
-#: src/admin/settings-page.php:102
-msgid "Short name"
-msgstr ""
-
-#: src/admin/settings-page.php:105
-msgid "Shown under the icon on a home screen."
-msgstr ""
-
-#: src/admin/settings-page.php:109
-msgid "Theme colour"
-msgstr ""
-
-#: src/admin/settings-page.php:113
-msgid "Background colour"
-msgstr ""
-
-#: src/admin/settings-page.php:116
-msgid "Shown while the app opens."
-msgstr ""
-
-#: src/admin/settings-page.php:120
-msgid "Icon"
+#: src/admin/settings-page.php:119
+msgid "This browser already has another service worker for this site:"
 msgstr ""
 
 #: src/admin/settings-page.php:121
+msgid "Turning the app on replaces it. Confirm the replacement below to continue."
+msgstr ""
+
+#: src/admin/settings-page.php:126
+msgid "The app is on at"
+msgstr ""
+
+#: src/admin/settings-page.php:135
+msgid "App"
+msgstr ""
+
+#: src/admin/settings-page.php:139
+msgid "Turn the installable app on"
+msgstr ""
+
+#: src/admin/settings-page.php:141
+msgid "While it is off, the site serves no manifest, and a browser that installed the app removes its service worker on its next visit."
+msgstr ""
+
+#: src/admin/settings-page.php:145
+msgid "Other service workers"
+msgstr ""
+
+#: src/admin/settings-page.php:149
+msgid "Replace another plugin's service worker"
+msgstr ""
+
+#: src/admin/settings-page.php:151
+msgid "Only needed when another plugin registers a worker at the site root. A push service that wants to keep working can load its script through the site_pwa_sw_imports filter instead."
+msgstr ""
+
+#: src/admin/settings-page.php:155
+msgid "Name"
+msgstr ""
+
+#: src/admin/settings-page.php:159
+msgid "Short name"
+msgstr ""
+
+#: src/admin/settings-page.php:162
+msgid "Shown under the icon on a home screen."
+msgstr ""
+
+#: src/admin/settings-page.php:166
+msgid "Theme colour"
+msgstr ""
+
+#: src/admin/settings-page.php:170
+msgid "Background colour"
+msgstr ""
+
+#: src/admin/settings-page.php:173
+msgid "Shown while the app opens."
+msgstr ""
+
+#: src/admin/settings-page.php:177
+msgid "Icon"
+msgstr ""
+
+#: src/admin/settings-page.php:178
 msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
 msgstr ""
 

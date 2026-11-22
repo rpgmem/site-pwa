@@ -13,6 +13,14 @@ Configurações → Site PWA liga o app; até lá ele fica desligado. O app fica
 1. Baixe o `site-pwa-X.Y.Z.zip` do release mais recente no GitHub.
 2. No WordPress, vá em Plugins → Adicionar novo → Enviar plugin, escolha o zip e ative.
 
+== Outros service workers ==
+
+O navegador mantém um service worker por raiz de site, então o do app e o de outro plugin (OneSignal, SuperPWA, PWA for WP, o plugin PWA) se substituiriam a cada visita. Três desfechos:
+
+* **Nenhum outro worker:** basta ligar o app.
+* **Outro plugin registra um:** Configurações → Site PWA o nomeia e o app fica desligado. Desative esse plugin ou confirme a substituição, que interrompe o worker dele. A tela também lista os workers que o seu próprio navegador já tem para o site.
+* **Um serviço de push que precisa continuar funcionando:** ele pode dividir a raiz. O script dele, neste site, é carregado primeiro pelo worker do app quando devolvido pelo filtro `site_pwa_sw_imports`; um serviço de push também pode carregar o worker do app dentro do seu com `importScripts( '/site-pwa-sw.js' )`.
+
 == Privacidade ==
 
 O plugin não guarda dados pessoais. Ele mantém as próprias configurações, a revisão das suas regras de URL e um cache do release mais recente no GitHub, tudo apagado junto com o plugin. No navegador, o service worker do app guarda em cache só a página offline e a folha de estilo do app: nunca uma página, então nada do que um usuário conectado vê fica no aparelho.

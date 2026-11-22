@@ -21,6 +21,14 @@ Settings → Site PWA turns the app on; it is off until then. The app lives unde
 1. Download `site-pwa-X.Y.Z.zip` from the latest GitHub release.
 2. In WordPress, go to Plugins → Add New → Upload Plugin, choose the zip and activate it.
 
+== Other service workers ==
+
+A browser keeps one service worker per site root, so the app's and another plugin's (OneSignal, SuperPWA, PWA for WP, the PWA plugin) would replace each other on every visit. Three outcomes:
+
+* **No other worker:** turning the app on is enough.
+* **Another plugin registers one:** Settings → Site PWA names it and the app stays off. Deactivate that plugin, or confirm the replacement, which stops that plugin's worker. The screen also lists the workers your own browser already holds for the site.
+* **A push service that must keep working:** it can share the root instead. Its script, on this site, is loaded first by the app's worker when it is returned by the `site_pwa_sw_imports` filter; a push service can also load the app's worker into its own with `importScripts( '/site-pwa-sw.js' )`.
+
 == Privacy ==
 
 The plugin stores no personal data. It keeps its settings, the revision of its URL rules and one cache of the latest GitHub release, all deleted with the plugin. In the browser, the app's service worker caches only the offline page and the app's stylesheet: never a page, so nothing a signed-in user sees stays on the device.

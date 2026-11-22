@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-22 21:57+0000\n"
+"POT-Creation-Date: 2026-11-22 22:05+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -16,56 +16,90 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Domain: site-pwa\n"
 
-#: src/admin/settings-page.php:41 src/admin/settings-page.php:42
-#: src/admin/settings-page.php:75
+#: src/admin/settings-page.php:58 src/admin/settings-page.php:59
+#: src/admin/settings-page.php:93
 msgid "Site PWA"
 msgstr "Site PWA"
 
-#: src/admin/settings-page.php:79
+#. translators: %s: plugin names, comma-separated
+#: src/admin/settings-page.php:101
+#, php-format
+msgid "Also registering a service worker at the site root: %s. A browser keeps only one there, so the two would replace each other on every visit."
+msgstr "Também registra um service worker na raiz do site: %s. O navegador mantém só um ali, então os dois se substituiriam a cada visita."
+
+#: src/admin/settings-page.php:110
+msgid "The app stays off until you confirm the replacement below, or that plugin is deactivated."
+msgstr "O app fica desligado até você confirmar a substituição abaixo, ou até esse plugin ser desativado."
+
+#: src/admin/settings-page.php:112
+msgid "Replacement confirmed: the app's worker takes the root, and that plugin's worker stops working."
+msgstr "Substituição confirmada: o worker do app ocupa a raiz, e o worker desse plugin deixa de funcionar."
+
+#: src/admin/settings-page.php:119
+msgid "This browser already has another service worker for this site:"
+msgstr "Este navegador já tem outro service worker para este site:"
+
+#: src/admin/settings-page.php:121
+msgid "Turning the app on replaces it. Confirm the replacement below to continue."
+msgstr "Ligar o app o substitui. Confirme a substituição abaixo para continuar."
+
+#: src/admin/settings-page.php:126
 msgid "The app is on at"
 msgstr "O app está ligado em"
 
-#: src/admin/settings-page.php:88
+#: src/admin/settings-page.php:135
 msgid "App"
 msgstr "App"
 
-#: src/admin/settings-page.php:92
+#: src/admin/settings-page.php:139
 msgid "Turn the installable app on"
 msgstr "Ligar o app instalável"
 
-#: src/admin/settings-page.php:94
+#: src/admin/settings-page.php:141
 msgid "While it is off, the site serves no manifest, and a browser that installed the app removes its service worker on its next visit."
 msgstr "Enquanto estiver desligado, o site não oferece o manifest, e um navegador que instalou o app remove o service worker na próxima visita."
 
-#: src/admin/settings-page.php:98
+#: src/admin/settings-page.php:145
+msgid "Other service workers"
+msgstr "Outros service workers"
+
+#: src/admin/settings-page.php:149
+msgid "Replace another plugin's service worker"
+msgstr "Substituir o service worker de outro plugin"
+
+#: src/admin/settings-page.php:151
+msgid "Only needed when another plugin registers a worker at the site root. A push service that wants to keep working can load its script through the site_pwa_sw_imports filter instead."
+msgstr "Só é necessário quando outro plugin registra um worker na raiz do site. Um serviço de push que precise continuar funcionando pode, em vez disso, carregar o próprio script pelo filtro site_pwa_sw_imports."
+
+#: src/admin/settings-page.php:155
 msgid "Name"
 msgstr "Nome"
 
-#: src/admin/settings-page.php:102
+#: src/admin/settings-page.php:159
 msgid "Short name"
 msgstr "Nome curto"
 
-#: src/admin/settings-page.php:105
+#: src/admin/settings-page.php:162
 msgid "Shown under the icon on a home screen."
 msgstr "Aparece sob o ícone na tela inicial."
 
-#: src/admin/settings-page.php:109
+#: src/admin/settings-page.php:166
 msgid "Theme colour"
 msgstr "Cor do tema"
 
-#: src/admin/settings-page.php:113
+#: src/admin/settings-page.php:170
 msgid "Background colour"
 msgstr "Cor de fundo"
 
-#: src/admin/settings-page.php:116
+#: src/admin/settings-page.php:173
 msgid "Shown while the app opens."
 msgstr "Aparece enquanto o app abre."
 
-#: src/admin/settings-page.php:120
+#: src/admin/settings-page.php:177
 msgid "Icon"
 msgstr "Ícone"
 
-#: src/admin/settings-page.php:121
+#: src/admin/settings-page.php:178
 msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
 msgstr "O app usa o ícone do site, de Configurações → Geral; sem ele, usa o ícone do plugin."
 
