@@ -35,7 +35,7 @@ add_action( 'site_pwa_register_screens', static function ( $screens, int $api ):
 | `capability` | no | `read` | Who sees the screen. The app checks it everywhere the screen appears: navigation, home, More and its own URL. |
 | `position` | no | `10` | Order, lowest first; screens with the same position sort by label. |
 
-The id is part of the URL: lowercase letters, digits and hyphens. `home`, `account`, `more`, `post`, `offline`, `manifest`, `sw` and `s` belong to the app.
+The id is part of the URL: lowercase letters, digits and hyphens. `home`, `account`, `more`, `news`, `post`, `offline`, `manifest`, `sw` and `s` belong to the app.
 
 `add()` returns `true`, or a `WP_Error` naming what is wrong. It also calls `_doing_it_wrong()`, so the mistake shows under `WP_DEBUG`. A refused screen is simply absent; the rest still register.
 

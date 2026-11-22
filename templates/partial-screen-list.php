@@ -4,7 +4,9 @@
  *
  * @package SitePwa
  *
- * @var list<array{label: string, icon: string, url: string}> $site_pwa_rows Rows to draw.
+ * @var list<array{label: string, icon: string, url: string, end?: string}> $site_pwa_rows Rows to draw;
+ *      `end` is the trailing icon, `chevron` unless set (`open` for a link
+ *      that leaves the app).
  */
 
 use SitePwa\App\Icons;
@@ -19,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<a href="<?php echo esc_url( $site_pwa_row['url'] ); ?>">
 				<?php echo Icons::svg( $site_pwa_row['icon'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a fixed drawing from Icons::PATHS. ?>
 				<span><?php echo esc_html( $site_pwa_row['label'] ); ?></span>
-				<?php echo Icons::svg( 'chevron' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a fixed drawing from Icons::PATHS. ?>
+				<?php echo Icons::svg( $site_pwa_row['end'] ?? 'chevron' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a fixed drawing from Icons::PATHS. ?>
 			</a>
 		</li>
 	<?php endforeach; ?>

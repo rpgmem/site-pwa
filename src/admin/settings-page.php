@@ -181,6 +181,72 @@ final class SettingsPage {
 						</td>
 					</tr>
 					<tr>
+						<th scope="row"><?php esc_html_e( 'News', 'site-pwa' ); ?></th>
+						<td>
+							<fieldset>
+								<legend class="screen-reader-text"><?php esc_html_e( 'Categories shown in the app', 'site-pwa' ); ?></legend>
+								<?php
+								$site_pwa_categories = get_categories( array( 'hide_empty' => false ) );
+								foreach ( $site_pwa_categories as $site_pwa_category ) :
+									?>
+									<label>
+										<input type="checkbox" name="<?php echo esc_attr( $field( 'news_categories' ) ); ?>[]" value="<?php echo esc_attr( (string) $site_pwa_category->term_id ); ?>" <?php checked( in_array( $site_pwa_category->term_id, $settings['news_categories'], true ) ); ?>>
+										<?php echo esc_html( $site_pwa_category->name ); ?>
+									</label><br>
+								<?php endforeach; ?>
+							</fieldset>
+							<p class="description"><?php esc_html_e( 'The app shows the posts of the ticked categories, newest first: the three latest on the home screen and all of them under More → News. With none ticked, it shows every post.', 'site-pwa' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Pages', 'site-pwa' ); ?></th>
+						<td>
+							<?php $site_pwa_pages = get_pages( array( 'post_status' => 'publish' ) ); ?>
+							<?php $site_pwa_pages = false === $site_pwa_pages ? array() : $site_pwa_pages; ?>
+							<?php if ( array() === $site_pwa_pages ) : ?>
+								<p class="description"><?php esc_html_e( 'The site has no published pages.', 'site-pwa' ); ?></p>
+							<?php else : ?>
+								<table class="widefat striped site-pwa-pages">
+									<thead>
+										<tr>
+											<th scope="col"><?php esc_html_e( 'In the app', 'site-pwa' ); ?></th>
+											<th scope="col"><?php esc_html_e( 'Open on the site', 'site-pwa' ); ?></th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php
+										foreach ( $site_pwa_pages as $site_pwa_page ) :
+											$site_pwa_name  = $field( 'app_pages' ) . '[' . $site_pwa_page->ID . ']';
+											$site_pwa_on    = array_key_exists( $site_pwa_page->ID, $settings['app_pages'] );
+											$site_pwa_title = '' !== $site_pwa_page->post_title ? $site_pwa_page->post_title : __( '(no title)', 'site-pwa' );
+											?>
+											<tr>
+												<td>
+													<label>
+														<input type="checkbox" name="<?php echo esc_attr( $site_pwa_name . '[show]' ); ?>" value="1" <?php checked( $site_pwa_on ); ?>>
+														<?php echo esc_html( $site_pwa_title ); ?>
+													</label>
+												</td>
+												<td>
+													<label>
+														<input type="checkbox" name="<?php echo esc_attr( $site_pwa_name . '[site]' ); ?>" value="1" <?php checked( $site_pwa_on && $settings['app_pages'][ $site_pwa_page->ID ] ); ?>>
+														<span class="screen-reader-text">
+															<?php
+															/* translators: %s: a page title */
+															echo esc_html( sprintf( __( 'Open %s on the site', 'site-pwa' ), $site_pwa_title ) );
+															?>
+														</span>
+													</label>
+												</td>
+											</tr>
+										<?php endforeach; ?>
+									</tbody>
+								</table>
+							<?php endif; ?>
+							<p class="description"><?php esc_html_e( 'The ticked pages appear under More and on the home screen. A page opens inside the app, unless it is marked to open on the site, as a page built with a page builder should be.', 'site-pwa' ); ?></p>
+						</td>
+					</tr>
+					<tr>
 						<th scope="row"><label for="site-pwa-identity-source"><?php esc_html_e( 'Look', 'site-pwa' ); ?></label></th>
 						<td>
 							<select id="site-pwa-identity-source" name="<?php echo esc_attr( $field( 'identity_source' ) ); ?>">

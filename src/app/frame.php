@@ -76,6 +76,10 @@ final class Frame {
 			'screen-' . $route,
 			array(
 				'screens'     => Screens::visible(),
+				'news'        => 'home' === $route ? News::page( 1, News::LATEST ) : ( 'news' === $route ? News::page( News::requested() ) : null ),
+				'news_page'   => News::requested(),
+				'news_url'    => News::url(),
+				'pages'       => in_array( $route, array( 'home', 'more' ), true ) ? AppPages::items() : array(),
 				'more'        => Screens::split()['more'],
 				'account_url' => Routes::url( 'account' ),
 				'screen'      => $screen,
@@ -241,6 +245,8 @@ final class Frame {
 				return __( 'Account', 'site-pwa' );
 			case 'more':
 				return __( 'More', 'site-pwa' );
+			case 'news':
+				return __( 'News', 'site-pwa' );
 			case 'post':
 				$post = Content::current();
 				return null === $post ? __( 'Not available', 'site-pwa' ) : wp_strip_all_tags( get_the_title( $post ) );

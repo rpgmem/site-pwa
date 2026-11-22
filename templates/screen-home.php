@@ -4,7 +4,7 @@
  *
  * @package SitePwa
  *
- * @var array{first_name: string, screens: list<array{id: string, label: string, icon: string}>} $site_pwa Values built by Frame::render().
+ * @var array{first_name: string, screens: list<array{id: string, label: string, icon: string}>, news: array{items: list<array{id: int, title: string, excerpt: string, date: string, image: string, url: string}>, pages: int}, news_url: string, pages: list<array{id: int, label: string, url: string, external: bool}>} $site_pwa Values built by Frame::render().
  */
 
 use SitePwa\App\Icons;
@@ -32,6 +32,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'label' => $site_pwa_screen['label'],
 				'icon'  => $site_pwa_screen['icon'],
 				'url'   => Screens::link( $site_pwa_screen ),
+			);
+		}
+		require __DIR__ . '/partial-screen-list.php';
+		?>
+	<?php endif; ?>
+</section>
+<section class="site-pwa-card" aria-labelledby="site-pwa-news-heading">
+	<h2 id="site-pwa-news-heading"><?php esc_html_e( 'Latest news', 'site-pwa' ); ?></h2>
+	<?php if ( array() === $site_pwa['news']['items'] ) : ?>
+		<p class="site-pwa-muted"><?php esc_html_e( 'No news yet.', 'site-pwa' ); ?></p>
+	<?php else : ?>
+		<?php
+		$site_pwa_news = $site_pwa['news']['items'];
+		require __DIR__ . '/partial-news-list.php';
+		?>
+		<p class="site-pwa-more-link"><a href="<?php echo esc_url( $site_pwa['news_url'] ); ?>"><?php esc_html_e( 'See all news', 'site-pwa' ); ?></a></p>
+	<?php endif; ?>
+</section>
+<section class="site-pwa-card" aria-labelledby="site-pwa-pages-heading">
+	<h2 id="site-pwa-pages-heading"><?php esc_html_e( 'Pages', 'site-pwa' ); ?></h2>
+	<?php if ( array() === $site_pwa['pages'] ) : ?>
+		<p class="site-pwa-muted"><?php esc_html_e( 'No pages yet. The pages chosen in the app\'s settings appear here.', 'site-pwa' ); ?></p>
+	<?php else : ?>
+		<?php
+		$site_pwa_rows = array();
+		foreach ( $site_pwa['pages'] as $site_pwa_page ) {
+			$site_pwa_rows[] = array(
+				'label' => $site_pwa_page['label'],
+				'icon'  => 'document',
+				'url'   => $site_pwa_page['url'],
+				'end'   => $site_pwa_page['external'] ? 'open' : 'chevron',
 			);
 		}
 		require __DIR__ . '/partial-screen-list.php';

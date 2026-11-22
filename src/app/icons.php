@@ -36,6 +36,7 @@ final class Icons {
 		'add'      => array( 'M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z', 'M12 8v8', 'M8 12h8' ),
 		'close'    => array( 'M6 6l12 12', 'M18 6L6 18' ),
 		'download' => array( 'M12 4v11', 'M7 10l5 5 5-5', 'M5 20h14' ),
+		'news'     => array( 'M5 5h11v14H6a1 1 0 0 1-1-1V5z', 'M16 9h3v9a1 1 0 0 1-1 1h-2', 'M8 9h5', 'M8 13h5', 'M8 16h3' ),
 	);
 
 	/**
