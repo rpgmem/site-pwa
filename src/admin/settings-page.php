@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SitePwa\Admin;
 
 use SitePwa\App\Conflicts;
+use SitePwa\App\Identity;
 use SitePwa\App\Routes;
 use SitePwa\Plugin;
 use SitePwa\Settings;
@@ -160,6 +161,32 @@ final class SettingsPage {
 						<td>
 							<input type="text" id="site-pwa-short-name" name="<?php echo esc_attr( $field( 'short_name' ) ); ?>" value="<?php echo esc_attr( $settings['short_name'] ); ?>" maxlength="<?php echo esc_attr( (string) Settings::SHORT_NAME_MAX ); ?>" required>
 							<p class="description"><?php esc_html_e( 'Shown under the icon on a home screen.', 'site-pwa' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="site-pwa-identity-source"><?php esc_html_e( 'Look', 'site-pwa' ); ?></label></th>
+						<td>
+							<select id="site-pwa-identity-source" name="<?php echo esc_attr( $field( 'identity_source' ) ); ?>">
+								<option value="<?php echo esc_attr( Identity::OWN ); ?>" <?php selected( $settings['identity_source'], Identity::OWN ); ?>><?php esc_html_e( 'These settings', 'site-pwa' ); ?></option>
+								<?php foreach ( Identity::sources() as $site_pwa_id => $site_pwa_source ) : ?>
+									<option value="<?php echo esc_attr( $site_pwa_id ); ?>" <?php selected( $settings['identity_source'], $site_pwa_id ); ?>><?php echo esc_html( (string) $site_pwa_source['label'] ); ?></option>
+								<?php endforeach; ?>
+							</select>
+							<p class="description"><?php esc_html_e( 'Where the app takes its accent colour and its corners from. While the chosen design is switched off, or its plugin is inactive, the app uses the theme colour below.', 'site-pwa' ); ?></p>
+							<?php $site_pwa_look = Identity::current(); ?>
+							<p class="description">
+								<?php
+								echo esc_html(
+									sprintf(
+										/* translators: 1: a colour such as #1d5e8c, 2: corner radius of cards in px, 3: corner radius of buttons in px */
+										__( 'In use now: accent %1$s, cards %2$d px, buttons %3$d px.', 'site-pwa' ),
+										$site_pwa_look['accent'],
+										$site_pwa_look['radius'],
+										$site_pwa_look['control_radius']
+									)
+								);
+								?>
+							</p>
 						</td>
 					</tr>
 					<tr>

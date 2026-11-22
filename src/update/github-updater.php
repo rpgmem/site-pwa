@@ -65,6 +65,7 @@ final class GithubUpdater {
 		'3-login.png',
 		'4-account-dark.png',
 		'5-post.png',
+		'6-account-ffc-look.png',
 	);
 
 	/**

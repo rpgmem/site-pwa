@@ -15,7 +15,7 @@ namespace SitePwa;
  * The app is off until an administrator turns it on: a site that installs the
  * plugin gets no manifest and no service worker by surprise.
  *
- * @phpstan-type SettingsShape array{enabled: bool, replace_confirmed: bool, name: string, short_name: string, theme_color: string, background_color: string}
+ * @phpstan-type SettingsShape array{enabled: bool, replace_confirmed: bool, name: string, short_name: string, theme_color: string, background_color: string, identity_source: string}
  */
 final class Settings {
 
@@ -44,6 +44,7 @@ final class Settings {
 			'short_name'        => self::shorten( $name ),
 			'theme_color'       => '#1d5e8c',
 			'background_color'  => '#ffffff',
+			'identity_source'   => App\Identity::OWN,
 		);
 	}
 
@@ -89,6 +90,7 @@ final class Settings {
 			'short_name'        => $short_name,
 			'theme_color'       => self::color( $input['theme_color'] ?? '', $defaults['theme_color'] ),
 			'background_color'  => self::color( $input['background_color'] ?? '', $defaults['background_color'] ),
+			'identity_source'   => self::source( $input['identity_source'] ?? '' ),
 		);
 	}
 
@@ -101,6 +103,18 @@ final class Settings {
 	private static function color( $value, string $fallback ): string {
 		$color = sanitize_hex_color( is_string( $value ) ? $value : '' );
 		return is_string( $color ) && '' !== $color ? strtolower( $color ) : $fallback;
+	}
+
+	/**
+	 * A source id. Kept even when that source is not available now (its
+	 * plugin may be deactivated for a while): App\Identity falls back to the
+	 * own settings until it is back.
+	 *
+	 * @param mixed $value Raw value.
+	 */
+	private static function source( $value ): string {
+		$id = sanitize_key( is_string( $value ) ? $value : '' );
+		return '' === $id ? App\Identity::OWN : $id;
 	}
 
 	/**

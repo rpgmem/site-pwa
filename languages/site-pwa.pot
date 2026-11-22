@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-22 22:25+0000\n"
+"POT-Creation-Date: 2026-11-22 22:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,95 +17,117 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/admin/settings-page.php:58 src/admin/settings-page.php:59
-#: src/admin/settings-page.php:93
+#: src/admin/settings-page.php:59 src/admin/settings-page.php:60
+#: src/admin/settings-page.php:94
 msgid "Site PWA"
 msgstr ""
 
 #. translators: %s: plugin names, comma-separated
-#: src/admin/settings-page.php:101
+#: src/admin/settings-page.php:102
 #, php-format
 msgid "Also registering a service worker at the site root: %s. A browser keeps only one there, so the two would replace each other on every visit."
 msgstr ""
 
-#: src/admin/settings-page.php:110
+#: src/admin/settings-page.php:111
 msgid "The app stays off until you confirm the replacement below, or that plugin is deactivated."
 msgstr ""
 
-#: src/admin/settings-page.php:112
+#: src/admin/settings-page.php:113
 msgid "Replacement confirmed: the app's worker takes the root, and that plugin's worker stops working."
 msgstr ""
 
-#: src/admin/settings-page.php:119
+#: src/admin/settings-page.php:120
 msgid "This browser already has another service worker for this site:"
 msgstr ""
 
-#: src/admin/settings-page.php:121
+#: src/admin/settings-page.php:122
 msgid "Turning the app on replaces it. Confirm the replacement below to continue."
 msgstr ""
 
-#: src/admin/settings-page.php:126
+#: src/admin/settings-page.php:127
 msgid "The app is on at"
 msgstr ""
 
-#: src/admin/settings-page.php:135 templates/frame.php:35
+#: src/admin/settings-page.php:136 templates/frame.php:35
 msgid "App"
 msgstr ""
 
-#: src/admin/settings-page.php:139
+#: src/admin/settings-page.php:140
 msgid "Turn the installable app on"
 msgstr ""
 
-#: src/admin/settings-page.php:141
+#: src/admin/settings-page.php:142
 msgid "While it is off, the site serves no manifest, and a browser that installed the app removes its service worker on its next visit."
 msgstr ""
 
-#: src/admin/settings-page.php:145
+#: src/admin/settings-page.php:146
 msgid "Other service workers"
 msgstr ""
 
-#: src/admin/settings-page.php:149
+#: src/admin/settings-page.php:150
 msgid "Replace another plugin's service worker"
 msgstr ""
 
-#: src/admin/settings-page.php:151
+#: src/admin/settings-page.php:152
 msgid "Only needed when another plugin registers a worker at the site root. A push service that wants to keep working can load its script through the site_pwa_sw_imports filter instead."
 msgstr ""
 
-#: src/admin/settings-page.php:155 templates/screen-account.php:20
+#: src/admin/settings-page.php:156 templates/screen-account.php:20
 msgid "Name"
 msgstr ""
 
-#: src/admin/settings-page.php:159
+#: src/admin/settings-page.php:160
 msgid "Short name"
 msgstr ""
 
-#: src/admin/settings-page.php:162
+#: src/admin/settings-page.php:163
 msgid "Shown under the icon on a home screen."
 msgstr ""
 
-#: src/admin/settings-page.php:166
-msgid "Theme colour"
+#: src/admin/settings-page.php:167
+msgid "Look"
 msgstr ""
 
 #: src/admin/settings-page.php:170
+msgid "These settings"
+msgstr ""
+
+#: src/admin/settings-page.php:175
+msgid "Where the app takes its accent colour and its corners from. While the chosen design is switched off, or its plugin is inactive, the app uses the theme colour below."
+msgstr ""
+
+#. translators: 1: a colour such as #1d5e8c, 2: corner radius of cards in px, 3: corner radius of buttons in px
+#: src/admin/settings-page.php:182
+#, php-format
+msgid "In use now: accent %1$s, cards %2$d px, buttons %3$d px."
+msgstr ""
+
+#: src/admin/settings-page.php:193
+msgid "Theme colour"
+msgstr ""
+
+#: src/admin/settings-page.php:197
 msgid "Background colour"
 msgstr ""
 
-#: src/admin/settings-page.php:173
+#: src/admin/settings-page.php:200
 msgid "Shown while the app opens."
 msgstr ""
 
-#: src/admin/settings-page.php:177
+#: src/admin/settings-page.php:204
 msgid "Icon"
 msgstr ""
 
-#: src/admin/settings-page.php:178
+#: src/admin/settings-page.php:205
 msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
 msgstr ""
 
-#: src/app/frame.php:226
+#: src/app/frame.php:227
 msgid "Not available"
+msgstr ""
+
+#: src/app/identity.php:60
+msgid "Free Form Certificate: Public Design"
 msgstr ""
 
 #: src/app/navigation.php:33

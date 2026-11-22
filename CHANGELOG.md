@@ -16,6 +16,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **The app has its own frame** (#3). `/app/` and `/app/account/` need a signed-in user and draw a header, the screen and a bottom navigation, with landmarks, a skip link and `aria-current`; `wp_head()`/`wp_footer()` run, but the theme's stylesheets and scripts are taken out.
 - **The login looks like the app inside the installed app** (#3). The WordPress login keeps its form and every plugin on it; styles apply only under `display-mode: standalone`, and the logo links back to the app when the login came from it.
 - **Posts and pages open inside the app** at `/app/?p=ID` (#3), signed-in only, through the main query so shortcodes and their assets work. Canonical, Share, Copy link and Open on the site carry the permalink; a page-builder layout or page template opens on the site (`site_pwa_opens_in_app`).
+- **The app can take its look from another plugin's design** (#3). Settings → Site PWA → Look picks the source of the accent colour and the corners; Free Form Certificate's Public Design is built in and others join through `site_pwa_identity_sources`. The accent applies to the light theme only, and a design switched off falls back to the theme colour.
 
 ### Fixed
 

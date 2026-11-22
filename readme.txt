@@ -14,7 +14,7 @@ Turns the site into an installable app: a home-screen icon, an app shell for sig
 
 Site PWA makes a WordPress site installable on a phone or a computer, as an app with its own icon and window. Signed-in users open it on an app shell, and other plugins add their screens to it through a registration contract.
 
-Settings → Site PWA turns the app on; it is off until then. The app is for signed-in users: it opens on its own frame, independent of the theme, with a home screen and the account, and the WordPress login takes the app's look inside the installed app. A post or page opens inside the app at `/app/?p=ID`; Share and Copy link hand out its normal address on the site, and a page built with a page builder or a page template opens on the site instead. The app lives under `/app/` (filterable with `site_pwa_app_prefix`), with the site icon from Settings → General, or the plugin's own, on the home screen. Without a connection, the app shows an offline page. The app's screens arrive in the releases that follow.
+Settings → Site PWA turns the app on; it is off until then. The app is for signed-in users: it opens on its own frame, independent of the theme, with a home screen and the account, and the WordPress login takes the app's look inside the installed app. A post or page opens inside the app at `/app/?p=ID`; Share and Copy link hand out its normal address on the site, and a page built with a page builder or a page template opens on the site instead. The app's accent colour and corners come from its own settings or, under Look, from another plugin's design: Free Form Certificate's Public Design is built in. The app lives under `/app/` (filterable with `site_pwa_app_prefix`), with the site icon from Settings → General, or the plugin's own, on the home screen. Without a connection, the app shows an offline page. The app's screens arrive in the releases that follow.
 
 == Installation ==
 
@@ -28,6 +28,7 @@ Settings → Site PWA turns the app on; it is off until then. The app is for sig
 3. The WordPress login inside the installed app.
 4. The account screen in the dark theme.
 5. A post opened inside the app, with Copy link and Open on the site.
+6. The account screen taking its accent and corners from Free Form Certificate's Public Design.
 
 == Other service workers ==
 

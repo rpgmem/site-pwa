@@ -35,7 +35,7 @@ final class ServiceWorker {
 		$precache = array( Routes::url( 'offline' ), Pages::stylesheet() );
 		return array(
 			'cachePrefix' => self::CACHE_PREFIX,
-			'cache'       => self::CACHE_PREFIX . substr( md5( implode( '|', array_merge( array( Plugin::VERSION, Plugin::assetVersion( Plugin::asset( 'assets/js/sw.js' ) ) ), $precache ) ) ), 0, 12 ),
+			'cache'       => self::CACHE_PREFIX . substr( md5( implode( '|', array_merge( array( Plugin::VERSION, Plugin::assetVersion( Plugin::asset( 'assets/js/sw.js' ) ), Identity::css() ), $precache ) ) ), 0, 12 ),
 			'appPath'     => Routes::scope() . Routes::prefix() . '/',
 			'offlineUrl'  => Routes::url( 'offline' ),
 			'precache'    => $precache,

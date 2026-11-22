@@ -131,6 +131,7 @@ final class Frame {
 		$css = Plugin::asset( 'assets/css/app.css' );
 		$js  = Plugin::asset( 'assets/js/register.js' );
 		wp_enqueue_style( self::HANDLE, Plugin::url() . $css, array(), Plugin::assetVersion( $css ) );
+		wp_add_inline_style( self::HANDLE, Identity::css() );
 		wp_enqueue_script(
 			self::REGISTER_HANDLE,
 			Plugin::url() . $js,
@@ -171,7 +172,7 @@ final class Frame {
 			printf( '<title>%s</title>' . "\n", esc_html( wp_get_document_title() ) );
 		}
 		printf( '<link rel="manifest" href="%s">' . "\n", esc_url( Routes::url( 'manifest' ) ) );
-		printf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( Settings::get()['theme_color'] ) );
+		printf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( Identity::current()['accent'] ) );
 		printf( '<link rel="apple-touch-icon" href="%s">' . "\n", esc_url( Manifest::touchIcon() ) );
 	}
 
