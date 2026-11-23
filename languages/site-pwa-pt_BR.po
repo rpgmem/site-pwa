@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-22 23:44+0000\n"
+"POT-Creation-Date: 2026-11-23 09:53+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -16,168 +16,176 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Domain: site-pwa\n"
 
-#: src/admin/settings-page.php:59 src/admin/settings-page.php:60
-#: src/admin/settings-page.php:94
+#: src/admin/settings-page.php:60 src/admin/settings-page.php:61
+#: src/admin/settings-page.php:95
 msgid "Site PWA"
 msgstr "Site PWA"
 
 #. translators: %s: plugin names, comma-separated
-#: src/admin/settings-page.php:102
+#: src/admin/settings-page.php:103
 #, php-format
 msgid "Also registering a service worker at the site root: %s. A browser keeps only one there, so the two would replace each other on every visit."
 msgstr "Também registra um service worker na raiz do site: %s. O navegador mantém só um ali, então os dois se substituiriam a cada visita."
 
-#: src/admin/settings-page.php:111
+#: src/admin/settings-page.php:112
 msgid "The app stays off until you confirm the replacement below, or that plugin is deactivated."
 msgstr "O app fica desligado até você confirmar a substituição abaixo, ou até esse plugin ser desativado."
 
-#: src/admin/settings-page.php:113
+#: src/admin/settings-page.php:114
 msgid "Replacement confirmed: the app's worker takes the root, and that plugin's worker stops working."
 msgstr "Substituição confirmada: o worker do app ocupa a raiz, e o worker desse plugin deixa de funcionar."
 
-#: src/admin/settings-page.php:120
+#: src/admin/settings-page.php:121
 msgid "This browser already has another service worker for this site:"
 msgstr "Este navegador já tem outro service worker para este site:"
 
-#: src/admin/settings-page.php:122
+#: src/admin/settings-page.php:123
 msgid "Turning the app on replaces it. Confirm the replacement below to continue."
 msgstr "Ligar o app o substitui. Confirme a substituição abaixo para continuar."
 
-#: src/admin/settings-page.php:127
+#: src/admin/settings-page.php:128
 msgid "The app is on at"
 msgstr "O app está ligado em"
 
-#: src/admin/settings-page.php:136 templates/frame.php:35
+#: src/admin/settings-page.php:137 templates/frame.php:35
 #: templates/site-banner.php:17
 msgid "App"
 msgstr "App"
 
-#: src/admin/settings-page.php:140
+#: src/admin/settings-page.php:141
 msgid "Turn the installable app on"
 msgstr "Ligar o app instalável"
 
-#: src/admin/settings-page.php:142
+#: src/admin/settings-page.php:143
 msgid "While it is off, the site serves no manifest, and a browser that installed the app removes its service worker on its next visit."
 msgstr "Enquanto estiver desligado, o site não oferece o manifest, e um navegador que instalou o app remove o service worker na próxima visita."
 
-#: src/admin/settings-page.php:146
+#: src/admin/settings-page.php:147
 msgid "Other service workers"
 msgstr "Outros service workers"
 
-#: src/admin/settings-page.php:150
+#: src/admin/settings-page.php:151
 msgid "Replace another plugin's service worker"
 msgstr "Substituir o service worker de outro plugin"
 
-#: src/admin/settings-page.php:152
+#: src/admin/settings-page.php:153
 msgid "Only needed when another plugin registers a worker at the site root. A push service that wants to keep working can load its script through the site_pwa_sw_imports filter instead."
 msgstr "Só é necessário quando outro plugin registra um worker na raiz do site. Um serviço de push que precise continuar funcionando pode, em vez disso, carregar o próprio script pelo filtro site_pwa_sw_imports."
 
-#: src/admin/settings-page.php:156 templates/screen-account.php:20
+#: src/admin/settings-page.php:157 templates/screen-account.php:20
 msgid "Name"
 msgstr "Nome"
 
-#: src/admin/settings-page.php:160
+#: src/admin/settings-page.php:161
 msgid "Short name"
 msgstr "Nome curto"
 
-#: src/admin/settings-page.php:163
+#: src/admin/settings-page.php:164
 msgid "Shown under the icon on a home screen."
 msgstr "Aparece sob o ícone na tela inicial."
 
-#: src/admin/settings-page.php:167
+#: src/admin/settings-page.php:168
 msgid "Invite to the app"
 msgstr "Convite para o app"
 
-#: src/admin/settings-page.php:172
+#: src/admin/settings-page.php:173
 msgid "Show a \"Use the app\" banner on the site's pages"
 msgstr "Mostrar a faixa \"Use o app\" nas páginas do site"
 
-#: src/admin/settings-page.php:178
+#: src/admin/settings-page.php:179
 msgid "Also show it to visitors who are not signed in"
 msgstr "Mostrar também para visitantes não conectados"
 
-#: src/admin/settings-page.php:180
+#: src/admin/settings-page.php:181
 msgid "Only on phones and tablets, and never inside the installed app. A visitor who is not signed in goes to the login first, then into the app. A visitor who closes the banner does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
 msgstr "Só em celulares e tablets, e nunca dentro do app instalado. Um visitante não conectado passa primeiro pelo login e depois entra no app. Quem fecha a faixa não a vê de novo naquele aparelho por 30 dias. A tela inicial do app convida para instalá-lo da mesma forma."
 
-#: src/admin/settings-page.php:184 src/app/frame.php:249
+#: src/admin/settings-page.php:185 src/app/frame.php:249
 #: templates/screen-more.php:19 templates/screen-news.php:19
 msgid "News"
 msgstr "Notícias"
 
-#: src/admin/settings-page.php:187
+#: src/admin/settings-page.php:188
 msgid "Categories shown in the app"
 msgstr "Categorias mostradas no app"
 
-#: src/admin/settings-page.php:198
+#: src/admin/settings-page.php:199
 msgid "The app shows the posts of the ticked categories, newest first: the three latest on the home screen and all of them under More → News. With none ticked, it shows every post."
 msgstr "O app mostra os posts das categorias marcadas, do mais recente ao mais antigo: os três últimos na tela inicial e todos em Mais → Notícias. Sem nenhuma marcada, mostra todos os posts."
 
-#: src/admin/settings-page.php:202 templates/screen-home.php:54
+#: src/admin/settings-page.php:203 templates/screen-home.php:54
 msgid "Pages"
 msgstr "Páginas"
 
-#: src/admin/settings-page.php:207
+#: src/admin/settings-page.php:208
 msgid "The site has no published pages."
 msgstr "O site não tem páginas publicadas."
 
-#: src/admin/settings-page.php:212
+#: src/admin/settings-page.php:213
 msgid "In the app"
 msgstr "No app"
 
-#: src/admin/settings-page.php:213 templates/screen-post.php:43
+#: src/admin/settings-page.php:214 templates/screen-post.php:43
 msgid "Open on the site"
 msgstr "Abrir no site"
 
-#: src/admin/settings-page.php:221
+#: src/admin/settings-page.php:222
 msgid "(no title)"
 msgstr "(sem título)"
 
 #. translators: %s: a page title
-#: src/admin/settings-page.php:236
+#: src/admin/settings-page.php:237
 #, php-format
 msgid "Open %s on the site"
 msgstr "Abrir %s no site"
 
-#: src/admin/settings-page.php:246
+#: src/admin/settings-page.php:247
 msgid "The ticked pages appear under More and on the home screen. A page opens inside the app, unless it is marked to open on the site, as a page built with a page builder should be."
 msgstr "As páginas marcadas aparecem em Mais e na tela inicial. Uma página abre dentro do app, a menos que esteja marcada para abrir no site, como deve ser uma página feita com um construtor de páginas."
 
-#: src/admin/settings-page.php:250
+#: src/admin/settings-page.php:251
 msgid "Look"
 msgstr "Aparência"
 
-#: src/admin/settings-page.php:253
+#: src/admin/settings-page.php:254
 msgid "These settings"
 msgstr "Estas configurações"
 
-#: src/admin/settings-page.php:258
+#: src/admin/settings-page.php:259
 msgid "Where the app takes its accent colour and its corners from. While the chosen design is switched off, or its plugin is inactive, the app uses the theme colour below."
 msgstr "De onde o app tira a cor de destaque e os cantos. Enquanto o design escolhido estiver desligado, ou o plugin dele estiver inativo, o app usa a cor do tema abaixo."
 
 #. translators: 1: a colour such as #1d5e8c, 2: corner radius of cards in px, 3: corner radius of buttons in px
-#: src/admin/settings-page.php:265
+#: src/admin/settings-page.php:266
 #, php-format
 msgid "In use now: accent %1$s, cards %2$d px, buttons %3$d px."
 msgstr "Em uso agora: destaque %1$s, cartões %2$d px, botões %3$d px."
 
-#: src/admin/settings-page.php:276
+#: src/admin/settings-page.php:277
+msgid "Light or dark"
+msgstr "Claro ou escuro"
+
+#: src/admin/settings-page.php:287
+msgid "Whether the app draws light, dark, or follows the device. Following Free Form Certificate's Dark Mode keeps the app's header and menu in the same theme as the screens it draws inside them. While the chosen plugin is inactive, the app follows the device."
+msgstr "Se o app fica claro, escuro ou segue o aparelho. Seguir o Modo Escuro do Free Form Certificate mantém o cabeçalho e o menu do app no mesmo tema das telas que ele mostra dentro deles. Enquanto o plugin escolhido estiver inativo, o app segue o aparelho."
+
+#: src/admin/settings-page.php:291
 msgid "Theme colour"
 msgstr "Cor do tema"
 
-#: src/admin/settings-page.php:280
+#: src/admin/settings-page.php:295
 msgid "Background colour"
 msgstr "Cor de fundo"
 
-#: src/admin/settings-page.php:283
+#: src/admin/settings-page.php:298
 msgid "Shown while the app opens."
 msgstr "Aparece enquanto o app abre."
 
-#: src/admin/settings-page.php:287
+#: src/admin/settings-page.php:302
 msgid "Icon"
 msgstr "Ícone"
 
-#: src/admin/settings-page.php:288
+#: src/admin/settings-page.php:303
 msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
 msgstr "O app usa o ícone do site, de Configurações → Geral; sem ele, usa o ícone do plugin."
 
@@ -203,7 +211,23 @@ msgstr "Início"
 msgid "Free Form Certificate: Public Design"
 msgstr "Free Form Certificate: Design Público"
 
-#: src/update/github-updater.php:338
+#: src/app/scheme.php:56
+msgid "Follow the device"
+msgstr "Seguir o aparelho"
+
+#: src/app/scheme.php:57
+msgid "Always light"
+msgstr "Sempre claro"
+
+#: src/app/scheme.php:58
+msgid "Always dark"
+msgstr "Sempre escuro"
+
+#: src/app/scheme.php:71
+msgid "Free Form Certificate: Dark Mode"
+msgstr "Free Form Certificate: Modo Escuro"
+
+#: src/update/github-updater.php:340
 msgid "Update package integrity check (SHA-256) failed. Installation aborted."
 msgstr "A verificação de integridade do pacote de atualização (SHA-256) falhou. Instalação cancelada."
 

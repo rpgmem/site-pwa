@@ -11,6 +11,7 @@ namespace SitePwa\Admin;
 
 use SitePwa\App\Conflicts;
 use SitePwa\App\Identity;
+use SitePwa\App\Scheme;
 use SitePwa\App\Routes;
 use SitePwa\Plugin;
 use SitePwa\Settings;
@@ -270,6 +271,20 @@ final class SettingsPage {
 								);
 								?>
 							</p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="site-pwa-color-scheme"><?php esc_html_e( 'Light or dark', 'site-pwa' ); ?></label></th>
+						<td>
+							<select id="site-pwa-color-scheme" name="<?php echo esc_attr( $field( 'color_scheme' ) ); ?>">
+								<?php foreach ( Scheme::sources() as $site_pwa_id => $site_pwa_source ) : ?>
+									<option value="<?php echo esc_attr( $site_pwa_id ); ?>" <?php selected( $settings['color_scheme'], $site_pwa_id ); ?>><?php echo esc_html( (string) $site_pwa_source['label'] ); ?></option>
+								<?php endforeach; ?>
+								<?php foreach ( Scheme::own() as $site_pwa_id => $site_pwa_label ) : ?>
+									<option value="<?php echo esc_attr( $site_pwa_id ); ?>" <?php selected( $settings['color_scheme'], $site_pwa_id ); ?>><?php echo esc_html( $site_pwa_label ); ?></option>
+								<?php endforeach; ?>
+							</select>
+							<p class="description"><?php esc_html_e( 'Whether the app draws light, dark, or follows the device. Following Free Form Certificate\'s Dark Mode keeps the app\'s header and menu in the same theme as the screens it draws inside them. While the chosen plugin is inactive, the app follows the device.', 'site-pwa' ); ?></p>
 						</td>
 					</tr>
 					<tr>

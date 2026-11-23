@@ -117,12 +117,12 @@ final class IdentityTest extends WP_UnitTestCase {
 		self::assertSame( array(), Identity::sources() );
 	}
 
-	public function test_the_css_puts_the_accent_in_the_light_theme_only_and_the_corners_in_both(): void {
+	public function test_the_css_carries_the_accent_and_the_corners(): void {
 		$this->settings( array( 'identity_source' => 'ffc' ) );
 		PublicDesign::$stored = self::FFC_ON;
 
 		self::assertSame(
-			':root{--site-pwa-radius:20px;--site-pwa-control-radius:2px}@media not all and (prefers-color-scheme:dark){:root{--site-pwa-accent:#b32d2e;--site-pwa-on-accent:#ffffff}}',
+			':root{--site-pwa-radius:20px;--site-pwa-control-radius:2px;--site-pwa-accent:#b32d2e;--site-pwa-on-accent:#ffffff}',
 			Identity::css()
 		);
 	}
