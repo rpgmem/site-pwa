@@ -20,6 +20,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Other plugins can add screens to the app** (#4) through the `site_pwa_register_screens` action, so a consumer needs no check that the app is installed. A screen is drawn in the frame at `/app/s/<id>/` or links to a page on the site, and the app checks its capability everywhere it appears. The bottom navigation is Home, up to three screens and More; More holds the rest and the account. Contract and example: `docs/screens.md`.
 - **An invite to install, on phones only** (#16). The app's home screen shows the browser's own install button on Android, or the two steps on iPhone Safari. Visitors on the site's pages see a "Use the app" banner, signed in or not (#18), with settings for both. Neither shows on a computer or inside the installed app, and a dismissal lasts 30 days on that device.
 - **News and pages inside the app** (#5). The home screen shows the three latest posts and the pages the administrator chose; More → News lists every post, ten to a page. Settings → Site PWA picks the news categories (none means all) and the pages, each of which can open on the site instead.
+- **The app follows Free Form Certificate's Dark Mode** (#21). Settings → Site PWA → Light or dark picks light, dark, following the device, or FFC's Dark Mode, the default, so the app's header and menu match the FFC screens inside them; before, the frame followed the device and the screens their own setting.
 
 ### Fixed
 

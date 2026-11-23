@@ -1,7 +1,9 @@
 /**
  * The app's own document: the frame around each screen, and the offline
- * page. Light and dark follow the operating system, because the app owns its
- * whole document; the theme's stylesheets are not loaded here.
+ * page; the theme's stylesheets are not loaded here. Light or dark is the
+ * body's `site-pwa-scheme-*` class (App\Scheme): dark always, light always,
+ * or `auto`, which follows the device. The class is what lets the app follow
+ * the same choice as the screens other plugins draw inside it.
  */
 
 :root {
@@ -16,11 +18,27 @@
 	--site-pwa-radius: 12px;
 	--site-pwa-control-radius: 8px;
 	--site-pwa-nav-height: 64px;
-	color-scheme: light dark;
+	color-scheme: light;
+}
+
+.site-pwa-scheme-light {
+	color-scheme: light;
+}
+
+.site-pwa-scheme-dark {
+	--site-pwa-bg: #10161d;
+	--site-pwa-surface: #1a232d;
+	--site-pwa-text: #e8edf2;
+	--site-pwa-muted: #a9b4c0;
+	--site-pwa-border: #2f3b48;
+	--site-pwa-accent: #7cc3f0;
+	--site-pwa-on-accent: #0d1a24;
+	--site-pwa-neutral-bg: #243140;
+	color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
-	:root {
+	.site-pwa-scheme-auto {
 		--site-pwa-bg: #10161d;
 		--site-pwa-surface: #1a232d;
 		--site-pwa-text: #e8edf2;
@@ -29,6 +47,7 @@
 		--site-pwa-accent: #7cc3f0;
 		--site-pwa-on-accent: #0d1a24;
 		--site-pwa-neutral-bg: #243140;
+		color-scheme: dark;
 	}
 }
 

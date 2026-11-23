@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <?php wp_head(); ?>
 </head>
-<body class="site-pwa-app">
+<body class="site-pwa-app <?php echo esc_attr( \SitePwa\App\Scheme::bodyClass() ); ?>">
 <?php wp_body_open(); ?>
 <a class="site-pwa-skip" href="#site-pwa-main"><?php esc_html_e( 'Skip to content', 'site-pwa' ); ?></a>
 <header class="site-pwa-header">

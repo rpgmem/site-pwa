@@ -146,8 +146,7 @@ final class Identity {
 	public static function css(): string {
 		$look = self::current();
 		return sprintf(
-			':root{--site-pwa-radius:%1$dpx;--site-pwa-control-radius:%2$dpx}'
-			. '@media not all and (prefers-color-scheme:dark){:root{--site-pwa-accent:%3$s;--site-pwa-on-accent:%4$s}}',
+			':root{--site-pwa-radius:%1$dpx;--site-pwa-control-radius:%2$dpx;--site-pwa-accent:%3$s;--site-pwa-on-accent:%4$s}',
 			$look['radius'],
 			$look['control_radius'],
 			$look['accent'],

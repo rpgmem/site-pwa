@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php require __DIR__ . '/head.php'; ?>
 <title><?php esc_html_e( 'No connection', 'site-pwa' ); ?></title>
 </head>
-<body class="site-pwa">
+<body class="site-pwa <?php echo esc_attr( \SitePwa\App\Scheme::bodyClass() ); ?>">
 <main class="site-pwa-card">
 	<h1><?php esc_html_e( 'No connection', 'site-pwa' ); ?></h1>
 	<p><?php esc_html_e( 'This page needs the internet. Check the connection and try again.', 'site-pwa' ); ?></p>
