@@ -184,7 +184,13 @@ final class Routes {
 		if ( 'manifest' === $route ) {
 			return array(
 				'status'  => 200,
-				'headers' => array( 'Content-Type' => 'application/manifest+json; charset=utf-8' ),
+				// Revalidated on every fetch (#28): an installed app takes its
+				// colour, name and icon from it, and a cached copy would keep
+				// the old ones on every phone.
+				'headers' => array(
+					'Content-Type'  => 'application/manifest+json; charset=utf-8',
+					'Cache-Control' => 'no-cache',
+				),
 				'body'    => (string) wp_json_encode( Manifest::data(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ),
 			);
 		}
