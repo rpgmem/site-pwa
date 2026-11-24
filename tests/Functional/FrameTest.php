@@ -66,8 +66,35 @@ final class FrameTest extends WP_UnitTestCase {
 		self::assertTrue( $skip < $head && $head < $main && $main < $nav, 'Focus order: skip link, header, content, navigation.' );
 	}
 
-	public function test_the_home_screen_greets_by_first_name(): void {
-		self::assertStringContainsString( 'Hello, Maria', $this->screen( 'home' ) );
+	public function test_the_home_screen_opens_on_the_accent_band_with_a_greeting_and_the_name(): void {
+		$html = $this->screen( 'home' );
+
+		self::assertStringContainsString( '<header class="site-pwa-header site-pwa-header-home">', $html );
+		self::assertMatchesRegularExpression( '#<p class="site-pwa-hello">\s*<span>Good (morning|afternoon|evening),</span>\s*<strong>Maria Souza</strong>#', $html );
+		self::assertStringContainsString( 'class="site-pwa-bell"', $html );
+		self::assertStringContainsString( 'Notifications: nothing pending', $html );
+		self::assertStringNotContainsString( 'site-pwa-badge', $html, 'no badge without anything pending' );
+		self::assertMatchesRegularExpression( '#id="site-pwa-home-js" src="[^"]*assets/js/home(\.min)?\.js#', $html, 'the banner script loads on home' );
+	}
+
+	public function test_the_greeting_follows_the_hour(): void {
+		self::assertSame( 'Good morning,', \SitePwa\App\Home::greeting( 5 ) );
+		self::assertSame( 'Good morning,', \SitePwa\App\Home::greeting( 11 ) );
+		self::assertSame( 'Good afternoon,', \SitePwa\App\Home::greeting( 12 ) );
+		self::assertSame( 'Good afternoon,', \SitePwa\App\Home::greeting( 17 ) );
+		self::assertSame( 'Good evening,', \SitePwa\App\Home::greeting( 18 ) );
+		self::assertSame( 'Good evening,', \SitePwa\App\Home::greeting( 2 ) );
+	}
+
+	public function test_an_inner_screen_has_a_back_arrow_only_where_it_was_reached_from_another(): void {
+		$account = $this->screen( 'account' );
+		self::assertStringContainsString( '<a class="site-pwa-back" href="' . esc_url( Routes::url( 'more' ) ) . '">', $account );
+
+		$more = $this->screen( 'more' );
+		self::assertStringNotContainsString( 'site-pwa-back', $more, 'More is in the bar' );
+		self::assertStringNotContainsString( '<header', $more );
+		self::assertSame( \SitePwa\App\News::url(), Frame::back( 'post' ) );
+		self::assertSame( '', Frame::back( 'news' ) );
 	}
 
 	public function test_the_account_screen_shows_the_users_own_details_and_the_way_out(): void {

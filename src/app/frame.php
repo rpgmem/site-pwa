@@ -38,6 +38,11 @@ final class Frame {
 	public const SHARE_HANDLE = 'site-pwa-share';
 
 	/**
+	 * Handle of the home screen's script, which hides a dismissed banner.
+	 */
+	public const HOME_HANDLE = 'site-pwa-home';
+
+	/**
 	 * Wire the hooks that only act on an app screen.
 	 */
 	public static function register(): void {
@@ -71,6 +76,8 @@ final class Frame {
 		$user     = wp_get_current_user();
 		$post     = 'post' === $route ? Content::current() : null;
 		$screen   = 'screen' === $route ? Screens::page( Routes::screen() ) : null;
+		$home     = 'home' === $route ? Home::items( $user ) : null;
+		$name     = '' !== (string) $user->display_name ? (string) $user->display_name : (string) $user->user_login;
 
 		$content = self::template(
 			'screen-' . $route,
@@ -86,6 +93,7 @@ final class Frame {
 				'screen_html' => null === $screen ? '' : self::screenHtml( $screen ),
 				'user'        => $user,
 				'first_name'  => '' !== (string) $user->first_name ? (string) $user->first_name : (string) $user->display_name,
+				'home_items'  => $home,
 				'profile_url' => get_edit_profile_url( $user->ID ),
 				'logout_url'  => wp_logout_url( Routes::url( 'home' ) ),
 				'home'        => Routes::url( 'home' ),
@@ -100,10 +108,32 @@ final class Frame {
 				'name'       => $settings['name'],
 				'icon'       => Manifest::touchIcon(),
 				'home'       => Routes::url( 'home' ),
+				'route'      => $route,
+				'greeting'   => Home::greeting(),
+				'user_name'  => $name,
+				'pending'    => null === $home ? 0 : count( $home['pending'] ),
+				'back'       => self::back( $route ),
 				'navigation' => Navigation::items( Navigation::key( $route, Routes::screen() ) ),
 				'content'    => $content,
 			)
 		);
+	}
+
+	/**
+	 * Where a screen's back arrow leads, or '' for a screen the navigation
+	 * reaches directly: a post goes back to the news, the account to More.
+	 *
+	 * @param string $route The route being drawn.
+	 */
+	public static function back( string $route ): string {
+		switch ( $route ) {
+			case 'post':
+				return News::url();
+			case 'account':
+				return Routes::url( 'more' );
+			default:
+				return '';
+		}
 	}
 
 	/**
@@ -152,6 +182,19 @@ final class Frame {
 				'strategy'  => 'defer',
 			)
 		);
+		if ( 'home' === Routes::current() ) {
+			$home = Plugin::asset( 'assets/js/home.js' );
+			wp_enqueue_script(
+				self::HOME_HANDLE,
+				Plugin::url() . $home,
+				array(),
+				Plugin::assetVersion( $home ),
+				array(
+					'in_footer' => true,
+					'strategy'  => 'defer',
+				)
+			);
+		}
 		if ( 'post' === Routes::current() ) {
 			$share = Plugin::asset( 'assets/js/share.js' );
 			wp_enqueue_script(

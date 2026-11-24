@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-23 09:53+0000\n"
+"POT-Creation-Date: 2026-11-24 03:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,7 +48,7 @@ msgstr ""
 msgid "The app is on at"
 msgstr ""
 
-#: src/admin/settings-page.php:137 templates/frame.php:35
+#: src/admin/settings-page.php:137 templates/frame.php:69
 #: templates/site-banner.php:17
 msgid "App"
 msgstr ""
@@ -101,8 +101,9 @@ msgstr ""
 msgid "Only on phones and tablets, and never inside the installed app. A visitor who is not signed in goes to the login first, then into the app. A visitor who closes the banner does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
 msgstr ""
 
-#: src/admin/settings-page.php:185 src/app/frame.php:249
-#: templates/screen-more.php:19 templates/screen-news.php:19
+#: src/admin/settings-page.php:185 src/app/frame.php:292
+#: templates/screen-home.php:87 templates/screen-more.php:19
+#: templates/screen-news.php:19
 msgid "News"
 msgstr ""
 
@@ -114,7 +115,7 @@ msgstr ""
 msgid "The app shows the posts of the ticked categories, newest first: the three latest on the home screen and all of them under More → News. With none ticked, it shows every post."
 msgstr ""
 
-#: src/admin/settings-page.php:203 templates/screen-home.php:54
+#: src/admin/settings-page.php:203 templates/screen-home.php:105
 msgid "Pages"
 msgstr ""
 
@@ -190,22 +191,34 @@ msgstr ""
 msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
 msgstr ""
 
-#: src/app/frame.php:245 templates/screen-account.php:16
+#: src/app/frame.php:288 templates/screen-account.php:16
 #: templates/screen-more.php:40
 msgid "Account"
 msgstr ""
 
-#: src/app/frame.php:247 src/app/navigation.php:47 templates/screen-more.php:45
+#: src/app/frame.php:290 src/app/navigation.php:51 templates/screen-more.php:45
 #: templates/screen-more.php:46
 msgid "More"
 msgstr ""
 
-#: src/app/frame.php:252 src/app/frame.php:255
+#: src/app/frame.php:295 src/app/frame.php:298
 msgid "Not available"
 msgstr ""
 
-#: src/app/frame.php:257 src/app/navigation.php:32
+#: src/app/frame.php:300 src/app/navigation.php:41 templates/screen-home.php:18
 msgid "Home"
+msgstr ""
+
+#: src/app/home.php:130
+msgid "Good morning,"
+msgstr ""
+
+#: src/app/home.php:133
+msgid "Good afternoon,"
+msgstr ""
+
+#: src/app/home.php:135
+msgid "Good evening,"
 msgstr ""
 
 #: src/app/identity.php:60
@@ -236,6 +249,20 @@ msgstr ""
 msgid "Skip to content"
 msgstr ""
 
+#: templates/frame.php:45
+msgid "Notifications: nothing pending"
+msgstr ""
+
+#. translators: %d: number of pending items
+#: templates/frame.php:47
+#, php-format
+msgid "Notifications, pending items: %d"
+msgstr ""
+
+#: templates/frame.php:62
+msgid "Back"
+msgstr ""
+
 #: templates/offline.php:20 templates/offline.php:24
 msgid "No connection"
 msgstr ""
@@ -264,61 +291,55 @@ msgstr ""
 msgid "Sign out"
 msgstr ""
 
-#. translators: %s: the signed-in user's first name
-#: templates/screen-home.php:20
-#, php-format
-msgid "Hello, %s"
+#: templates/screen-home.php:33
+msgid "Dismiss"
 msgstr ""
 
-#: templates/screen-home.php:24
-msgid "Your screens"
+#: templates/screen-home.php:41
+msgid "Next commitment"
 msgstr ""
 
-#: templates/screen-home.php:26
-msgid "Nothing here yet. The screens other plugins add to the app appear here."
+#: templates/screen-home.php:64
+msgid "Pending"
 msgstr ""
 
-#: templates/screen-home.php:42
-msgid "Latest news"
+#: templates/screen-home.php:89
+msgid "See all"
 msgstr ""
 
-#: templates/screen-home.php:44 templates/screen-news.php:22
+#: templates/screen-home.php:94 templates/screen-news.php:22
 msgid "No news yet."
 msgstr ""
 
-#: templates/screen-home.php:50
-msgid "See all news"
-msgstr ""
-
-#: templates/screen-home.php:56
+#: templates/screen-home.php:107
 msgid "No pages yet. The pages chosen in the app's settings appear here."
 msgstr ""
 
-#: templates/screen-home.php:73 templates/site-banner.php:24
+#: templates/screen-home.php:124 templates/site-banner.php:24
 msgid "Not now"
 msgstr ""
 
-#: templates/screen-home.php:76
+#: templates/screen-home.php:127
 msgid "Install the app"
 msgstr ""
 
-#: templates/screen-home.php:78
+#: templates/screen-home.php:129
 msgid "Open it from your home screen, full screen, like any other app."
 msgstr ""
 
-#: templates/screen-home.php:82
+#: templates/screen-home.php:133
 msgid "Install app"
 msgstr ""
 
-#: templates/screen-home.php:87
+#: templates/screen-home.php:138
 msgid "Add it to your home screen to open it like any other app:"
 msgstr ""
 
-#: templates/screen-home.php:91
+#: templates/screen-home.php:142
 msgid "Tap Share in Safari’s toolbar."
 msgstr ""
 
-#: templates/screen-home.php:95
+#: templates/screen-home.php:146
 msgid "Choose Add to Home Screen."
 msgstr ""
 
