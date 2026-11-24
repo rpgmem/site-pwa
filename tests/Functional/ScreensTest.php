@@ -128,6 +128,8 @@ final class ScreensTest extends WP_UnitTestCase {
 				'scheme'   => array( 'label' => 'X', 'url' => 'javascript:alert(1)' ),
 				'slot'     => array( 'label' => 'X', 'place' => 'nav', 'slot' => 'left', 'render' => $render ),
 				'more-mid' => array( 'label' => 'X', 'slot' => 'center', 'render' => $render ),
+				'section'  => array( 'label' => 'X', 'section' => 'admin', 'render' => $render ),
+				'badge'    => array( 'label' => 'X', 'badge' => 42, 'render' => $render ),
 				'ok'       => array( 'label' => 'X', 'render' => $render ),
 			)
 		);
@@ -147,6 +149,8 @@ final class ScreensTest extends WP_UnitTestCase {
 				'scheme'   => 'site_pwa_screen_url',
 				'slot'     => 'site_pwa_screen_slot',
 				'more-mid' => 'site_pwa_screen_slot',
+				'section'  => 'site_pwa_screen_section',
+				'badge'    => 'site_pwa_screen_badge',
 				'ok'       => true,
 			),
 			$codes
@@ -302,8 +306,9 @@ final class ScreensTest extends WP_UnitTestCase {
 		$body     = $response['body'];
 
 		self::assertSame( 200, $response['status'] );
-		self::assertStringContainsString( '<nav class="site-pwa-card site-pwa-card-list" aria-label="More">', $body );
-		self::assertLessThan( strpos( $body, Routes::url( 'account' ) ), strpos( $body, home_url( '/calendar/' ) ) );
+		self::assertStringContainsString( '<div class="site-pwa-more">', $body );
+		self::assertLessThan( strpos( $body, home_url( '/calendar/' ) ), strpos( $body, Routes::url( 'account' ) ), 'the profile card comes first' );
+		self::assertLessThan( strpos( $body, 'site-pwa-signout' ), strpos( $body, home_url( '/calendar/' ) ) );
 		self::assertMatchesRegularExpression( '#href="' . preg_quote( Routes::url( 'more' ), '#' ) . '" aria-current="page"#', $body );
 		self::assertStringNotContainsString( 'Reports', $body );
 		self::assertSame( 'More – Escola Viva', Frame::title( 'x' ) );
@@ -328,5 +333,56 @@ final class ScreensTest extends WP_UnitTestCase {
 		self::assertSame( 'index.php?site_pwa_route=more', $wp_rewrite->extra_rules_top['^app/more/?$'] );
 		self::assertSame( 'index.php?site_pwa_route=screen&site_pwa_screen=$matches[1]', $wp_rewrite->extra_rules_top['^app/s/([a-z0-9-]+)/?$'] );
 		self::assertContains( Routes::SCREEN_VAR, Routes::queryVars( array() ) );
+	}
+
+	public function test_more_groups_screens_into_services_and_operator_with_their_subtitle_and_badge(): void {
+		$this->signIn();
+		$render = static fn(): string => 'x';
+		$this->register(
+			array(
+				'certs'     => array( 'label' => 'Certificates', 'render' => $render, 'subtitle' => '<b>Issued</b> to you' ),
+				'terminals' => array(
+					'label'    => 'Terminals',
+					'render'   => $render,
+					'section'  => 'operator',
+					'subtitle' => 'Check-in tablets',
+					'badge'    => static fn(): string => '2 active · <em>1</em> offline',
+				),
+				'broken'    => array(
+					'label'   => 'Broken',
+					'render'  => $render,
+					'section' => 'operator',
+					'badge'   => static function (): string {
+						throw new \RuntimeException( 'down' );
+					},
+				),
+			)
+		);
+		$all = Screens::all();
+		self::assertSame( 'services', $all['certs']['section'], 'the default section' );
+		self::assertSame( 'Issued to you', $all['certs']['subtitle'] );
+		self::assertSame( '2 active · 1 offline', Screens::badge( $all['terminals'] ) );
+		self::assertSame( '', Screens::badge( $all['broken'] ), 'a badge that throws shows nothing' );
+		self::assertSame( 'New', Screens::badge( array( 'badge' => ' New ' ) ) );
+		self::assertSame( '', Screens::badge( array( 'badge' => static fn(): int => 3 ) ) );
+
+		set_query_var( Routes::QUERY_VAR, 'more' );
+		$more     = \SitePwa\App\Frame::render( 'more' );
+		$services = strpos( $more, 'id="site-pwa-more-services"' );
+		$operator = strpos( $more, 'id="site-pwa-more-operator"' );
+		self::assertNotFalse( $services );
+		self::assertNotFalse( $operator );
+		self::assertLessThan( strpos( $more, '<strong>Certificates</strong>' ), $services );
+		self::assertLessThan( $operator, strpos( $more, '<strong>Certificates</strong>' ) );
+		self::assertLessThan( strpos( $more, '<strong>Terminals</strong>' ), $operator );
+		self::assertStringContainsString( '<span class="site-pwa-badge-text">2 active · 1 offline</span>', $more );
+		self::assertStringContainsString( '<span>Check-in tablets</span>', $more );
+	}
+
+	public function test_more_has_no_operator_section_when_no_screen_sits_there(): void {
+		$this->signIn();
+		$this->register( array( 'certs' => array( 'label' => 'Certificates', 'render' => static fn(): string => 'x' ) ) );
+		set_query_var( Routes::QUERY_VAR, 'more' );
+		self::assertStringNotContainsString( 'site-pwa-more-operator', \SitePwa\App\Frame::render( 'more' ) );
 	}
 }

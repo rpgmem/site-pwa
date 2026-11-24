@@ -94,7 +94,8 @@ final class FrameTest extends WP_UnitTestCase {
 		self::assertStringNotContainsString( 'site-pwa-back', $more, 'More is in the bar' );
 		self::assertStringNotContainsString( '<header', $more );
 		self::assertSame( \SitePwa\App\News::url(), Frame::back( 'post' ) );
-		self::assertSame( '', Frame::back( 'news' ) );
+		self::assertSame( Routes::url( 'home' ), Frame::back( 'news' ), 'News is reached from Home' );
+		self::assertSame( '', Frame::back( 'more' ) );
 	}
 
 	public function test_the_account_screen_shows_the_users_own_details_and_the_way_out(): void {
@@ -207,5 +208,68 @@ final class FrameTest extends WP_UnitTestCase {
 		$css = (string) preg_replace( '#/\*.*?\*/#s', '', $css );
 
 		self::assertSame( 1, preg_match( '/^\s*@media \(display-mode: standalone\) \{(.*)\}\s*$/s', $css ), 'login.css holds one standalone media block and nothing outside it.' );
+	}
+
+	public function test_the_login_from_the_app_names_the_app_moves_the_lost_link_and_says_what_remember_does(): void {
+		update_option( 'blogdescription', 'Learn & grow' );
+		self::assertSame( 'core', Login::message( 'core' ), 'a login not from the app is left alone' );
+		ob_start();
+		Login::lostPasswordLink();
+		self::assertSame( '', ob_get_clean() );
+
+		$_REQUEST['redirect_to'] = Routes::url( 'home' );
+
+		$message = Login::message( '<p class="message">core</p>' );
+		self::assertStringStartsWith( '<div class="site-pwa-login-heading" hidden><p class="site-pwa-login-name">Escola Viva</p><p class="site-pwa-login-tagline">Learn &amp; grow</p></div>', $message );
+		self::assertStringEndsWith( '<p class="message">core</p>', $message, 'what another plugin prints there is kept' );
+
+		update_option( 'blogdescription', '' );
+		self::assertStringNotContainsString( 'site-pwa-login-tagline', Login::message( '' ) );
+
+		ob_start();
+		Login::lostPasswordLink();
+		$lost = (string) ob_get_clean();
+		self::assertStringContainsString( '<p class="site-pwa-login-lost" hidden><a href="' . esc_url( wp_lostpassword_url( Routes::url( 'home' ) ) ) . '">Forgot your password?</a></p>', $lost );
+
+		self::assertFalse( has_filter( 'gettext', array( Login::class, 'rememberLabel' ) ), 'outside the login screen nothing is relabelled' );
+		Login::relabel();
+		self::assertSame( 10, has_filter( 'gettext', array( Login::class, 'rememberLabel' ) ) );
+		self::assertSame( 'Keep me signed in on this device', Login::rememberLabel( 'Remember Me', 'Remember Me', 'default' ) );
+		self::assertSame( 'Remember Me', Login::rememberLabel( 'Remember Me', 'Remember Me', 'other-plugin' ) );
+		self::assertSame( 'Log In', Login::rememberLabel( 'Log In', 'Log In', 'default' ) );
+
+		unset( $_REQUEST['redirect_to'] );
+		self::assertSame( 'Remember Me', Login::rememberLabel( 'Remember Me', 'Remember Me', 'default' ) );
+	}
+
+	public function test_the_dark_theme_this_device_chose_is_applied_in_the_head_before_the_first_paint(): void {
+		$html = $this->screen( 'home' );
+		$head = substr( $html, 0, (int) strpos( $html, '</head>' ) );
+		self::assertStringContainsString( Frame::DARK_SCRIPT, $head );
+		self::assertStringContainsString( "'" . Frame::DARK_KEY . "'", Frame::DARK_SCRIPT, 'the head script reads the key More writes' );
+		self::assertStringContainsString( "'" . Frame::DARK_KEY . "'", (string) file_get_contents( dirname( __DIR__, 2 ) . '/assets/js/more.js' ) );
+		self::assertFalse( wp_script_is( Frame::MORE_HANDLE, 'enqueued' ), 'only More loads the switch' );
+
+		$more = $this->screen( 'more' );
+		self::assertTrue( wp_script_is( Frame::MORE_HANDLE, 'enqueued' ) );
+		self::assertStringContainsString( '<input type="checkbox" role="switch" data-site-pwa-dark>', $more );
+	}
+
+	public function test_more_opens_with_the_person_their_initials_and_a_line_other_plugins_supply(): void {
+		$more = $this->screen( 'more' );
+		self::assertStringContainsString( '<span class="site-pwa-avatar" aria-hidden="true">MS</span>', $more );
+		self::assertStringContainsString( '<strong>Maria Souza</strong>', $more );
+		self::assertStringNotContainsString( 'site-pwa-profile-text"><strong>Maria Souza</strong>' . "\n\t\t\t\t<span>", $more );
+
+		add_filter( 'site_pwa_profile_line', static fn( string $line, \WP_User $user ): string => '<i>RF</i> ***.**1-0 · ' . $user->first_name, 10, 2 );
+		self::assertStringContainsString( '<span>RF ***.**1-0 · Maria</span>', $this->screen( 'more' ) );
+
+		self::assertSame( 'MS', Frame::initials( 'maria da silva souza' ) );
+		self::assertSame( 'Á', Frame::initials( '  ágata ' ) );
+		self::assertSame( 'ÉO', Frame::initials( 'élio otávio' ) );
+		self::assertSame( '', Frame::initials( '   ' ) );
+
+		$login = self::factory()->user->create( array( 'user_login' => 'jlima', 'display_name' => '' ) );
+		self::assertSame( 'jlima', Frame::profile( new \WP_User( $login ) )['name'], 'a user with no display name shows their login' );
 	}
 }

@@ -32,7 +32,7 @@ use WP_Error;
  * to whoever holds its capability: in the navigation, on the home screen and
  * at its URL alike.
  *
- * @phpstan-type Screen array{id: string, label: string, icon: string, place: string, slot: string, capability: string, render: callable|null, url: string, position: int}
+ * @phpstan-type Screen array{id: string, label: string, icon: string, place: string, slot: string, section: string, subtitle: string, badge: callable|string, capability: string, render: callable|null, url: string, position: int}
  */
 final class Screens {
 
@@ -58,6 +58,12 @@ final class Screens {
 	 * position wins and any other stays an ordinary `nav` screen.
 	 */
 	public const SLOTS = array( '', 'center' );
+
+	/**
+	 * The More sections a screen can sit in: what a person uses, or what an
+	 * operator does for others.
+	 */
+	public const SECTIONS = array( 'services', 'operator' );
 
 	/**
 	 * Screens in the bottom navigation, between Home and More. Further `nav`
@@ -191,6 +197,25 @@ final class Screens {
 	}
 
 	/**
+	 * The short status a screen shows beside its name in More, as plain
+	 * text: its string, or what its callable returns now. A callable that
+	 * throws or returns anything else shows nothing.
+	 *
+	 * @param array{badge: callable|string} $screen The screen.
+	 */
+	public static function badge( array $screen ): string {
+		$badge = $screen['badge'];
+		if ( is_callable( $badge ) ) {
+			try {
+				$badge = call_user_func( $badge );
+			} catch ( \Throwable $error ) {
+				return '';
+			}
+		}
+		return is_string( $badge ) ? trim( wp_strip_all_tags( $badge ) ) : '';
+	}
+
+	/**
 	 * Forget what was registered, so the action fires again.
 	 */
 	public static function reset(): void {
@@ -203,7 +228,10 @@ final class Screens {
 	 * @param string               $id   Lowercase letters, digits and hyphens; part of the URL.
 	 * @param array<string, mixed> $args `label` (required), `icon`, `place` (`nav` or `more`,
 	 *                                   default `more`), `slot` (`center` for a `nav` screen
-	 *                                   raised in the middle of the bar), `capability` (default `read`), `position`
+	 *                                   raised in the middle of the bar), `section` (`services` or
+	 *                                   `operator`, More's group), `subtitle`, `badge` (a string, or a
+	 *                                   callable returning one, shown beside the name in More),
+	 *                                   `capability` (default `read`), `position`
 	 *                                   (default 10), and exactly one of `render` (a callable that
 	 *                                   returns or prints the screen's HTML) or `url` (a page on
 	 *                                   this site).
@@ -256,6 +284,15 @@ final class Screens {
 			return new WP_Error( 'site_pwa_screen_slot', sprintf( 'Screen "%s": only a "nav" screen can take the center slot.', $id ) );
 		}
 
+		$section = $args['section'] ?? 'services';
+		if ( ! in_array( $section, self::SECTIONS, true ) ) {
+			return new WP_Error( 'site_pwa_screen_section', sprintf( 'Screen "%s": section must be "services" or "operator".', $id ) );
+		}
+		$badge = $args['badge'] ?? '';
+		if ( ! is_string( $badge ) && ! is_callable( $badge ) ) {
+			return new WP_Error( 'site_pwa_screen_badge', sprintf( 'Screen "%s": badge must be a string or a callable.', $id ) );
+		}
+
 		$render = $args['render'] ?? null;
 		$url    = $args['url'] ?? null;
 		if ( ( null === $render ) === ( null === $url ) ) {
@@ -281,6 +318,9 @@ final class Screens {
 			'icon'       => $icon,
 			'place'      => $place,
 			'slot'       => $slot,
+			'section'    => $section,
+			'subtitle'   => is_string( $args['subtitle'] ?? null ) ? trim( wp_strip_all_tags( $args['subtitle'] ) ) : '',
+			'badge'      => $badge,
 			'capability' => $cap,
 			'render'     => null === $render ? null : $render,
 			'url'        => $link,

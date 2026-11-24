@@ -33,6 +33,9 @@ add_action( 'site_pwa_register_screens', static function ( $screens, int $api ):
 | `icon` | no | `grid` | One of the app's icons: `home`, `user`, `edit`, `logout`, `share`, `link`, `open`, `more`, `grid`, `calendar`, `check`, `document`, `chevron`, `add`, `close`, `download`, `news`, `qr`, `bell`, `back`, `award`. An unknown name draws `grid`. |
 | `place` | no | `more` | `nav` puts the screen in the bottom navigation; `more` puts it in the More list. |
 | `slot` | no | | `center` raises a `nav` screen in the middle of the bar, as the app's main action. Refused on a `more` screen. |
+| `section` | no | `services` | More's group: `services` for what a person uses, `operator` for what they do for others. Anything else is refused. |
+| `subtitle` | no | | A line under the name in More. Markup is stripped. |
+| `badge` | no | | A short status beside the name in More: a string, or a callable that returns one when More is drawn (`"2 active · 1 offline"`). Markup is stripped; a callable that throws or returns anything else shows nothing. |
 | `capability` | no | `read` | Who sees the screen. The app checks it everywhere the screen appears: navigation, home, More and its own URL. |
 | `position` | no | `10` | Order, lowest first; screens with the same position sort by label. |
 
@@ -49,7 +52,13 @@ The bottom navigation holds at most five items:
 
 A `nav` screen that asks for the `center` slot takes one of the three and sits raised in the middle of them, with Home and one screen on its left and one screen and More on its right. One screen holds the slot: the first by position. A second one stays an ordinary `nav` screen.
 
-More lists the `more` screens, then the `nav` screens that did not fit, then the account.
+More opens on the person: their initials, their name, a line from the `site_pwa_profile_line` filter and a link to their details. Then the `more` screens and the `nav` screens that did not fit, in two groups by `section` (an empty group is not drawn), with News at the end of Services; the site's pages; the preferences; and Sign out.
+
+```php
+add_filter( 'site_pwa_profile_line', static fn( string $line, WP_User $user ): string => 'RF ***.**1-0 · Teacher', 10, 2 );
+```
+
+The line is plain text; markup is stripped. The dark theme preference is kept on that device only, in the browser's storage, and turns the frame and the screens inside it dark before the first paint by putting `data-site-pwa-scheme="dark"` and FFC's `ffc-dark-mode` class on `<html>`. Off, the app follows the site's choice again.
 
 ## Feeding the home screen
 

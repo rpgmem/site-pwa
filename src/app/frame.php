@@ -43,6 +43,21 @@ final class Frame {
 	public const HOME_HANDLE = 'site-pwa-home';
 
 	/**
+	 * Handle of More's script, which saves the dark theme on this device.
+	 */
+	public const MORE_HANDLE = 'site-pwa-more';
+
+	/**
+	 * Where this device keeps the dark theme chosen on More.
+	 */
+	public const DARK_KEY = 'site-pwa-dark';
+
+	/**
+	 * Applies the stored choice to the root element before the first paint.
+	 */
+	public const DARK_SCRIPT = "try{if(localStorage.getItem('site-pwa-dark')==='1'){var r=document.documentElement;r.setAttribute('data-site-pwa-scheme','dark');r.classList.add('ffc-dark-mode');}}catch(e){}";
+
+	/**
 	 * Wire the hooks that only act on an app screen.
 	 */
 	public static function register(): void {
@@ -82,23 +97,26 @@ final class Frame {
 		$content = self::template(
 			'screen-' . $route,
 			array(
-				'screens'     => Screens::visible(),
-				'news'        => 'home' === $route ? News::page( 1, News::LATEST ) : ( 'news' === $route ? News::page( News::requested() ) : null ),
-				'news_page'   => News::requested(),
-				'news_url'    => News::url(),
-				'pages'       => in_array( $route, array( 'home', 'more' ), true ) ? AppPages::items() : array(),
-				'more'        => Screens::split()['more'],
-				'account_url' => Routes::url( 'account' ),
-				'screen'      => $screen,
-				'screen_html' => null === $screen ? '' : self::screenHtml( $screen ),
-				'user'        => $user,
-				'first_name'  => '' !== (string) $user->first_name ? (string) $user->first_name : (string) $user->display_name,
-				'home_items'  => $home,
-				'profile_url' => get_edit_profile_url( $user->ID ),
-				'logout_url'  => wp_logout_url( Routes::url( 'home' ) ),
-				'home'        => Routes::url( 'home' ),
-				'permalink'   => null === $post ? '' : (string) get_permalink( $post ),
-				'post_title'  => null === $post ? '' : wp_strip_all_tags( get_the_title( $post ) ),
+				'screens'         => Screens::visible(),
+				'news'            => 'home' === $route ? News::page( 1, News::LATEST ) : ( 'news' === $route ? News::page( News::requested(), News::PER_PAGE, (int) ( News::requestedCategory()['id'] ?? 0 ) ) : null ),
+				'news_categories' => 'news' === $route ? News::categories() : array(),
+				'news_category'   => 'news' === $route ? News::requestedCategory() : null,
+				'news_page'       => News::requested(),
+				'news_url'        => News::url(),
+				'pages'           => in_array( $route, array( 'home', 'more' ), true ) ? AppPages::items() : array(),
+				'more'            => Screens::split()['more'],
+				'profile'         => 'more' === $route ? self::profile( $user ) : null,
+				'account_url'     => Routes::url( 'account' ),
+				'screen'          => $screen,
+				'screen_html'     => null === $screen ? '' : self::screenHtml( $screen ),
+				'user'            => $user,
+				'first_name'      => '' !== (string) $user->first_name ? (string) $user->first_name : (string) $user->display_name,
+				'home_items'      => $home,
+				'profile_url'     => get_edit_profile_url( $user->ID ),
+				'logout_url'      => wp_logout_url( Routes::url( 'home' ) ),
+				'home'            => Routes::url( 'home' ),
+				'permalink'       => null === $post ? '' : (string) get_permalink( $post ),
+				'post_title'      => null === $post ? '' : wp_strip_all_tags( get_the_title( $post ) ),
 			)
 		);
 
@@ -120,6 +138,46 @@ final class Frame {
 	}
 
 	/**
+	 * The profile card on More: the person's initials, name and one line
+	 * about them. The line is empty unless a plugin gives one through the
+	 * `site_pwa_profile_line` filter, such as a masked registration number
+	 * and a role; it is shown as plain text.
+	 *
+	 * @param \WP_User $user The signed-in user.
+	 * @return array{initials: string, name: string, line: string}
+	 */
+	public static function profile( \WP_User $user ): array {
+		$name = '' !== (string) $user->display_name ? (string) $user->display_name : (string) $user->user_login;
+		/**
+		 * One line under the person's name on More.
+		 *
+		 * @param string   $line Empty by default.
+		 * @param \WP_User $user The signed-in user.
+		 */
+		$line = apply_filters( 'site_pwa_profile_line', '', $user );
+		return array(
+			'initials' => self::initials( $name ),
+			'name'     => $name,
+			'line'     => is_string( $line ) ? trim( wp_strip_all_tags( $line ) ) : '',
+		);
+	}
+
+	/**
+	 * The first letters of the first and the last word of a name.
+	 *
+	 * @param string $name A name.
+	 */
+	public static function initials( string $name ): string {
+		$words = preg_split( '/\s+/u', trim( $name ), -1, PREG_SPLIT_NO_EMPTY );
+		if ( false === $words || array() === $words ) {
+			return '';
+		}
+		$first = mb_substr( $words[0], 0, 1 );
+		$last  = count( $words ) > 1 ? mb_substr( (string) end( $words ), 0, 1 ) : '';
+		return mb_strtoupper( $first . $last );
+	}
+
+	/**
 	 * Where a screen's back arrow leads, or '' for a screen the navigation
 	 * reaches directly: a post goes back to the news, the account to More.
 	 *
@@ -131,6 +189,8 @@ final class Frame {
 				return News::url();
 			case 'account':
 				return Routes::url( 'more' );
+			case 'news':
+				return Routes::url( 'home' );
 			default:
 				return '';
 		}
@@ -195,6 +255,19 @@ final class Frame {
 				)
 			);
 		}
+		if ( 'more' === Routes::current() ) {
+			$more = Plugin::asset( 'assets/js/more.js' );
+			wp_enqueue_script(
+				self::MORE_HANDLE,
+				Plugin::url() . $more,
+				array(),
+				Plugin::assetVersion( $more ),
+				array(
+					'in_footer' => true,
+					'strategy'  => 'defer',
+				)
+			);
+		}
 		if ( 'post' === Routes::current() ) {
 			$share = Plugin::asset( 'assets/js/share.js' );
 			wp_enqueue_script(
@@ -227,6 +300,10 @@ final class Frame {
 		printf( '<link rel="manifest" href="%s">' . "\n", esc_url( Routes::url( 'manifest' ) ) );
 		printf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( Identity::current()['accent'] ) );
 		printf( '<link rel="apple-touch-icon" href="%s">' . "\n", esc_url( Manifest::touchIcon() ) );
+		// The dark theme chosen on More, on this device only (#23), applied
+		// before the first paint. `ffc-dark-mode` is FFC's own root class,
+		// so the screens it draws inside the frame turn dark with it.
+		wp_print_inline_script_tag( self::DARK_SCRIPT );
 	}
 
 	/**

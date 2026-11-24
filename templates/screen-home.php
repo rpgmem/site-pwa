@@ -4,7 +4,7 @@
  *
  * @package SitePwa
  *
- * @var array{home_items: array{banners: list<array{id: string, text: string, emphasis: string, tone: string}>, next: array{title: string, meta: string, actions: list<array{label: string, url: string, icon: string, primary: bool}>}|null, pending: list<array{label: string, meta: string, url: string, icon: string, tone: string}>}, news: array{items: list<array{id: int, title: string, excerpt: string, date: string, image: string, url: string}>, pages: int}, news_url: string, pages: list<array{id: int, label: string, url: string, external: bool}>} $site_pwa Values built by Frame::render().
+ * @var array{home_items: array{banners: list<array{id: string, text: string, emphasis: string, tone: string}>, next: array{title: string, meta: string, actions: list<array{label: string, url: string, icon: string, primary: bool}>}|null, pending: list<array{label: string, meta: string, url: string, icon: string, tone: string}>}, news: array{items: list<array{id: int, title: string, excerpt: string, date: string, category: string, image: string, url: string}>, pages: int}, news_url: string, pages: list<array{id: int, label: string, url: string, external: bool}>} $site_pwa Values built by Frame::render().
  */
 
 use SitePwa\App\Icons;

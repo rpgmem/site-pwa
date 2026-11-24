@@ -34,6 +34,17 @@ final class Login {
 		add_action( 'login_enqueue_scripts', array( self::class, 'enqueue' ) );
 		add_filter( 'login_headerurl', array( self::class, 'headerUrl' ) );
 		add_filter( 'login_headertext', array( self::class, 'headerText' ) );
+		add_filter( 'login_message', array( self::class, 'message' ) );
+		add_action( 'login_form', array( self::class, 'lostPasswordLink' ) );
+		// Only on the login screen: gettext runs for every string of the site.
+		add_action( 'login_init', array( self::class, 'relabel' ) );
+	}
+
+	/**
+	 * Hook the "Remember Me" relabelling, from `login_init`.
+	 */
+	public static function relabel(): void {
+		add_filter( 'gettext', array( self::class, 'rememberLabel' ), 10, 3 );
 	}
 
 	/**
@@ -86,5 +97,55 @@ final class Login {
 	 */
 	public static function headerText( string $text ): string {
 		return self::fromApp() ? Settings::get()['name'] : $text;
+	}
+
+	/**
+	 * The app's name and the site's tagline under the logo, when the login
+	 * came from the app (#23). It is printed `hidden`; the stylesheet shows
+	 * it only inside the installed app.
+	 *
+	 * @param string $message What WordPress or another plugin prints there.
+	 */
+	public static function message( string $message ): string {
+		if ( ! self::fromApp() ) {
+			return $message;
+		}
+		$tagline = trim( wp_strip_all_tags( (string) get_bloginfo( 'description' ) ) );
+		$heading = sprintf(
+			'<div class="site-pwa-login-heading" hidden><p class="site-pwa-login-name">%1$s</p>%2$s</div>',
+			esc_html( Settings::get()['name'] ),
+			'' === $tagline ? '' : '<p class="site-pwa-login-tagline">' . esc_html( $tagline ) . '</p>'
+		);
+		return $heading . $message;
+	}
+
+	/**
+	 * The lost-password link inside the card, above the button, when the
+	 * login came from the app; the stylesheet hides core's link under the card.
+	 */
+	public static function lostPasswordLink(): void {
+		if ( ! self::fromApp() ) {
+			return;
+		}
+		printf(
+			'<p class="site-pwa-login-lost" hidden><a href="%1$s">%2$s</a></p>',
+			esc_url( wp_lostpassword_url( Routes::url( 'home' ) ) ),
+			esc_html__( 'Forgot your password?', 'site-pwa' )
+		);
+	}
+
+	/**
+	 * "Remember Me" says what it does on a phone, when the login came from
+	 * the app.
+	 *
+	 * @param string $translation The translated text.
+	 * @param string $text        The source text.
+	 * @param string $domain      Its text domain.
+	 */
+	public static function rememberLabel( string $translation, string $text, string $domain ): string {
+		if ( 'default' !== $domain || 'Remember Me' !== $text || ! self::fromApp() ) {
+			return $translation;
+		}
+		return __( 'Keep me signed in on this device', 'site-pwa' );
 	}
 }
