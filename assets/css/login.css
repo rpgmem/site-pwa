@@ -49,8 +49,59 @@
 		font-size: 16px;
 	}
 
-	/* A browser tab to the public site has no place in the installed app. */
-	.login #backtoblog {
+	/* A browser tab to the public site has no place in the installed app,
+	   and the lost-password link moved inside the card (Login::lostPasswordLink). */
+	.login #backtoblog,
+	.login:has(.site-pwa-login-lost) #nav {
 		display: none;
 	}
+
+	/* Printed `hidden`, so a browser tab never shows them. */
+	.site-pwa-login-heading[hidden],
+	.site-pwa-login-lost[hidden] {
+		display: block;
+	}
+
+	.site-pwa-login-heading {
+		margin: -8px 0 24px;
+		text-align: center;
+	}
+
+	.site-pwa-login-name {
+		margin: 0;
+		color: #1b2430;
+		font-size: 22px;
+		font-weight: 600;
+	}
+
+	.site-pwa-login-tagline {
+		margin: 4px 0 0;
+		color: #4a5563;
+		font-size: 14px;
+	}
+
+	.login .forgetmenot,
+	.login .submit {
+		float: none;
+	}
+
+	.login .forgetmenot {
+		margin-bottom: 16px;
+	}
+
+	.login .button-primary {
+		width: 100%;
+	}
+
+	.site-pwa-login-lost {
+		margin: 0 0 16px;
+		text-align: right;
+	}
+
+	.site-pwa-login-lost a {
+		color: var(--site-pwa-accent);
+		font-size: 14px;
+		text-decoration: none;
+	}
 }
+

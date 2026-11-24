@@ -4,7 +4,7 @@
  *
  * @package SitePwa
  *
- * @var list<array{id: int, title: string, excerpt: string, date: string, image: string, url: string}> $site_pwa_news Items to draw.
+ * @var list<array{id: int, title: string, excerpt: string, date: string, category: string, image: string, url: string}> $site_pwa_news Items to draw.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php endif; ?>
 				<span class="site-pwa-news-text">
 					<strong><?php echo esc_html( $site_pwa_item['title'] ); ?></strong>
-					<span class="site-pwa-muted"><?php echo esc_html( $site_pwa_item['date'] ); ?></span>
+					<span class="site-pwa-muted"><?php echo esc_html( implode( ' · ', array_filter( array( $site_pwa_item['date'], $site_pwa_item['category'] ) ) ) ); ?></span>
 					<?php if ( '' !== $site_pwa_item['excerpt'] ) : ?>
 						<span class="site-pwa-news-excerpt"><?php echo esc_html( $site_pwa_item['excerpt'] ); ?></span>
 					<?php endif; ?>

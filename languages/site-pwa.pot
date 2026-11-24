@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-24 03:13+0000\n"
+"POT-Creation-Date: 2026-11-24 03:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,9 +101,9 @@ msgstr ""
 msgid "Only on phones and tablets, and never inside the installed app. A visitor who is not signed in goes to the login first, then into the app. A visitor who closes the banner does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
 msgstr ""
 
-#: src/admin/settings-page.php:185 src/app/frame.php:292
-#: templates/screen-home.php:87 templates/screen-more.php:19
-#: templates/screen-news.php:19
+#: src/admin/settings-page.php:185 src/app/frame.php:369
+#: templates/screen-home.php:87 templates/screen-more.php:35
+#: templates/screen-news.php:22
 msgid "News"
 msgstr ""
 
@@ -191,38 +191,44 @@ msgstr ""
 msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
 msgstr ""
 
-#: src/app/frame.php:288 templates/screen-account.php:16
-#: templates/screen-more.php:40
+#: src/app/frame.php:365 templates/screen-account.php:16
 msgid "Account"
 msgstr ""
 
-#: src/app/frame.php:290 src/app/navigation.php:51 templates/screen-more.php:45
-#: templates/screen-more.php:46
+#: src/app/frame.php:367 src/app/navigation.php:51 templates/screen-more.php:47
 msgid "More"
 msgstr ""
 
-#: src/app/frame.php:295 src/app/frame.php:298
+#: src/app/frame.php:372 src/app/frame.php:375
 msgid "Not available"
 msgstr ""
 
-#: src/app/frame.php:300 src/app/navigation.php:41 templates/screen-home.php:18
+#: src/app/frame.php:377 src/app/navigation.php:41 templates/screen-home.php:18
 msgid "Home"
 msgstr ""
 
-#: src/app/home.php:130
+#: src/app/home.php:132
 msgid "Good morning,"
 msgstr ""
 
-#: src/app/home.php:133
+#: src/app/home.php:135
 msgid "Good afternoon,"
 msgstr ""
 
-#: src/app/home.php:135
+#: src/app/home.php:137
 msgid "Good evening,"
 msgstr ""
 
 #: src/app/identity.php:60
 msgid "Free Form Certificate: Public Design"
+msgstr ""
+
+#: src/app/login.php:133
+msgid "Forgot your password?"
+msgstr ""
+
+#: src/app/login.php:149
+msgid "Keep me signed in on this device"
 msgstr ""
 
 #: src/app/scheme.php:56
@@ -287,7 +293,7 @@ msgstr ""
 msgid "Edit profile"
 msgstr ""
 
-#: templates/screen-account.php:27
+#: templates/screen-account.php:27 templates/screen-more.php:118
 msgid "Sign out"
 msgstr ""
 
@@ -307,7 +313,7 @@ msgstr ""
 msgid "See all"
 msgstr ""
 
-#: templates/screen-home.php:94 templates/screen-news.php:22
+#: templates/screen-home.php:94 templates/screen-news.php:32
 msgid "No news yet."
 msgstr ""
 
@@ -355,21 +361,61 @@ msgstr ""
 msgid "Back to the home screen"
 msgstr ""
 
-#: templates/screen-news.php:32
+#: templates/screen-more.php:43
+msgid "Services"
+msgstr ""
+
+#: templates/screen-more.php:44
+msgid "Operator"
+msgstr ""
+
+#: templates/screen-more.php:49
+msgid "Your account"
+msgstr ""
+
+#: templates/screen-more.php:57
+msgid "My details"
+msgstr ""
+
+#: templates/screen-more.php:89
+msgid "Site pages"
+msgstr ""
+
+#: templates/screen-more.php:104
+msgid "Preferences"
+msgstr ""
+
+#: templates/screen-more.php:108
+msgid "Dark theme"
+msgstr ""
+
+#: templates/screen-more.php:109
+msgid "On this device only. Off follows the site."
+msgstr ""
+
+#: templates/screen-news.php:24
+msgid "News categories"
+msgstr ""
+
+#: templates/screen-news.php:25
+msgid "All"
+msgstr ""
+
+#: templates/screen-news.php:55
 msgid "News pages"
 msgstr ""
 
-#: templates/screen-news.php:34
+#: templates/screen-news.php:57
 msgid "Newer news"
 msgstr ""
 
 #. translators: 1: the current page number, 2: the number of pages
-#: templates/screen-news.php:39
+#: templates/screen-news.php:62
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr ""
 
-#: templates/screen-news.php:43
+#: templates/screen-news.php:66
 msgid "Older news"
 msgstr ""
 

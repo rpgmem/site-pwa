@@ -35,7 +35,7 @@ final class NewsTest extends WP_UnitTestCase {
 	}
 
 	protected function tearDown(): void {
-		unset( $_GET['pg'] );
+		unset( $_GET['pg'], $_GET['topic'] );
 		set_query_var( Routes::QUERY_VAR, '' );
 		delete_option( Settings::OPTION );
 		parent::tearDown();
@@ -104,14 +104,16 @@ final class NewsTest extends WP_UnitTestCase {
 		set_query_var( Routes::QUERY_VAR, 'news' );
 
 		$first = Frame::render( 'news' );
-		self::assertSame( 10, substr_count( $first, 'site-pwa-news-text' ) );
+		self::assertSame( 10, substr_count( $first, 'class="site-pwa-panel site-pwa-story' ) );
+		self::assertSame( 1, substr_count( $first, 'site-pwa-story-featured' ), 'the newest is the featured card' );
 		self::assertStringContainsString( 'Page 1 of 2', $first );
 		self::assertStringContainsString( 'rel="next" href="' . esc_url( News::url( 2 ) ) . '"', $first );
 		self::assertStringNotContainsString( 'rel="prev"', $first );
 
 		$_GET['pg'] = '2';
 		$second     = Frame::render( 'news' );
-		self::assertSame( 2, substr_count( $second, 'site-pwa-news-text' ) );
+		self::assertSame( 2, substr_count( $second, 'class="site-pwa-panel site-pwa-story' ) );
+		self::assertStringNotContainsString( 'site-pwa-story-featured', $second, 'only page 1 features a story' );
 		self::assertStringContainsString( 'Post 1', $second );
 		self::assertStringContainsString( 'rel="prev" href="' . esc_url( Routes::url( 'news' ) ) . '"', $second );
 		self::assertStringNotContainsString( 'rel="next"', $second );
@@ -180,14 +182,16 @@ final class NewsTest extends WP_UnitTestCase {
 
 		$more = Frame::render( 'more' );
 
+		$account = strpos( $more, esc_url( Routes::url( 'account' ) ) );
 		$news    = strpos( $more, esc_url( Routes::url( 'news' ) ) );
 		$page    = strpos( $more, esc_url( (string) get_permalink( $outside ) ) );
-		$account = strpos( $more, esc_url( Routes::url( 'account' ) ) );
-		self::assertNotFalse( $news );
+		$out     = strpos( $more, 'site-pwa-signout' );
+		self::assertNotFalse( $account );
+		self::assertLessThan( $news, $account, 'the profile card comes first' );
 		self::assertLessThan( $page, $news );
-		self::assertLessThan( $account, $page );
+		self::assertLessThan( $out, $page, 'sign out comes last' );
 		// An external page ends in the "open" drawing, not the chevron.
-		self::assertMatchesRegularExpression( '#<span>Shop</span>\s*' . preg_quote( Icons::svg( 'open' ), '#' ) . '#', $more );
+		self::assertMatchesRegularExpression( '#<strong>Shop</strong></span>\s*' . preg_quote( Icons::svg( 'open' ), '#' ) . '#', $more );
 	}
 
 	public function test_the_settings_keep_positive_ids_and_the_two_page_forms(): void {
@@ -205,5 +209,37 @@ final class NewsTest extends WP_UnitTestCase {
 		);
 		self::assertSame( array( 4 => false, 5 => true ), Settings::sanitize( array( 'app_pages' => $posted ) )['app_pages'] );
 		self::assertSame( array( 4 => false, 5 => true ), Settings::sanitize( array( 'app_pages' => array( 4 => false, 5 => true ) ) )['app_pages'] );
+	}
+
+	public function test_the_news_screen_offers_its_categories_as_chips_and_filters_by_the_chosen_one(): void {
+		$events = self::factory()->category->create( array( 'name' => 'Events', 'slug' => 'events' ) );
+		$notice = self::factory()->category->create( array( 'name' => 'Notices', 'slug' => 'notices' ) );
+		self::factory()->category->create( array( 'name' => 'Empty', 'slug' => 'empty' ) );
+		$fair = $this->post( array( 'post_title' => 'Fair', 'post_category' => array( $events ) ) );
+		$this->post( array( 'post_title' => 'Closed', 'post_category' => array( $notice ) ) );
+		$this->signIn();
+		set_query_var( Routes::QUERY_VAR, 'news' );
+
+		self::assertSame( array( 'events', 'notices' ), array_column( News::categories(), 'slug' ), 'only categories with a post, by name' );
+		$all = Frame::render( 'news' );
+		self::assertStringContainsString( '<nav class="site-pwa-chips" aria-label="News categories">', $all );
+		self::assertStringContainsString( 'href="' . esc_url( News::url() ) . '" aria-current="page">All</a>', $all );
+		self::assertStringContainsString( '<span class="site-pwa-story-meta">' . get_the_date( '', $fair ) . ' · Events</span>', $all );
+
+		$_GET['topic'] = 'events';
+		self::assertSame( $events, News::requestedCategory()['id'] ?? null );
+		$one = Frame::render( 'news' );
+		self::assertStringContainsString( 'Fair', $one );
+		self::assertStringNotContainsString( 'Closed', $one );
+		self::assertStringContainsString( 'href="' . esc_url( News::url( 1, 'events' ) ) . '" aria-current="page">Events</a>', $one );
+		self::assertSame( Routes::url( 'news' ) . '?topic=events&pg=2', News::url( 2, 'events' ), 'the pager keeps the category' );
+
+		$_GET['topic'] = 'empty';
+		self::assertNull( News::requestedCategory(), 'a category not offered is ignored' );
+		unset( $_GET['topic'] );
+
+		$this->settings( array( 'news_categories' => array( $events ) ) );
+		self::assertSame( array(), News::categories(), 'one category leaves nothing to choose between' );
+		self::assertStringNotContainsString( 'site-pwa-chips', Frame::render( 'news' ) );
 	}
 }

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-24 03:13+0000\n"
+"POT-Creation-Date: 2026-11-24 03:32+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -100,9 +100,9 @@ msgstr "Mostrar também para visitantes não conectados"
 msgid "Only on phones and tablets, and never inside the installed app. A visitor who is not signed in goes to the login first, then into the app. A visitor who closes the banner does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
 msgstr "Só em celulares e tablets, e nunca dentro do app instalado. Um visitante não conectado passa primeiro pelo login e depois entra no app. Quem fecha a faixa não a vê de novo naquele aparelho por 30 dias. A tela inicial do app convida para instalá-lo da mesma forma."
 
-#: src/admin/settings-page.php:185 src/app/frame.php:292
-#: templates/screen-home.php:87 templates/screen-more.php:19
-#: templates/screen-news.php:19
+#: src/admin/settings-page.php:185 src/app/frame.php:369
+#: templates/screen-home.php:87 templates/screen-more.php:35
+#: templates/screen-news.php:22
 msgid "News"
 msgstr "Notícias"
 
@@ -190,39 +190,45 @@ msgstr "Ícone"
 msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
 msgstr "O app usa o ícone do site, de Configurações → Geral; sem ele, usa o ícone do plugin."
 
-#: src/app/frame.php:288 templates/screen-account.php:16
-#: templates/screen-more.php:40
+#: src/app/frame.php:365 templates/screen-account.php:16
 msgid "Account"
 msgstr "Conta"
 
-#: src/app/frame.php:290 src/app/navigation.php:51 templates/screen-more.php:45
-#: templates/screen-more.php:46
+#: src/app/frame.php:367 src/app/navigation.php:51 templates/screen-more.php:47
 msgid "More"
 msgstr "Mais"
 
-#: src/app/frame.php:295 src/app/frame.php:298
+#: src/app/frame.php:372 src/app/frame.php:375
 msgid "Not available"
 msgstr "Indisponível"
 
-#: src/app/frame.php:300 src/app/navigation.php:41 templates/screen-home.php:18
+#: src/app/frame.php:377 src/app/navigation.php:41 templates/screen-home.php:18
 msgid "Home"
 msgstr "Início"
 
-#: src/app/home.php:130
+#: src/app/home.php:132
 msgid "Good morning,"
 msgstr "Bom dia,"
 
-#: src/app/home.php:133
+#: src/app/home.php:135
 msgid "Good afternoon,"
 msgstr "Boa tarde,"
 
-#: src/app/home.php:135
+#: src/app/home.php:137
 msgid "Good evening,"
 msgstr "Boa noite,"
 
 #: src/app/identity.php:60
 msgid "Free Form Certificate: Public Design"
 msgstr "Free Form Certificate: Design Público"
+
+#: src/app/login.php:133
+msgid "Forgot your password?"
+msgstr "Esqueceu a senha?"
+
+#: src/app/login.php:149
+msgid "Keep me signed in on this device"
+msgstr "Manter conectado neste aparelho"
 
 #: src/app/scheme.php:56
 msgid "Follow the device"
@@ -286,7 +292,7 @@ msgstr "E-mail"
 msgid "Edit profile"
 msgstr "Editar perfil"
 
-#: templates/screen-account.php:27
+#: templates/screen-account.php:27 templates/screen-more.php:118
 msgid "Sign out"
 msgstr "Sair"
 
@@ -306,7 +312,7 @@ msgstr "Pendências"
 msgid "See all"
 msgstr "Ver todas"
 
-#: templates/screen-home.php:94 templates/screen-news.php:22
+#: templates/screen-home.php:94 templates/screen-news.php:32
 msgid "No news yet."
 msgstr "Ainda não há notícias."
 
@@ -354,21 +360,61 @@ msgstr "Ela pode ter sido removida, ou você pode não ter acesso a ela."
 msgid "Back to the home screen"
 msgstr "Voltar à tela inicial"
 
-#: templates/screen-news.php:32
+#: templates/screen-more.php:43
+msgid "Services"
+msgstr "Serviços"
+
+#: templates/screen-more.php:44
+msgid "Operator"
+msgstr "Operador"
+
+#: templates/screen-more.php:49
+msgid "Your account"
+msgstr "Sua conta"
+
+#: templates/screen-more.php:57
+msgid "My details"
+msgstr "Meus dados"
+
+#: templates/screen-more.php:89
+msgid "Site pages"
+msgstr "Páginas do site"
+
+#: templates/screen-more.php:104
+msgid "Preferences"
+msgstr "Preferências"
+
+#: templates/screen-more.php:108
+msgid "Dark theme"
+msgstr "Tema escuro"
+
+#: templates/screen-more.php:109
+msgid "On this device only. Off follows the site."
+msgstr "Só neste aparelho. Desligado, segue o site."
+
+#: templates/screen-news.php:24
+msgid "News categories"
+msgstr "Categorias de notícias"
+
+#: templates/screen-news.php:25
+msgid "All"
+msgstr "Todas"
+
+#: templates/screen-news.php:55
 msgid "News pages"
 msgstr "Páginas de notícias"
 
-#: templates/screen-news.php:34
+#: templates/screen-news.php:57
 msgid "Newer news"
 msgstr "Notícias mais recentes"
 
 #. translators: 1: the current page number, 2: the number of pages
-#: templates/screen-news.php:39
+#: templates/screen-news.php:62
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr "Página %1$d de %2$d"
 
-#: templates/screen-news.php:43
+#: templates/screen-news.php:66
 msgid "Older news"
 msgstr "Notícias mais antigas"
 
