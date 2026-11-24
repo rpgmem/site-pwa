@@ -312,6 +312,7 @@ final class SettingsPage {
 										$site_pwa_look['control_radius']
 									)
 								);
+								echo ' ' . esc_html__( 'A phone that already installed the app picks up a new colour, name or icon when its browser next refreshes the installed app, which can take a few days; reinstalling the app applies it at once.', 'site-pwa' );
 								$site_pwa_text_shade = Identity::accentText( $site_pwa_look['accent'] );
 								if ( $site_pwa_text_shade !== $site_pwa_look['accent'] ) {
 									echo ' ' . esc_html(

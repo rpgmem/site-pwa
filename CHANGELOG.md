@@ -30,5 +30,6 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - **The app's screens have a title on a block theme** (#3). WordPress prints `<title>` only for a theme declaring `title-tag`, which a block theme does only inside its own template; the frame now prints it itself.
 - **A light accent stays readable** (#26). Where the accent is text or an icon on a light surface (the bar's current item, links, Back, the Info tone, focus outlines, the login's link, the site banner's outline), a darker shade of the same colour reaching 4.5:1 is used; where it is a background it stays exact. The Info tone's background is now a tint of the accent instead of a fixed blue.
+- **A changed colour or icon reaches an installed app** (#28). The manifest is served with `Cache-Control: no-cache`, so a host page cache cannot keep the old one; an installed app on Android takes the new colour of its system bar and its icon when the browser next refreshes it, which Settings → Site PWA now says.
 - **The settings screen no longer warns about a service worker that never reaches the app** (#30). The browser check lists only a worker on the app's own scope or on a narrower one covering the app's pages, so Free Form Certificate's `/terminal/` worker is left out.
 
