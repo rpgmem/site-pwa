@@ -160,7 +160,7 @@ final class SettingsPage {
 					</p>
 				</div>
 			<?php endif; ?>
-			<div id="site-pwa-sw-check" class="notice notice-warning inline" data-own="<?php echo esc_url( Routes::url( 'sw' ) ); ?>" hidden>
+			<div id="site-pwa-sw-check" class="notice notice-warning inline" data-own="<?php echo esc_url( Routes::url( 'sw' ) ); ?>" data-scope="<?php echo esc_url( home_url( '/' ) ); ?>" data-app="<?php echo esc_url( Routes::url( 'home' ) ); ?>" hidden>
 				<p><?php esc_html_e( 'This browser already has another service worker for this site:', 'site-pwa' ); ?></p>
 				<ul class="site-pwa-sw-list"></ul>
 				<p><?php esc_html_e( 'Turning the app on replaces it. Confirm the replacement below to continue.', 'site-pwa' ); ?></p>
