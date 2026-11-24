@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-24 11:00+0000\n"
+"POT-Creation-Date: 2026-11-24 11:50+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -421,8 +421,8 @@ msgid "Choose Add to Home Screen. If it is not there, scroll the list or tap Mor
 msgstr "Escolha Adicionar à Tela de Início. Se não aparecer, role a lista ou toque em Mais."
 
 #: templates/install.php:103
-msgid "On iPhone no browser installs with a button. In Safari, Share is at the bottom."
-msgstr "No iPhone nenhum navegador instala com um botão. No Safari, o Compartilhar fica embaixo."
+msgid "On iPad and iPhone no browser installs with a button; these steps are the official way."
+msgstr "No iPad e no iPhone nenhum navegador instala com um botão; estes passos são o caminho oficial."
 
 #: templates/install.php:107
 msgid "On this version of iOS only Safari adds apps to the home screen. Open this address in Safari to install."
@@ -623,6 +623,9 @@ msgstr "Instalar"
 #. Plugin header: Description
 msgid "Turns the site into an installable app: a home-screen icon, an app shell for signed-in users and screens other plugins register."
 msgstr "Transforma o site em um app instalável: um ícone na tela inicial, uma estrutura de app para quem está conectado e telas que outros plugins registram."
+
+#~ msgid "On iPhone no browser installs with a button. In Safari, Share is at the bottom."
+#~ msgstr "No iPhone nenhum navegador instala com um botão. No Safari, o Compartilhar fica embaixo."
 
 #~ msgid "Shown under the icon on a home screen."
 #~ msgstr "Aparece sob o ícone na tela inicial."

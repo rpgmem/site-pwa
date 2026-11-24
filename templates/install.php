@@ -100,7 +100,7 @@ echo esc_html( sprintf( __( 'Install %s', 'site-pwa' ), $site_pwa['name'] ) );
 					<span><?php esc_html_e( 'Tap Add.', 'site-pwa' ); ?></span>
 				</li>
 			</ol>
-			<p class="site-pwa-muted"><?php esc_html_e( 'On iPhone no browser installs with a button. In Safari, Share is at the bottom.', 'site-pwa' ); ?></p>
+			<p class="site-pwa-muted"><?php esc_html_e( 'On iPad and iPhone no browser installs with a button; these steps are the official way.', 'site-pwa' ); ?></p>
 		</section>
 
 		<section class="site-pwa-card" data-state="ios-old" hidden>

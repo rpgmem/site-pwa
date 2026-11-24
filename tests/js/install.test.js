@@ -5,6 +5,8 @@ const require = createRequire( import.meta.url );
 const { isMobile, isStandalone, isIosSafari, iosBrowser, isQuiet, card, banner, installPage, WAIT_MS } = require( '../../assets/js/install.js' );
 
 const IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1';
+const IPAD = 'Mozilla/5.0 (iPad; CPU OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1';
+const IPAD_DESKTOP = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15';
 const IPHONE_CHROME = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/124.0 Mobile/15E148 Safari/604.1';
 const ANDROID = 'Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Mobile Safari/537.36';
 const DAY = 24 * 60 * 60 * 1000;
@@ -323,6 +325,7 @@ describe( 'install.js install page', () => {
 
 	it.each( [
 		[ IPHONE, 'ios-safari' ],
+		[ IPAD, 'ios-other' ],
 		[ IPHONE_CHROME, 'ios-other' ],
 		[ IPHONE_CHROME.replace( '17_4', '15_7' ), 'ios-old' ],
 	] )( 'shows the iPhone steps that fit the browser', ( userAgent, state ) => {
@@ -330,6 +333,12 @@ describe( 'install.js install page', () => {
 		expect( installPage( page, win ) ).toBe( state );
 		expect( shown() ).toEqual( [ state ] );
 		expect( win.timers ).toEqual( [] );
+	} );
+
+	it( 'sends Safari on an iPad to the top, where its Share is, even asking for the desktop site', () => {
+		expect( iosBrowser( { userAgent: IPAD } ) ).toBe( 'other' );
+		expect( iosBrowser( { userAgent: IPAD_DESKTOP, platform: 'MacIntel', maxTouchPoints: 5 } ) ).toBe( 'other' );
+		expect( iosBrowser( { userAgent: IPHONE } ) ).toBe( 'safari' );
 	} );
 
 	it( 'goes straight to the app inside the installed app', () => {
