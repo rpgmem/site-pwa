@@ -8,6 +8,7 @@
 .site-pwa-site-banner {
 	--site-pwa-accent: #1d5e8c;
 	--site-pwa-on-accent: #fff;
+	--site-pwa-accent-text: #1d5e8c;
 
 	position: fixed;
 	inset: auto 12px calc(12px + env(safe-area-inset-bottom)) 12px;
@@ -84,7 +85,7 @@
 
 .site-pwa-site-banner a:focus-visible,
 .site-pwa-site-banner button:focus-visible {
-	outline: 2px solid var(--site-pwa-accent);
+	outline: 2px solid var(--site-pwa-accent-text);
 	outline-offset: 2px;
 }
 

@@ -99,7 +99,7 @@
 	}
 
 	.site-pwa-login-lost a {
-		color: var(--site-pwa-accent);
+		color: var(--site-pwa-accent-text, var(--site-pwa-accent));
 		font-size: 14px;
 		text-decoration: none;
 	}

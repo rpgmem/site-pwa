@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-24 03:32+0000\n"
+"POT-Creation-Date: 2026-11-24 03:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,178 +17,228 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/admin/settings-page.php:60 src/admin/settings-page.php:61
-#: src/admin/settings-page.php:95
+#: src/admin/settings-page.php:63
+msgid "Choose the app icon"
+msgstr ""
+
+#: src/admin/settings-page.php:64
+msgid "Use this image"
+msgstr ""
+
+#: src/admin/settings-page.php:74 src/admin/settings-page.php:75
+#: src/admin/settings-page.php:138
 msgid "Site PWA"
 msgstr ""
 
 #. translators: %s: plugin names, comma-separated
-#: src/admin/settings-page.php:103
+#: src/admin/settings-page.php:146
 #, php-format
 msgid "Also registering a service worker at the site root: %s. A browser keeps only one there, so the two would replace each other on every visit."
 msgstr ""
 
-#: src/admin/settings-page.php:112
+#: src/admin/settings-page.php:155
 msgid "The app stays off until you confirm the replacement below, or that plugin is deactivated."
 msgstr ""
 
-#: src/admin/settings-page.php:114
+#: src/admin/settings-page.php:157
 msgid "Replacement confirmed: the app's worker takes the root, and that plugin's worker stops working."
 msgstr ""
 
-#: src/admin/settings-page.php:121
+#: src/admin/settings-page.php:164
 msgid "This browser already has another service worker for this site:"
 msgstr ""
 
-#: src/admin/settings-page.php:123
+#: src/admin/settings-page.php:166
 msgid "Turning the app on replaces it. Confirm the replacement below to continue."
 msgstr ""
 
-#: src/admin/settings-page.php:128
+#: src/admin/settings-page.php:171
 msgid "The app is on at"
 msgstr ""
 
-#: src/admin/settings-page.php:137 templates/frame.php:69
+#: src/admin/settings-page.php:180 templates/frame.php:69
 #: templates/site-banner.php:17
 msgid "App"
 msgstr ""
 
-#: src/admin/settings-page.php:141
+#: src/admin/settings-page.php:184
 msgid "Turn the installable app on"
 msgstr ""
 
-#: src/admin/settings-page.php:143
+#: src/admin/settings-page.php:186
 msgid "While it is off, the site serves no manifest, and a browser that installed the app removes its service worker on its next visit."
 msgstr ""
 
-#: src/admin/settings-page.php:147
+#: src/admin/settings-page.php:190
 msgid "Other service workers"
 msgstr ""
 
-#: src/admin/settings-page.php:151
+#: src/admin/settings-page.php:194
 msgid "Replace another plugin's service worker"
 msgstr ""
 
-#: src/admin/settings-page.php:153
+#: src/admin/settings-page.php:196
 msgid "Only needed when another plugin registers a worker at the site root. A push service that wants to keep working can load its script through the site_pwa_sw_imports filter instead."
 msgstr ""
 
-#: src/admin/settings-page.php:157 templates/screen-account.php:20
+#: src/admin/settings-page.php:200 templates/screen-account.php:20
 msgid "Name"
 msgstr ""
 
-#: src/admin/settings-page.php:161
+#: src/admin/settings-page.php:204
 msgid "Short name"
 msgstr ""
 
-#: src/admin/settings-page.php:164
+#: src/admin/settings-page.php:207
 msgid "Shown under the icon on a home screen."
 msgstr ""
 
-#: src/admin/settings-page.php:168
+#: src/admin/settings-page.php:211
 msgid "Invite to the app"
 msgstr ""
 
-#: src/admin/settings-page.php:173
+#: src/admin/settings-page.php:216
 msgid "Show a \"Use the app\" banner on the site's pages"
 msgstr ""
 
-#: src/admin/settings-page.php:179
+#: src/admin/settings-page.php:222
 msgid "Also show it to visitors who are not signed in"
 msgstr ""
 
-#: src/admin/settings-page.php:181
+#: src/admin/settings-page.php:224
 msgid "Only on phones and tablets, and never inside the installed app. A visitor who is not signed in goes to the login first, then into the app. A visitor who closes the banner does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
 msgstr ""
 
-#: src/admin/settings-page.php:185 src/app/frame.php:369
+#: src/admin/settings-page.php:228 src/app/frame.php:369
 #: templates/screen-home.php:87 templates/screen-more.php:35
 #: templates/screen-news.php:22
 msgid "News"
 msgstr ""
 
-#: src/admin/settings-page.php:188
+#: src/admin/settings-page.php:231
 msgid "Categories shown in the app"
 msgstr ""
 
-#: src/admin/settings-page.php:199
+#: src/admin/settings-page.php:242
 msgid "The app shows the posts of the ticked categories, newest first: the three latest on the home screen and all of them under More → News. With none ticked, it shows every post."
 msgstr ""
 
-#: src/admin/settings-page.php:203 templates/screen-home.php:105
+#: src/admin/settings-page.php:246 templates/screen-home.php:105
 msgid "Pages"
 msgstr ""
 
-#: src/admin/settings-page.php:208
+#: src/admin/settings-page.php:251
 msgid "The site has no published pages."
 msgstr ""
 
-#: src/admin/settings-page.php:213
+#: src/admin/settings-page.php:256
 msgid "In the app"
 msgstr ""
 
-#: src/admin/settings-page.php:214 templates/screen-post.php:43
+#: src/admin/settings-page.php:257 templates/screen-post.php:43
 msgid "Open on the site"
 msgstr ""
 
-#: src/admin/settings-page.php:222
+#: src/admin/settings-page.php:265
 msgid "(no title)"
 msgstr ""
 
 #. translators: %s: a page title
-#: src/admin/settings-page.php:237
+#: src/admin/settings-page.php:280
 #, php-format
 msgid "Open %s on the site"
 msgstr ""
 
-#: src/admin/settings-page.php:247
+#: src/admin/settings-page.php:290
 msgid "The ticked pages appear under More and on the home screen. A page opens inside the app, unless it is marked to open on the site, as a page built with a page builder should be."
 msgstr ""
 
-#: src/admin/settings-page.php:251
+#: src/admin/settings-page.php:294
 msgid "Look"
 msgstr ""
 
-#: src/admin/settings-page.php:254
+#: src/admin/settings-page.php:297
 msgid "These settings"
 msgstr ""
 
-#: src/admin/settings-page.php:259
+#: src/admin/settings-page.php:302
 msgid "Where the app takes its accent colour and its corners from. While the chosen design is switched off, or its plugin is inactive, the app uses the theme colour below."
 msgstr ""
 
 #. translators: 1: a colour such as #1d5e8c, 2: corner radius of cards in px, 3: corner radius of buttons in px
-#: src/admin/settings-page.php:266
+#: src/admin/settings-page.php:309
 #, php-format
 msgid "In use now: accent %1$s, cards %2$d px, buttons %3$d px."
 msgstr ""
 
-#: src/admin/settings-page.php:277
+#. translators: %s: a colour such as #8a6d00
+#: src/admin/settings-page.php:320
+#, php-format
+msgid "The accent is too light to read as text, so links and icons use the darker %s."
+msgstr ""
+
+#: src/admin/settings-page.php:330
 msgid "Light or dark"
 msgstr ""
 
-#: src/admin/settings-page.php:287
+#: src/admin/settings-page.php:340
 msgid "Whether the app draws light, dark, or follows the device. Following Free Form Certificate's Dark Mode keeps the app's header and menu in the same theme as the screens it draws inside them. While the chosen plugin is inactive, the app follows the device."
 msgstr ""
 
-#: src/admin/settings-page.php:291
+#: src/admin/settings-page.php:344
 msgid "Theme colour"
 msgstr ""
 
-#: src/admin/settings-page.php:295
+#: src/admin/settings-page.php:348
 msgid "Background colour"
 msgstr ""
 
-#: src/admin/settings-page.php:298
+#: src/admin/settings-page.php:351
 msgid "Shown while the app opens."
 msgstr ""
 
-#: src/admin/settings-page.php:302
+#: src/admin/settings-page.php:355 src/admin/settings-page.php:366
 msgid "Icon"
 msgstr ""
 
-#: src/admin/settings-page.php:303
-msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
+#: src/admin/settings-page.php:359
+msgid "The site icon"
+msgstr ""
+
+#: src/admin/settings-page.php:360
+msgid "The plugin's icon"
+msgstr ""
+
+#: src/admin/settings-page.php:361
+msgid "A custom icon"
+msgstr ""
+
+#: src/admin/settings-page.php:377
+msgid "Choose image"
+msgstr ""
+
+#: src/admin/settings-page.php:379
+msgid "The site icon is the one set in Settings → General; without one, the app uses the plugin's icon. A custom icon is a square PNG of at least 512 px from the Media Library; the app makes the sizes it needs from it. Only the plugin's icon is shaped for launchers that crop icons into circles or squircles."
+msgstr ""
+
+#: src/app/app-icon.php:76
+msgid "Choose an image from the Media Library for the custom icon."
+msgstr ""
+
+#: src/app/app-icon.php:79
+msgid "The custom icon must be a PNG image."
+msgstr ""
+
+#. translators: 1: width in px, 2: height in px
+#: src/app/app-icon.php:86
+#, php-format
+msgid "The custom icon must be square; this image is %1$d × %2$d px."
+msgstr ""
+
+#. translators: 1: the image's side in px, 2: the smallest side allowed in px
+#: src/app/app-icon.php:90
+#, php-format
+msgid "The custom icon must be at least %2$d px wide; this image is %1$d px."
 msgstr ""
 
 #: src/app/frame.php:365 templates/screen-account.php:16
@@ -223,11 +273,11 @@ msgstr ""
 msgid "Free Form Certificate: Public Design"
 msgstr ""
 
-#: src/app/login.php:133
+#: src/app/login.php:134
 msgid "Forgot your password?"
 msgstr ""
 
-#: src/app/login.php:149
+#: src/app/login.php:150
 msgid "Keep me signed in on this device"
 msgstr ""
 

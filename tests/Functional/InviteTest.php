@@ -59,7 +59,7 @@ final class InviteTest extends WP_UnitTestCase {
 		self::assertStringContainsString( 'href="' . esc_url( Routes::url( 'home' ) ) . '">Use the app</a>', $html );
 		self::assertTrue( wp_script_is( Invite::SCRIPT, 'enqueued' ) );
 		self::assertTrue( wp_style_is( Invite::BANNER_STYLE, 'enqueued' ) );
-		self::assertStringContainsString( '--site-pwa-accent:#1d5e8c;--site-pwa-on-accent:#ffffff', implode( '', wp_styles()->get_data( Invite::BANNER_STYLE, 'after' ) ) );
+		self::assertStringContainsString( '--site-pwa-accent:#1d5e8c;--site-pwa-on-accent:#ffffff;--site-pwa-accent-text:#1d5e8c', implode( '', wp_styles()->get_data( Invite::BANNER_STYLE, 'after' ) ) );
 	}
 
 	public function test_visitors_who_are_not_signed_in_get_the_banner_by_default(): void {

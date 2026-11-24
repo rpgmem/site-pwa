@@ -67,7 +67,7 @@ final class SettingsTest extends WP_UnitTestCase {
 		SettingsPage::registerSetting();
 		$registered = get_registered_settings();
 
-		self::assertSame( array( Settings::class, 'sanitize' ), $registered[ Settings::OPTION ]['sanitize_callback'] );
+		self::assertSame( array( SettingsPage::class, 'save' ), $registered[ Settings::OPTION ]['sanitize_callback'] );
 	}
 
 	public function test_saving_through_options_php_runs_the_sanitizer(): void {

@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SitePwa\Admin;
 
+use SitePwa\App\AppIcon;
 use SitePwa\App\Conflicts;
 use SitePwa\App\Identity;
 use SitePwa\App\Scheme;
@@ -50,6 +51,19 @@ final class SettingsPage {
 		}
 		$file = Plugin::asset( 'assets/js/admin-conflicts.js' );
 		wp_enqueue_script( 'site-pwa-admin-conflicts', Plugin::url() . $file, array(), Plugin::assetVersion( $file ), array( 'in_footer' => true ) );
+
+		// The custom icon is chosen in the Media Library (#26).
+		wp_enqueue_media();
+		$icon = Plugin::asset( 'assets/js/admin-icon.js' );
+		wp_enqueue_script( 'site-pwa-admin-icon', Plugin::url() . $icon, array( 'media-editor' ), Plugin::assetVersion( $icon ), array( 'in_footer' => true ) );
+		wp_localize_script(
+			'site-pwa-admin-icon',
+			'sitePwaIcon',
+			array(
+				'title'  => __( 'Choose the app icon', 'site-pwa' ),
+				'button' => __( 'Use this image', 'site-pwa' ),
+			)
+		);
 	}
 
 	/**
@@ -74,10 +88,39 @@ final class SettingsPage {
 			Settings::OPTION,
 			array(
 				'type'              => 'object',
-				'sanitize_callback' => array( Settings::class, 'sanitize' ),
+				'sanitize_callback' => array( self::class, 'save' ),
 				'default'           => Settings::defaults(),
 			)
 		);
+	}
+
+	/**
+	 * Clean what the form posted and check the custom icon (#26). An icon
+	 * that cannot serve is refused with a message, and the icon saved
+	 * before stays; one that can gets the sizes the manifest declares.
+	 *
+	 * Kept apart from Settings::sanitize(), which every read runs.
+	 *
+	 * @param mixed $input Posted value.
+	 * @return array<string, mixed>
+	 */
+	public static function save( $input ): array {
+		$clean = Settings::sanitize( $input );
+		if ( AppIcon::CUSTOM !== $clean['icon_source'] ) {
+			return $clean;
+		}
+		$problem = AppIcon::problem( $clean['icon_id'] );
+		if ( null === $problem ) {
+			AppIcon::prepare( $clean['icon_id'] );
+			return $clean;
+		}
+		if ( function_exists( 'add_settings_error' ) ) {
+			add_settings_error( Settings::OPTION, 'site_pwa_icon', $problem );
+		}
+		$before               = Settings::get();
+		$clean['icon_source'] = $before['icon_source'];
+		$clean['icon_id']     = $before['icon_id'];
+		return $clean;
 	}
 
 	/**
@@ -269,6 +312,16 @@ final class SettingsPage {
 										$site_pwa_look['control_radius']
 									)
 								);
+								$site_pwa_text_shade = Identity::accentText( $site_pwa_look['accent'] );
+								if ( $site_pwa_text_shade !== $site_pwa_look['accent'] ) {
+									echo ' ' . esc_html(
+										sprintf(
+											/* translators: %s: a colour such as #8a6d00 */
+											__( 'The accent is too light to read as text, so links and icons use the darker %s.', 'site-pwa' ),
+											$site_pwa_text_shade
+										)
+									);
+								}
 								?>
 							</p>
 						</td>
@@ -300,7 +353,31 @@ final class SettingsPage {
 					</tr>
 					<tr>
 						<th scope="row"><?php esc_html_e( 'Icon', 'site-pwa' ); ?></th>
-						<td><p class="description"><?php esc_html_e( 'The app uses the site icon from Settings → General; without one, it uses the plugin\'s icon.', 'site-pwa' ); ?></p></td>
+						<td>
+							<?php
+							$site_pwa_icon_labels = array(
+								AppIcon::SITE    => __( 'The site icon', 'site-pwa' ),
+								AppIcon::DEFAULT => __( 'The plugin\'s icon', 'site-pwa' ),
+								AppIcon::CUSTOM  => __( 'A custom icon', 'site-pwa' ),
+							);
+							$site_pwa_icon_url    = $settings['icon_id'] > 0 ? (string) wp_get_attachment_image_url( $settings['icon_id'], 'thumbnail' ) : '';
+							?>
+							<fieldset>
+								<legend class="screen-reader-text"><?php esc_html_e( 'Icon', 'site-pwa' ); ?></legend>
+								<?php foreach ( $site_pwa_icon_labels as $site_pwa_id => $site_pwa_label ) : ?>
+									<label>
+										<input type="radio" name="<?php echo esc_attr( $field( 'icon_source' ) ); ?>" value="<?php echo esc_attr( $site_pwa_id ); ?>" <?php checked( $settings['icon_source'], $site_pwa_id ); ?>>
+										<?php echo esc_html( $site_pwa_label ); ?>
+									</label><br>
+								<?php endforeach; ?>
+							</fieldset>
+							<div class="site-pwa-icon-picker" data-site-pwa-icon>
+								<input type="hidden" name="<?php echo esc_attr( $field( 'icon_id' ) ); ?>" value="<?php echo esc_attr( (string) $settings['icon_id'] ); ?>" data-site-pwa-icon-id>
+								<img src="<?php echo esc_url( $site_pwa_icon_url ); ?>" alt="" width="64" height="64" data-site-pwa-icon-preview<?php echo '' === $site_pwa_icon_url ? ' hidden' : ''; ?>>
+								<button type="button" class="button" data-site-pwa-icon-choose><?php esc_html_e( 'Choose image', 'site-pwa' ); ?></button>
+							</div>
+							<p class="description"><?php esc_html_e( 'The site icon is the one set in Settings → General; without one, the app uses the plugin\'s icon. A custom icon is a square PNG of at least 512 px from the Media Library; the app makes the sizes it needs from it. Only the plugin\'s icon is shaped for launchers that crop icons into circles or squircles.', 'site-pwa' ); ?></p>
+						</td>
 					</tr>
 				</table>
 				<?php submit_button(); ?>

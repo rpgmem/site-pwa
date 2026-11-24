@@ -139,6 +139,22 @@ final class Identity {
 	}
 
 	/**
+	 * The light page background every surface sits on; the readable shade
+	 * must reach its floor on it as well as on white.
+	 */
+	public const PAGE_BACKGROUND = '#f4f6f8';
+
+	/**
+	 * How much of the accent tints the Info tone's background.
+	 */
+	public const TINT = 0.12;
+
+	/**
+	 * The contrast text needs (WCAG AA).
+	 */
+	public const TEXT_CONTRAST = 4.5;
+
+	/**
 	 * The custom properties that carry the look, for the app's stylesheet.
 	 * Every value is validated in current(), which is what makes them safe
 	 * to print.
@@ -146,12 +162,73 @@ final class Identity {
 	public static function css(): string {
 		$look = self::current();
 		return sprintf(
-			':root{--site-pwa-radius:%1$dpx;--site-pwa-control-radius:%2$dpx;--site-pwa-accent:%3$s;--site-pwa-on-accent:%4$s}',
+			':root{--site-pwa-radius:%1$dpx;--site-pwa-control-radius:%2$dpx;--site-pwa-accent:%3$s;--site-pwa-on-accent:%4$s;--site-pwa-accent-text:%5$s;--site-pwa-info-bg:%6$s}',
 			$look['radius'],
 			$look['control_radius'],
 			$look['accent'],
-			self::onAccent( $look['accent'] )
+			self::onAccent( $look['accent'] ),
+			self::accentText( $look['accent'] ),
+			self::tint( $look['accent'] )
 		);
+	}
+
+	/**
+	 * The accent as it may be drawn as text or an icon on the light theme's
+	 * surfaces (#26): the accent itself when it reads there, otherwise the
+	 * first darker shade of the same hue that does. Where the accent is a
+	 * background, the exact colour stays and onAccent() picks the text.
+	 *
+	 * @param string $hex `#rrggbb`.
+	 */
+	public static function accentText( string $hex ): string {
+		$grounds = array( '#ffffff', self::PAGE_BACKGROUND, self::tint( $hex ) );
+		for ( $step = 0; $step <= 50; $step++ ) {
+			$shade = self::scale( $hex, 1 - $step / 50 );
+			if ( min( array_map( static fn( string $ground ): float => self::contrast( $shade, $ground ), $grounds ) ) >= self::TEXT_CONTRAST ) {
+				return $shade;
+			}
+		}
+		return '#000000';
+	}
+
+	/**
+	 * A light tint of a colour: TINT of it over white.
+	 *
+	 * @param string $hex `#rrggbb`.
+	 */
+	public static function tint( string $hex ): string {
+		$out = '#';
+		for ( $i = 0; $i < 3; $i++ ) {
+			$channel = hexdec( substr( $hex, 1 + 2 * $i, 2 ) );
+			$out    .= sprintf( '%02x', (int) round( 255 - ( 255 - $channel ) * self::TINT ) );
+		}
+		return $out;
+	}
+
+	/**
+	 * The WCAG contrast ratio between two `#rrggbb` colours.
+	 *
+	 * @param string $a Colour.
+	 * @param string $b Colour.
+	 */
+	public static function contrast( string $a, string $b ): float {
+		$la = self::luminance( $a );
+		$lb = self::luminance( $b );
+		return ( max( $la, $lb ) + 0.05 ) / ( min( $la, $lb ) + 0.05 );
+	}
+
+	/**
+	 * A colour with every channel multiplied by a factor, which keeps its hue.
+	 *
+	 * @param string $hex    `#rrggbb`.
+	 * @param float  $factor 0 to 1.
+	 */
+	private static function scale( string $hex, float $factor ): string {
+		$out = '#';
+		for ( $i = 0; $i < 3; $i++ ) {
+			$out .= sprintf( '%02x', (int) round( hexdec( substr( $hex, 1 + 2 * $i, 2 ) ) * $factor ) );
+		}
+		return $out;
 	}
 
 	/**
