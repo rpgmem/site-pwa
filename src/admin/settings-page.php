@@ -198,13 +198,16 @@ final class SettingsPage {
 					</tr>
 					<tr>
 						<th scope="row"><label for="site-pwa-name"><?php esc_html_e( 'Name', 'site-pwa' ); ?></label></th>
-						<td><input type="text" class="regular-text" id="site-pwa-name" name="<?php echo esc_attr( $field( 'name' ) ); ?>" value="<?php echo esc_attr( $settings['name'] ); ?>" required></td>
+						<td>
+							<input type="text" class="regular-text" id="site-pwa-name" name="<?php echo esc_attr( $field( 'name' ) ); ?>" value="<?php echo esc_attr( $settings['name'] ); ?>" required>
+							<p class="description"><?php esc_html_e( 'The app\'s name: at the top of the install page, in the browser\'s install dialog and on the offline page.', 'site-pwa' ); ?></p>
+						</td>
 					</tr>
 					<tr>
 						<th scope="row"><label for="site-pwa-short-name"><?php esc_html_e( 'Short name', 'site-pwa' ); ?></label></th>
 						<td>
 							<input type="text" id="site-pwa-short-name" name="<?php echo esc_attr( $field( 'short_name' ) ); ?>" value="<?php echo esc_attr( $settings['short_name'] ); ?>" maxlength="<?php echo esc_attr( (string) Settings::SHORT_NAME_MAX ); ?>" required>
-							<p class="description"><?php esc_html_e( 'Shown under the icon on a home screen.', 'site-pwa' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Shown under the icon on a home screen, and on the site banner.', 'site-pwa' ); ?></p>
 						</td>
 					</tr>
 					<tr>
@@ -213,7 +216,7 @@ final class SettingsPage {
 							<input type="hidden" name="<?php echo esc_attr( $field( 'site_banner' ) ); ?>" value="0">
 							<label>
 								<input type="checkbox" id="site-pwa-site-banner" name="<?php echo esc_attr( $field( 'site_banner' ) ); ?>" value="1" <?php checked( $settings['site_banner'] ); ?>>
-								<?php esc_html_e( 'Show a "Use the app" banner on the site\'s pages', 'site-pwa' ); ?>
+								<?php esc_html_e( 'Show an "Install" banner on the site\'s pages', 'site-pwa' ); ?>
 							</label>
 							<br>
 							<input type="hidden" name="<?php echo esc_attr( $field( 'site_banner_guests' ) ); ?>" value="0">
@@ -221,7 +224,28 @@ final class SettingsPage {
 								<input type="checkbox" id="site-pwa-site-banner-guests" name="<?php echo esc_attr( $field( 'site_banner_guests' ) ); ?>" value="1" <?php checked( $settings['site_banner_guests'] ); ?>>
 								<?php esc_html_e( 'Also show it to visitors who are not signed in', 'site-pwa' ); ?>
 							</label>
-							<p class="description"><?php esc_html_e( 'Only on phones and tablets, and never inside the installed app. A visitor who is not signed in goes to the login first, then into the app. A visitor who closes the banner does not see it again on that device for 30 days. The app\'s home screen invites to install it the same way.', 'site-pwa' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Only on phones and tablets, and never inside the installed app. The banner leads to the install page, which needs no login; the app asks for it once installed. A visitor who closes the banner does not see it again on that device for 30 days. The app\'s home screen invites to install it the same way.', 'site-pwa' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="site-pwa-banner-text"><?php esc_html_e( 'Banner sentence', 'site-pwa' ); ?></label></th>
+						<td>
+							<input type="text" class="regular-text" id="site-pwa-banner-text" name="<?php echo esc_attr( $field( 'banner_text' ) ); ?>" value="<?php echo esc_attr( $settings['banner_text'] ); ?>" maxlength="<?php echo esc_attr( (string) Settings::BANNER_TEXT_MAX ); ?>" placeholder="<?php esc_attr_e( 'Faster in the app.', 'site-pwa' ); ?>">
+							<p class="description"><?php esc_html_e( 'Beside the name on the site banner. Empty uses the default text.', 'site-pwa' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="site-pwa-install-text"><?php esc_html_e( 'Install page sentence', 'site-pwa' ); ?></label></th>
+						<td>
+							<textarea class="large-text" rows="2" id="site-pwa-install-text" name="<?php echo esc_attr( $field( 'install_text' ) ); ?>" maxlength="<?php echo esc_attr( (string) Settings::INSTALL_TEXT_MAX ); ?>" placeholder="<?php esc_attr_e( 'Open it faster, straight from your home screen.', 'site-pwa' ); ?>"><?php echo esc_textarea( $settings['install_text'] ); ?></textarea>
+							<p class="description"><?php esc_html_e( 'Under the name at the top of the install page. Empty uses the default text.', 'site-pwa' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Install page', 'site-pwa' ); ?></th>
+						<td>
+							<p><a href="<?php echo esc_url( Routes::url( 'install' ) ); ?>"><?php echo esc_html( Routes::url( 'install' ) ); ?></a></p>
+							<p class="description"><?php esc_html_e( 'Public, no login. The banner leads here, and the address can go on a poster, a QR code or an e-mail. It uses the app\'s name, icon and colours, and shows the install button, the iPhone steps or "Open the app" for each browser.', 'site-pwa' ); ?></p>
 						</td>
 					</tr>
 					<tr>

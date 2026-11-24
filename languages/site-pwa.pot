@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-24 09:34+0000\n"
+"POT-Creation-Date: 2026-11-24 11:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -85,143 +85,179 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: src/admin/settings-page.php:204
-msgid "Short name"
+#: src/admin/settings-page.php:203
+msgid "The app's name: at the top of the install page, in the browser's install dialog and on the offline page."
 msgstr ""
 
 #: src/admin/settings-page.php:207
-msgid "Shown under the icon on a home screen."
+msgid "Short name"
 msgstr ""
 
-#: src/admin/settings-page.php:211
+#: src/admin/settings-page.php:210
+msgid "Shown under the icon on a home screen, and on the site banner."
+msgstr ""
+
+#: src/admin/settings-page.php:214
 msgid "Invite to the app"
 msgstr ""
 
-#: src/admin/settings-page.php:216
-msgid "Show a \"Use the app\" banner on the site's pages"
+#: src/admin/settings-page.php:219
+msgid "Show an \"Install\" banner on the site's pages"
 msgstr ""
 
-#: src/admin/settings-page.php:222
+#: src/admin/settings-page.php:225
 msgid "Also show it to visitors who are not signed in"
 msgstr ""
 
-#: src/admin/settings-page.php:224
-msgid "Only on phones and tablets, and never inside the installed app. A visitor who is not signed in goes to the login first, then into the app. A visitor who closes the banner does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
+#: src/admin/settings-page.php:227
+msgid "Only on phones and tablets, and never inside the installed app. The banner leads to the install page, which needs no login; the app asks for it once installed. A visitor who closes the banner does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
 msgstr ""
 
-#: src/admin/settings-page.php:228 src/app/frame.php:369
+#: src/admin/settings-page.php:231
+msgid "Banner sentence"
+msgstr ""
+
+#: src/admin/settings-page.php:233 src/settings.php:134
+msgid "Faster in the app."
+msgstr ""
+
+#: src/admin/settings-page.php:234
+msgid "Beside the name on the site banner. Empty uses the default text."
+msgstr ""
+
+#: src/admin/settings-page.php:238
+msgid "Install page sentence"
+msgstr ""
+
+#: src/admin/settings-page.php:240 src/settings.php:142
+msgid "Open it faster, straight from your home screen."
+msgstr ""
+
+#: src/admin/settings-page.php:241
+msgid "Under the name at the top of the install page. Empty uses the default text."
+msgstr ""
+
+#: src/admin/settings-page.php:245
+msgid "Install page"
+msgstr ""
+
+#: src/admin/settings-page.php:248
+msgid "Public, no login. The banner leads here, and the address can go on a poster, a QR code or an e-mail. It uses the app's name, icon and colours, and shows the install button, the iPhone steps or \"Open the app\" for each browser."
+msgstr ""
+
+#: src/admin/settings-page.php:252 src/app/frame.php:369
 #: templates/screen-home.php:92 templates/screen-more.php:35
 #: templates/screen-news.php:22
 msgid "News"
 msgstr ""
 
-#: src/admin/settings-page.php:231
+#: src/admin/settings-page.php:255
 msgid "Categories shown in the app"
 msgstr ""
 
-#: src/admin/settings-page.php:242
+#: src/admin/settings-page.php:266
 msgid "The app shows the posts of the ticked categories, newest first: the three latest on the home screen and all of them under More → News. With none ticked, it shows every post."
 msgstr ""
 
-#: src/admin/settings-page.php:246 templates/screen-home.php:110
+#: src/admin/settings-page.php:270 templates/screen-home.php:110
 msgid "Pages"
 msgstr ""
 
-#: src/admin/settings-page.php:251
+#: src/admin/settings-page.php:275
 msgid "The site has no published pages."
 msgstr ""
 
-#: src/admin/settings-page.php:256
+#: src/admin/settings-page.php:280
 msgid "In the app"
 msgstr ""
 
-#: src/admin/settings-page.php:257 templates/screen-post.php:43
+#: src/admin/settings-page.php:281 templates/screen-post.php:43
 msgid "Open on the site"
 msgstr ""
 
-#: src/admin/settings-page.php:265
+#: src/admin/settings-page.php:289
 msgid "(no title)"
 msgstr ""
 
 #. translators: %s: a page title
-#: src/admin/settings-page.php:280
+#: src/admin/settings-page.php:304
 #, php-format
 msgid "Open %s on the site"
 msgstr ""
 
-#: src/admin/settings-page.php:290
+#: src/admin/settings-page.php:314
 msgid "The ticked pages appear under More and on the home screen. A page opens inside the app, unless it is marked to open on the site, as a page built with a page builder should be."
 msgstr ""
 
-#: src/admin/settings-page.php:294
+#: src/admin/settings-page.php:318
 msgid "Look"
 msgstr ""
 
-#: src/admin/settings-page.php:297
+#: src/admin/settings-page.php:321
 msgid "These settings"
 msgstr ""
 
-#: src/admin/settings-page.php:302
+#: src/admin/settings-page.php:326
 msgid "Where the app takes its accent colour and its corners from. While the chosen design is switched off, or its plugin is inactive, the app uses the theme colour below."
 msgstr ""
 
 #. translators: 1: a colour such as #1d5e8c, 2: corner radius of cards in px, 3: corner radius of buttons in px
-#: src/admin/settings-page.php:309
+#: src/admin/settings-page.php:333
 #, php-format
 msgid "In use now: accent %1$s, cards %2$d px, buttons %3$d px."
 msgstr ""
 
-#: src/admin/settings-page.php:315
+#: src/admin/settings-page.php:339
 msgid "A phone that already installed the app picks up a new colour, name or icon when its browser next refreshes the installed app, which can take a few days; reinstalling the app applies it at once."
 msgstr ""
 
 #. translators: %s: a colour such as #8a6d00
-#: src/admin/settings-page.php:321
+#: src/admin/settings-page.php:345
 #, php-format
 msgid "The accent is too light to read as text, so links and icons use the darker %s."
 msgstr ""
 
-#: src/admin/settings-page.php:331
+#: src/admin/settings-page.php:355
 msgid "Light or dark"
 msgstr ""
 
-#: src/admin/settings-page.php:341
+#: src/admin/settings-page.php:365
 msgid "Whether the app draws light, dark, or follows the device. Following Free Form Certificate's Dark Mode keeps the app's header and menu in the same theme as the screens it draws inside them. While the chosen plugin is inactive, the app follows the device."
 msgstr ""
 
-#: src/admin/settings-page.php:345
+#: src/admin/settings-page.php:369
 msgid "Theme colour"
 msgstr ""
 
-#: src/admin/settings-page.php:349
+#: src/admin/settings-page.php:373
 msgid "Background colour"
 msgstr ""
 
-#: src/admin/settings-page.php:352
+#: src/admin/settings-page.php:376
 msgid "Shown while the app opens."
 msgstr ""
 
-#: src/admin/settings-page.php:356 src/admin/settings-page.php:367
+#: src/admin/settings-page.php:380 src/admin/settings-page.php:391
 msgid "Icon"
 msgstr ""
 
-#: src/admin/settings-page.php:360
+#: src/admin/settings-page.php:384
 msgid "The site icon"
 msgstr ""
 
-#: src/admin/settings-page.php:361
+#: src/admin/settings-page.php:385
 msgid "The plugin's icon"
 msgstr ""
 
-#: src/admin/settings-page.php:362
+#: src/admin/settings-page.php:386
 msgid "A custom icon"
 msgstr ""
 
-#: src/admin/settings-page.php:378
+#: src/admin/settings-page.php:402
 msgid "Choose image"
 msgstr ""
 
-#: src/admin/settings-page.php:380
+#: src/admin/settings-page.php:404
 msgid "The site icon is the one set in Settings → General; without one, the app uses the plugin's icon. A custom icon is a square PNG of at least 512 px from the Media Library; the app makes the sizes it needs from it. Only the plugin's icon is shaped for launchers that crop icons into circles or squircles."
 msgstr ""
 
@@ -323,6 +359,102 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
+#: templates/install.php:23
+msgid "Address of this page"
+msgstr ""
+
+#: templates/install.php:28
+msgid "Copy address"
+msgstr ""
+
+#. translators: %s: the app's name
+#: templates/install.php:41
+#, php-format
+msgid "Install %s"
+msgstr ""
+
+#: templates/install.php:46
+msgid "Address copied."
+msgstr ""
+
+#: templates/install.php:46
+msgid "Select the address and copy it."
+msgstr ""
+
+#: templates/install.php:55
+msgid "Checking this browser…"
+msgstr ""
+
+#: templates/install.php:62 templates/screen-home.php:132
+msgid "Install the app"
+msgstr ""
+
+#: templates/install.php:65
+msgid "The icon goes to your home screen. You sign in inside the app, once."
+msgstr ""
+
+#: templates/install.php:69 templates/install.php:88
+msgid "Add it to your home screen in three taps"
+msgstr ""
+
+#: templates/install.php:73
+msgid "Tap Share in Safari’s toolbar, at the bottom."
+msgstr ""
+
+#: templates/install.php:77 templates/screen-home.php:151
+msgid "Choose Add to Home Screen."
+msgstr ""
+
+#: templates/install.php:81 templates/install.php:100
+msgid "Tap Add."
+msgstr ""
+
+#: templates/install.php:84
+msgid "On iPhone no browser installs with a button; these steps are the official way."
+msgstr ""
+
+#: templates/install.php:92
+msgid "Tap Share, at the top, beside the address."
+msgstr ""
+
+#: templates/install.php:96
+msgid "Choose Add to Home Screen. If it is not there, scroll the list or tap More."
+msgstr ""
+
+#: templates/install.php:103
+msgid "On iPhone no browser installs with a button. In Safari, Share is at the bottom."
+msgstr ""
+
+#: templates/install.php:107
+msgid "On this version of iOS only Safari adds apps to the home screen. Open this address in Safari to install."
+msgstr ""
+
+#: templates/install.php:114
+msgid "Already installed on this device"
+msgstr ""
+
+#: templates/install.php:119
+msgid "Open the app"
+msgstr ""
+
+#. translators: %s: the app's short name, as under its icon
+#: templates/install.php:125
+#, php-format
+msgid "It did not open? Look for the %s icon on your home screen."
+msgstr ""
+
+#: templates/install.php:131
+msgid "This browser offers no install button. Open this address in Chrome (Android) or Safari (iPhone), or look for Install app or Add to Home screen in the browser’s menu."
+msgstr ""
+
+#: templates/install.php:136
+msgid "Look for Install app or Add to Home screen in the browser’s menu."
+msgstr ""
+
+#: templates/install.php:141
+msgid "Continue in the browser"
+msgstr ""
+
 #: templates/offline.php:20 templates/offline.php:24
 msgid "No connection"
 msgstr ""
@@ -383,10 +515,6 @@ msgstr ""
 msgid "Not now"
 msgstr ""
 
-#: templates/screen-home.php:132
-msgid "Install the app"
-msgstr ""
-
 #: templates/screen-home.php:134
 msgid "Open it from your home screen, full screen, like any other app."
 msgstr ""
@@ -401,10 +529,6 @@ msgstr ""
 
 #: templates/screen-home.php:147
 msgid "Tap Share in Safari’s toolbar."
-msgstr ""
-
-#: templates/screen-home.php:151
-msgid "Choose Add to Home Screen."
 msgstr ""
 
 #: templates/screen-missing.php:16
@@ -493,12 +617,8 @@ msgstr ""
 msgid "Copy link"
 msgstr ""
 
-#: templates/site-banner.php:21
-msgid "Faster in the app."
-msgstr ""
-
 #: templates/site-banner.php:23
-msgid "Use the app"
+msgid "Install"
 msgstr ""
 
 #. Plugin header: Description

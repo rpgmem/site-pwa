@@ -56,7 +56,8 @@ final class InviteTest extends WP_UnitTestCase {
 
 		self::assertStringContainsString( '<aside class="site-pwa-site-banner" data-key="site-pwa-banner" aria-label="App" hidden>', $html );
 		self::assertStringContainsString( '<strong>Viva</strong>', $html );
-		self::assertStringContainsString( 'href="' . esc_url( Routes::url( 'home' ) ) . '">Use the app</a>', $html );
+		self::assertStringContainsString( 'href="' . esc_url( Routes::url( 'install' ) ) . '">Install</a>', $html, 'the banner leads to the public install page, not the login (#34)' );
+		self::assertStringContainsString( '<span>Faster in the app.</span>', $html );
 		self::assertTrue( wp_script_is( Invite::SCRIPT, 'enqueued' ) );
 		self::assertTrue( wp_style_is( Invite::BANNER_STYLE, 'enqueued' ) );
 		self::assertStringContainsString( '--site-pwa-accent:#1d5e8c;--site-pwa-on-accent:#ffffff;--site-pwa-accent-text:#1d5e8c', implode( '', wp_styles()->get_data( Invite::BANNER_STYLE, 'after' ) ) );
@@ -64,9 +65,18 @@ final class InviteTest extends WP_UnitTestCase {
 
 	public function test_visitors_who_are_not_signed_in_get_the_banner_by_default(): void {
 		self::assertTrue( Invite::bannerWanted() );
-		self::assertStringContainsString( 'href="' . esc_url( Routes::url( 'home' ) ) . '">Use the app</a>', $this->footer() );
+		self::assertStringContainsString( 'href="' . esc_url( Routes::url( 'install' ) ) . '">Install</a>', $this->footer() );
 		Invite::enqueue();
 		self::assertTrue( wp_script_is( Invite::SCRIPT, 'enqueued' ) );
+	}
+
+	public function test_the_banner_carries_the_configured_sentence_as_text(): void {
+		update_option( Settings::OPTION, array( 'enabled' => true, 'short_name' => 'Viva', 'banner_text' => 'Agenda & <b>presença</b>' ) );
+
+		$html = $this->footer();
+
+		self::assertStringContainsString( '<span>Agenda &amp; presença</span>', $html );
+		self::assertStringNotContainsString( '<b>', $html );
 	}
 
 	public function test_with_the_guest_option_off_only_signed_in_visitors_get_it(): void {

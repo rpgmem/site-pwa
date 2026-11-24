@@ -26,17 +26,26 @@ final class Manifest {
 		$home     = Routes::url( 'home' );
 
 		return array(
-			'id'               => $home,
-			'name'             => $settings['name'],
-			'short_name'       => $settings['short_name'],
-			'start_url'        => $home,
-			'scope'            => $home,
-			'display'          => 'standalone',
-			'background_color' => $settings['background_color'],
-			'theme_color'      => Identity::current()['accent'],
-			'lang'             => (string) get_bloginfo( 'language' ),
-			'dir'              => is_rtl() ? 'rtl' : 'ltr',
-			'icons'            => self::icons(),
+			'id'                   => $home,
+			'name'                 => $settings['name'],
+			'short_name'           => $settings['short_name'],
+			'start_url'            => $home,
+			'scope'                => $home,
+			'display'              => 'standalone',
+			'background_color'     => $settings['background_color'],
+			'theme_color'          => Identity::current()['accent'],
+			'lang'                 => (string) get_bloginfo( 'language' ),
+			'dir'                  => is_rtl() ? 'rtl' : 'ltr',
+			'icons'                => self::icons(),
+			// The app names itself, so its install page can ask the browser
+			// whether it is already installed (getInstalledRelatedApps, #34).
+			// It is not preferred over itself: the browser still offers it.
+			'related_applications' => array(
+				array(
+					'platform' => 'webapp',
+					'url'      => Routes::url( 'manifest' ),
+				),
+			),
 		);
 	}
 
