@@ -136,6 +136,30 @@ final class HomeTest extends WP_UnitTestCase {
 		self::assertSame( array( 'banners' => array(), 'next' => null, 'pending' => array() ), Home::items( wp_get_current_user() ) );
 	}
 
+	public function test_an_item_can_name_a_screen_the_user_may_open_instead_of_a_url(): void {
+		add_action(
+			\SitePwa\App\Screens::ACTION,
+			static function ( $registry ): void {
+				$registry->add( 'presence', array( 'label' => 'Presence', 'render' => static fn(): string => '' ) );
+				$registry->add( 'staff', array( 'label' => 'Staff', 'capability' => 'manage_options', 'render' => static fn(): string => '' ) );
+			}
+		);
+		\SitePwa\App\Screens::reset();
+		$this->feed(
+			array(
+				'next'    => array( 'title' => 'Meeting', 'actions' => array( array( 'label' => 'QR', 'screen' => 'presence' ), array( 'label' => 'Staff only', 'screen' => 'staff' ) ) ),
+				'pending' => array( array( 'label' => 'Unknown', 'screen' => 'nope' ), array( 'label' => 'Presence', 'screen' => 'presence' ) ),
+			)
+		);
+
+		$items = Home::items( wp_get_current_user() );
+		\SitePwa\App\Screens::reset();
+
+		self::assertSame( array( 'QR' ), array_column( $items['next']['actions'], 'label' ), 'a screen the user cannot open is dropped' );
+		self::assertStringEndsWith( '/s/presence/', $items['next']['actions'][0]['url'] );
+		self::assertSame( array( 'Presence' ), array_column( $items['pending'], 'label' ) );
+	}
+
 	public function test_the_lists_are_capped(): void {
 		$banners = array();
 		$pending = array();

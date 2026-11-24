@@ -67,8 +67,8 @@ add_filter( 'site_pwa_home', static function ( array $home, WP_User $user, int $
 		'title'   => 'Pedagogical meeting',
 		'meta'    => 'Paulo Freire Auditorium · Tue 25/11 · 14:00',
 		'actions' => array(
-			array( 'label' => __( 'Presence QR', 'my-plugin' ), 'url' => '/app/s/presence/', 'icon' => 'qr', 'primary' => true ),
-			array( 'label' => __( 'Details', 'my-plugin' ), 'url' => '/app/s/calendar/' ),
+			array( 'label' => __( 'Presence QR', 'my-plugin' ), 'screen' => 'presence', 'icon' => 'qr', 'primary' => true ),
+			array( 'label' => __( 'Details', 'my-plugin' ), 'screen' => 'calendar' ),
 		),
 	);
 	$home['pending'][] = array(
@@ -86,10 +86,10 @@ add_filter( 'site_pwa_home', static function ( array $home, WP_User $user, int $
 | Part | Keys | What the app does with it |
 | --- | --- | --- |
 | `banners` | `id`, `text`, `emphasis`, `tone` | A line on top that the person can dismiss. `text` places `emphasis` in bold with one `%s`; without exactly one, the emphasis is dropped. The `id` (letters, digits, `:`, `_`, `-`) is what the dismissal remembers, on that device only, so give each event its own. At most 3. |
-| `next` | `title`, `meta`, `actions` | The "Next commitment" card. Up to two actions; the one marked `primary` is the accent button. |
-| `pending` | `label`, `meta`, `url`, `icon`, `tone` | A row of the "Pending" list, which also lights the badge on the bell. At most 8. |
+| `next` | `title`, `meta`, `actions` (`label`, `screen` or `url`, `icon`, `primary`) | The "Next commitment" card. Up to two actions; the one marked `primary` is the accent button. |
+| `pending` | `label`, `meta`, `screen` or `url`, `icon`, `tone` | A row of the "Pending" list, which also lights the badge on the bell. At most 8. |
 
-`tone` is `info`, `success` or `warning`; anything else is `info`, and a banner without one is `success`. Text loses its markup, a `url` must be a page on this site (absolute, or starting with `/`), and an `icon` must be one of the app's. An item that fails those is left out rather than drawn half-way. Nothing here is cached by the app or its service worker.
+`tone` is `info`, `success` or `warning`; anything else is `info`, and a banner without one is `success`. Text loses its markup, and an `icon` must be one of the app's. An action or a pending item leads either to a registered screen, named by `screen` (its id), or to a page in `url`, which must be on this site (absolute, or starting with `/`); a screen the user may not open counts as no link. An item that fails those is left out rather than drawn half-way. Nothing here is cached by the app or its service worker.
 
 ## What the app does and does not do
 

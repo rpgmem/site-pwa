@@ -138,6 +138,21 @@ final class Home {
 	}
 
 	/**
+	 * Where an action or an item leads: a registered screen the user may
+	 * open, named by `screen`, or a page of this site in `url`. An unknown or
+	 * forbidden screen leads nowhere, so the item is dropped.
+	 *
+	 * @param array<mixed> $raw Raw action or item.
+	 */
+	private static function target( array $raw ): string {
+		if ( is_string( $raw['screen'] ?? null ) ) {
+			$screen = Screens::find( $raw['screen'] );
+			return null === $screen ? '' : Screens::link( $screen );
+		}
+		return Screens::sameSite( $raw['url'] ?? null );
+	}
+
+	/**
 	 * A list value as a list of arrays, whatever was handed.
 	 *
 	 * @param mixed $value Raw value.
@@ -218,7 +233,7 @@ final class Home {
 		$actions = array();
 		foreach ( self::lists( $raw['actions'] ?? null ) as $action ) {
 			$label = self::text( $action['label'] ?? null );
-			$url   = Screens::sameSite( $action['url'] ?? null );
+			$url   = self::target( $action );
 			if ( '' === $label || '' === $url ) {
 				continue;
 			}
@@ -244,7 +259,7 @@ final class Home {
 	 */
 	private static function pending( array $raw ): ?array {
 		$label = self::text( $raw['label'] ?? null );
-		$url   = Screens::sameSite( $raw['url'] ?? null );
+		$url   = self::target( $raw );
 		if ( '' === $label || '' === $url ) {
 			return null;
 		}
