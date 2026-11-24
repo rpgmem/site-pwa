@@ -32,7 +32,7 @@ use WP_Error;
  * to whoever holds its capability: in the navigation, on the home screen and
  * at its URL alike.
  *
- * @phpstan-type Screen array{id: string, label: string, icon: string, place: string, capability: string, render: callable|null, url: string, position: int}
+ * @phpstan-type Screen array{id: string, label: string, icon: string, place: string, slot: string, capability: string, render: callable|null, url: string, position: int}
  */
 final class Screens {
 
@@ -51,6 +51,13 @@ final class Screens {
 	 * Places a screen can take.
 	 */
 	public const PLACES = array( 'nav', 'more' );
+
+	/**
+	 * The slot a `nav` screen can ask for: `center` raises it in the middle of
+	 * the bar, as the app's main action. One screen holds it; the first by
+	 * position wins and any other stays an ordinary `nav` screen.
+	 */
+	public const SLOTS = array( '', 'center' );
 
 	/**
 	 * Screens in the bottom navigation, between Home and More. Further `nav`
@@ -149,16 +156,28 @@ final class Screens {
 	}
 
 	/**
-	 * The `nav` screens that fit the bar, and the rest, which join More.
+	 * The `nav` screens that fit the bar, the one raised in its centre, and
+	 * the rest, which join More. The centre takes one of the bar's slots, so
+	 * the bar still holds Home, three screens and More.
 	 *
-	 * @return array{nav: list<Screen>, more: list<Screen>}
+	 * @return array{nav: list<Screen>, center: Screen|null, more: list<Screen>}
 	 */
 	public static function split(): array {
-		$nav  = self::visible( 'nav' );
-		$more = array_merge( array_slice( $nav, self::NAV_SLOTS ), self::visible( 'more' ) );
+		$nav    = self::visible( 'nav' );
+		$center = null;
+		foreach ( $nav as $index => $screen ) {
+			if ( 'center' === $screen['slot'] ) {
+				$center = $screen;
+				unset( $nav[ $index ] );
+				break;
+			}
+		}
+		$nav   = array_values( $nav );
+		$slots = null === $center ? self::NAV_SLOTS : self::NAV_SLOTS - 1;
 		return array(
-			'nav'  => array_slice( $nav, 0, self::NAV_SLOTS ),
-			'more' => $more,
+			'nav'    => array_slice( $nav, 0, $slots ),
+			'center' => $center,
+			'more'   => array_merge( array_slice( $nav, $slots ), self::visible( 'more' ) ),
 		);
 	}
 
@@ -183,7 +202,8 @@ final class Screens {
 	 *
 	 * @param string               $id   Lowercase letters, digits and hyphens; part of the URL.
 	 * @param array<string, mixed> $args `label` (required), `icon`, `place` (`nav` or `more`,
-	 *                                   default `more`), `capability` (default `read`), `position`
+	 *                                   default `more`), `slot` (`center` for a `nav` screen
+	 *                                   raised in the middle of the bar), `capability` (default `read`), `position`
 	 *                                   (default 10), and exactly one of `render` (a callable that
 	 *                                   returns or prints the screen's HTML) or `url` (a page on
 	 *                                   this site).
@@ -228,6 +248,14 @@ final class Screens {
 			return new WP_Error( 'site_pwa_screen_place', sprintf( 'Screen "%s": place must be "nav" or "more".', $id ) );
 		}
 
+		$slot = $args['slot'] ?? '';
+		if ( ! in_array( $slot, self::SLOTS, true ) ) {
+			return new WP_Error( 'site_pwa_screen_slot', sprintf( 'Screen "%s": slot must be "center" or left out.', $id ) );
+		}
+		if ( 'center' === $slot && 'nav' !== $place ) {
+			return new WP_Error( 'site_pwa_screen_slot', sprintf( 'Screen "%s": only a "nav" screen can take the center slot.', $id ) );
+		}
+
 		$render = $args['render'] ?? null;
 		$url    = $args['url'] ?? null;
 		if ( ( null === $render ) === ( null === $url ) ) {
@@ -252,6 +280,7 @@ final class Screens {
 			'label'      => $label,
 			'icon'       => $icon,
 			'place'      => $place,
+			'slot'       => $slot,
 			'capability' => $cap,
 			'render'     => null === $render ? null : $render,
 			'url'        => $link,
@@ -265,7 +294,7 @@ final class Screens {
 	 *
 	 * @param mixed $url Raw value.
 	 */
-	private static function sameSite( $url ): string {
+	public static function sameSite( $url ): string {
 		if ( ! is_string( $url ) || '' === $url ) {
 			return '';
 		}

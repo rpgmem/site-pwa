@@ -126,6 +126,8 @@ final class ScreensTest extends WP_UnitTestCase {
 				'external' => array( 'label' => 'X', 'url' => 'https://elsewhere.example/' ),
 				'relative' => array( 'label' => 'X', 'url' => '//elsewhere.example/x' ),
 				'scheme'   => array( 'label' => 'X', 'url' => 'javascript:alert(1)' ),
+				'slot'     => array( 'label' => 'X', 'place' => 'nav', 'slot' => 'left', 'render' => $render ),
+				'more-mid' => array( 'label' => 'X', 'slot' => 'center', 'render' => $render ),
 				'ok'       => array( 'label' => 'X', 'render' => $render ),
 			)
 		);
@@ -143,6 +145,8 @@ final class ScreensTest extends WP_UnitTestCase {
 				'external' => 'site_pwa_screen_url',
 				'relative' => 'site_pwa_screen_url',
 				'scheme'   => 'site_pwa_screen_url',
+				'slot'     => 'site_pwa_screen_slot',
+				'more-mid' => 'site_pwa_screen_slot',
 				'ok'       => true,
 			),
 			$codes
@@ -260,6 +264,35 @@ final class ScreensTest extends WP_UnitTestCase {
 		self::assertSame( 'more', Navigation::key( 'screen', 'd' ) );
 	}
 
+	public function test_the_centre_slot_sits_raised_in_the_middle_and_takes_one_of_the_three(): void {
+		$this->signIn();
+		$this->register(
+			array(
+				'agenda'   => array( 'label' => 'Agenda', 'place' => 'nav', 'position' => 1, 'url' => '/agenda/' ),
+				'certs'    => array( 'label' => 'Certificates', 'place' => 'nav', 'position' => 2, 'url' => '/certs/' ),
+				'presence' => array( 'label' => 'Presence', 'place' => 'nav', 'slot' => 'center', 'position' => 3, 'icon' => 'qr', 'url' => '/presence/' ),
+				'extra'    => array( 'label' => 'Extra', 'place' => 'nav', 'position' => 4, 'url' => '/extra/' ),
+				'second'   => array( 'label' => 'Second', 'place' => 'nav', 'slot' => 'center', 'position' => 5, 'url' => '/second/' ),
+			)
+		);
+
+		$items = Navigation::items( 'screen:presence' );
+		self::assertSame( array( 'home', 'screen:agenda', 'screen:presence', 'screen:certs', 'more' ), array_column( $items, 'id' ) );
+		self::assertSame( array( false, false, true, false, false ), array_column( $items, 'raised' ) );
+		self::assertSame( array( 'extra', 'second' ), array_column( Screens::split()['more'], 'id' ), 'a second centre screen is an ordinary nav screen' );
+		self::assertSame( 'screen:presence', Navigation::key( 'screen', 'presence' ) );
+
+		set_query_var( Routes::QUERY_VAR, 'home' );
+		$html = \SitePwa\App\Frame::render( 'home' );
+		self::assertMatchesRegularExpression( '#<li class="site-pwa-nav-raised">\s*<a href="[^"]*/presence/">\s*<span class="site-pwa-nav-lift"><svg#', $html );
+	}
+
+	public function test_a_lone_centre_screen_still_sits_between_home_and_more(): void {
+		$this->signIn();
+		$this->register( array( 'presence' => array( 'label' => 'Presence', 'place' => 'nav', 'slot' => 'center', 'url' => '/presence/' ) ) );
+		self::assertSame( array( 'home', 'screen:presence', 'more' ), array_column( Navigation::items( 'home' ), 'id' ) );
+	}
+
 	public function test_more_lists_the_overflow_then_the_account_and_is_current(): void {
 		ExampleConsumer::register();
 		$this->signIn();
@@ -276,18 +309,16 @@ final class ScreensTest extends WP_UnitTestCase {
 		self::assertSame( 'More – Escola Viva', Frame::title( 'x' ) );
 	}
 
-	public function test_home_lists_every_screen_the_user_may_open(): void {
+	public function test_home_no_longer_lists_the_screens_the_navigation_already_shows(): void {
 		ExampleConsumer::register();
 		$this->signIn();
 		set_query_var( Routes::QUERY_VAR, 'home' );
 
 		$body = Frame::render( 'home' );
 
-		self::assertStringContainsString( '<ul class="site-pwa-list">', $body );
-		self::assertStringContainsString( '<span>Presence</span>', $body );
-		self::assertStringContainsString( '<span>Calendar</span>', $body );
-		self::assertStringNotContainsString( '<span>Reports</span>', $body );
+		self::assertStringNotContainsString( 'Your screens', $body );
 		self::assertStringNotContainsString( 'Nothing here yet', $body );
+		self::assertStringContainsString( '<span>Presence</span>', $body, 'still in the bar' );
 	}
 
 	public function test_the_screen_and_more_routes_have_rules_and_their_query_var_is_public(): void {

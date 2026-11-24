@@ -30,8 +30,9 @@ add_action( 'site_pwa_register_screens', static function ( $screens, int $api ):
 | `label` | yes | | The name in the navigation, on the home screen and as the screen's heading. Pass it already translated. Markup is stripped. |
 | `render` | one of the two | | A callable that prints or returns the screen's HTML. The app draws it at `/app/s/<id>/`, inside its frame and under the label as `<h1>`. |
 | `url` | one of the two | | A page on this site, absolute or starting with `/`. The screen links there instead of having a page in the app. Another host is refused. |
-| `icon` | no | `grid` | One of the app's icons: `home`, `user`, `edit`, `logout`, `share`, `link`, `open`, `more`, `grid`, `calendar`, `check`, `document`, `chevron`. An unknown name draws `grid`. |
+| `icon` | no | `grid` | One of the app's icons: `home`, `user`, `edit`, `logout`, `share`, `link`, `open`, `more`, `grid`, `calendar`, `check`, `document`, `chevron`, `add`, `close`, `download`, `news`, `qr`, `bell`, `back`, `award`. An unknown name draws `grid`. |
 | `place` | no | `more` | `nav` puts the screen in the bottom navigation; `more` puts it in the More list. |
+| `slot` | no | | `center` raises a `nav` screen in the middle of the bar, as the app's main action. Refused on a `more` screen. |
 | `capability` | no | `read` | Who sees the screen. The app checks it everywhere the screen appears: navigation, home, More and its own URL. |
 | `position` | no | `10` | Order, lowest first; screens with the same position sort by label. |
 
@@ -46,7 +47,49 @@ The bottom navigation holds at most five items:
 - up to three `nav` screens, by position;
 - More.
 
-More lists the `more` screens, then the `nav` screens that did not fit, then the account. The home screen lists every screen the user may open.
+A `nav` screen that asks for the `center` slot takes one of the three and sits raised in the middle of them, with Home and one screen on its left and one screen and More on its right. One screen holds the slot: the first by position. A second one stays an ordinary `nav` screen.
+
+More lists the `more` screens, then the `nav` screens that did not fit, then the account.
+
+## Feeding the home screen
+
+The home screen shows what a person should see first, and it learns it from the plugins that know it, through one filter:
+
+```php
+add_filter( 'site_pwa_home', static function ( array $home, WP_User $user, int $api ): array {
+	$home['banners'][] = array(
+		'id'       => 'my-plugin:attendance:42',
+		'text'     => __( 'Attendance confirmed at %s (18/11)', 'my-plugin' ),
+		'emphasis' => 'Coordinators meeting',
+		'tone'     => 'success',
+	);
+	$home['next'] = array(
+		'title'   => 'Pedagogical meeting',
+		'meta'    => 'Paulo Freire Auditorium · Tue 25/11 · 14:00',
+		'actions' => array(
+			array( 'label' => __( 'Presence QR', 'my-plugin' ), 'screen' => 'presence', 'icon' => 'qr', 'primary' => true ),
+			array( 'label' => __( 'Details', 'my-plugin' ), 'screen' => 'calendar' ),
+		),
+	);
+	$home['pending'][] = array(
+		'label' => __( 'Post-event form', 'my-plugin' ),
+		'meta'  => __( 'Coordinators meeting · until 28/11', 'my-plugin' ),
+		'url'   => '/forms/42/',
+		'icon'  => 'document',
+	);
+	return $home;
+}, 10, 3 );
+```
+
+`$api` is the contract's version, `1` today, as for screens. Append to the lists rather than replacing them, so other plugins' items stay. `next` holds one card: a later filter that sets it wins.
+
+| Part | Keys | What the app does with it |
+| --- | --- | --- |
+| `banners` | `id`, `text`, `emphasis`, `tone` | A line on top that the person can dismiss. `text` places `emphasis` in bold with one `%s`; without exactly one, the emphasis is dropped. The `id` (letters, digits, `:`, `_`, `-`) is what the dismissal remembers, on that device only, so give each event its own. At most 3. |
+| `next` | `title`, `meta`, `actions` (`label`, `screen` or `url`, `icon`, `primary`) | The "Next commitment" card. Up to two actions; the one marked `primary` is the accent button. |
+| `pending` | `label`, `meta`, `screen` or `url`, `icon`, `tone` | A row of the "Pending" list, which also lights the badge on the bell. At most 8. |
+
+`tone` is `info`, `success` or `warning`; anything else is `info`, and a banner without one is `success`. Text loses its markup, and an `icon` must be one of the app's. An action or a pending item leads either to a registered screen, named by `screen` (its id), or to a page in `url`, which must be on this site (absolute, or starting with `/`); a screen the user may not open counts as no link. An item that fails those is left out rather than drawn half-way. Nothing here is cached by the app or its service worker.
 
 ## What the app does and does not do
 

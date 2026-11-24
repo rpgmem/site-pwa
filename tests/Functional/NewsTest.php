@@ -165,7 +165,7 @@ final class NewsTest extends WP_UnitTestCase {
 		self::assertStringContainsString( 'Post 4', $home );
 		self::assertStringContainsString( 'Post 2', $home );
 		self::assertStringNotContainsString( 'Post 1<', $home );
-		self::assertStringContainsString( 'href="' . esc_url( News::url() ) . '">See all news', $home );
+		self::assertStringContainsString( 'href="' . esc_url( News::url() ) . '">See all</a>', $home );
 		self::assertSame( array( 'Shop', 'Rules' ), array_column( AppPages::items(), 'label' ) );
 		self::assertStringContainsString( 'href="' . esc_url( Content::url( $inside ) ) . '"', $home );
 		self::assertStringContainsString( 'href="' . esc_url( (string) get_permalink( $outside ) ) . '"', $home );
