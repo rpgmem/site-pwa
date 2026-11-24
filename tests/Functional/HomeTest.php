@@ -62,12 +62,14 @@ final class HomeTest extends WP_UnitTestCase {
 		self::assertSame( array( 'banners' => array(), 'next' => null, 'pending' => array() ), $items );
 	}
 
-	public function test_nothing_handed_draws_no_banner_no_card_and_no_pending(): void {
+	public function test_nothing_handed_draws_no_banner_no_card_and_an_empty_pending_section(): void {
 		$html = $this->home();
 
 		self::assertStringNotContainsString( 'data-banner=', $html );
 		self::assertStringNotContainsString( 'site-pwa-next', $html );
-		self::assertStringNotContainsString( 'site-pwa-pending-heading', $html );
+		self::assertStringContainsString( 'id="site-pwa-pending-heading"', $html, 'the bell always has somewhere to lead' );
+		self::assertStringContainsString( 'Nothing pending.', $html );
+		self::assertStringNotContainsString( 'site-pwa-pending-icon', $html );
 		self::assertStringContainsString( 'No news yet.', $html );
 	}
 

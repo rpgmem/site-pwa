@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-24 04:01+0000\n"
+"POT-Creation-Date: 2026-11-24 09:34+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -55,7 +55,7 @@ msgstr "Ligar o app o substitui. Confirme a substituição abaixo para continuar
 msgid "The app is on at"
 msgstr "O app está ligado em"
 
-#: src/admin/settings-page.php:180 templates/frame.php:69
+#: src/admin/settings-page.php:180 templates/frame.php:63
 #: templates/site-banner.php:17
 msgid "App"
 msgstr "App"
@@ -109,7 +109,7 @@ msgid "Only on phones and tablets, and never inside the installed app. A visitor
 msgstr "Só em celulares e tablets, e nunca dentro do app instalado. Um visitante não conectado passa primeiro pelo login e depois entra no app. Quem fecha a faixa não a vê de novo naquele aparelho por 30 dias. A tela inicial do app convida para instalá-lo da mesma forma."
 
 #: src/admin/settings-page.php:228 src/app/frame.php:369
-#: templates/screen-home.php:87 templates/screen-more.php:35
+#: templates/screen-home.php:92 templates/screen-more.php:35
 #: templates/screen-news.php:22
 msgid "News"
 msgstr "Notícias"
@@ -122,7 +122,7 @@ msgstr "Categorias mostradas no app"
 msgid "The app shows the posts of the ticked categories, newest first: the three latest on the home screen and all of them under More → News. With none ticked, it shows every post."
 msgstr "O app mostra os posts das categorias marcadas, do mais recente ao mais antigo: os três últimos na tela inicial e todos em Mais → Notícias. Sem nenhuma marcada, mostra todos os posts."
 
-#: src/admin/settings-page.php:246 templates/screen-home.php:105
+#: src/admin/settings-page.php:246 templates/screen-home.php:110
 msgid "Pages"
 msgstr "Páginas"
 
@@ -308,17 +308,17 @@ msgstr "A verificação de integridade do pacote de atualização (SHA-256) falh
 msgid "Skip to content"
 msgstr "Pular para o conteúdo"
 
-#: templates/frame.php:45
+#: templates/frame.php:41
 msgid "Notifications: nothing pending"
 msgstr "Notificações: nada pendente"
 
 #. translators: %d: number of pending items
-#: templates/frame.php:47
+#: templates/frame.php:43
 #, php-format
 msgid "Notifications, pending items: %d"
 msgstr "Notificações, itens pendentes: %d"
 
-#: templates/frame.php:62
+#: templates/frame.php:56
 msgid "Back"
 msgstr "Voltar"
 
@@ -362,43 +362,47 @@ msgstr "Próximo compromisso"
 msgid "Pending"
 msgstr "Pendências"
 
-#: templates/screen-home.php:89
+#: templates/screen-home.php:68
+msgid "Nothing pending."
+msgstr "Nada pendente."
+
+#: templates/screen-home.php:94
 msgid "See all"
 msgstr "Ver todas"
 
-#: templates/screen-home.php:94 templates/screen-news.php:32
+#: templates/screen-home.php:99 templates/screen-news.php:32
 msgid "No news yet."
 msgstr "Ainda não há notícias."
 
-#: templates/screen-home.php:107
+#: templates/screen-home.php:112
 msgid "No pages yet. The pages chosen in the app's settings appear here."
 msgstr "Ainda não há páginas. As páginas escolhidas nas configurações do app aparecem aqui."
 
-#: templates/screen-home.php:124 templates/site-banner.php:24
+#: templates/screen-home.php:129 templates/site-banner.php:24
 msgid "Not now"
 msgstr "Agora não"
 
-#: templates/screen-home.php:127
+#: templates/screen-home.php:132
 msgid "Install the app"
 msgstr "Instale o app"
 
-#: templates/screen-home.php:129
+#: templates/screen-home.php:134
 msgid "Open it from your home screen, full screen, like any other app."
 msgstr "Abra pela tela inicial, em tela cheia, como qualquer outro app."
 
-#: templates/screen-home.php:133
+#: templates/screen-home.php:138
 msgid "Install app"
 msgstr "Instalar app"
 
-#: templates/screen-home.php:138
+#: templates/screen-home.php:143
 msgid "Add it to your home screen to open it like any other app:"
 msgstr "Adicione à tela de início para abrir como qualquer outro app:"
 
-#: templates/screen-home.php:142
+#: templates/screen-home.php:147
 msgid "Tap Share in Safari’s toolbar."
 msgstr "Toque em Compartilhar, na barra do Safari."
 
-#: templates/screen-home.php:146
+#: templates/screen-home.php:151
 msgid "Choose Add to Home Screen."
 msgstr "Escolha Adicionar à Tela de Início."
 

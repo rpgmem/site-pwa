@@ -58,29 +58,34 @@ $site_pwa_home = $site_pwa['home_items'];
 		</section>
 	<?php endif; ?>
 
-	<?php if ( array() !== $site_pwa_home['pending'] ) : ?>
-		<section class="site-pwa-section" aria-labelledby="site-pwa-pending-heading">
-			<div class="site-pwa-section-head">
-				<h2 id="site-pwa-pending-heading" tabindex="-1"><?php esc_html_e( 'Pending', 'site-pwa' ); ?></h2>
+	<?php // Always drawn: the bell in the header leads here, with or without items. ?>
+	<section class="site-pwa-section" aria-labelledby="site-pwa-pending-heading">
+		<div class="site-pwa-section-head">
+			<h2 id="site-pwa-pending-heading" tabindex="-1"><?php esc_html_e( 'Pending', 'site-pwa' ); ?></h2>
+		</div>
+		<?php if ( array() === $site_pwa_home['pending'] ) : ?>
+			<div class="site-pwa-panel">
+				<p class="site-pwa-muted site-pwa-panel-note"><?php esc_html_e( 'Nothing pending.', 'site-pwa' ); ?></p>
 			</div>
-			<ul class="site-pwa-panel site-pwa-pending">
-				<?php foreach ( $site_pwa_home['pending'] as $site_pwa_item ) : ?>
-					<li>
-						<a href="<?php echo esc_url( $site_pwa_item['url'] ); ?>">
-							<span class="site-pwa-pending-icon site-pwa-tone-<?php echo esc_attr( $site_pwa_item['tone'] ); ?>"><?php echo Icons::svg( $site_pwa_item['icon'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a fixed drawing from Icons::PATHS. ?></span>
-							<span class="site-pwa-pending-text">
-								<strong><?php echo esc_html( $site_pwa_item['label'] ); ?></strong>
-								<?php if ( '' !== $site_pwa_item['meta'] ) : ?>
-									<span><?php echo esc_html( $site_pwa_item['meta'] ); ?></span>
-								<?php endif; ?>
-							</span>
-							<?php echo Icons::svg( 'chevron' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a fixed drawing from Icons::PATHS. ?>
-						</a>
-					</li>
-				<?php endforeach; ?>
-			</ul>
-		</section>
-	<?php endif; ?>
+		<?php else : ?>
+		<ul class="site-pwa-panel site-pwa-pending">
+			<?php foreach ( $site_pwa_home['pending'] as $site_pwa_item ) : ?>
+				<li>
+					<a href="<?php echo esc_url( $site_pwa_item['url'] ); ?>">
+						<span class="site-pwa-pending-icon site-pwa-tone-<?php echo esc_attr( $site_pwa_item['tone'] ); ?>"><?php echo Icons::svg( $site_pwa_item['icon'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a fixed drawing from Icons::PATHS. ?></span>
+						<span class="site-pwa-pending-text">
+							<strong><?php echo esc_html( $site_pwa_item['label'] ); ?></strong>
+							<?php if ( '' !== $site_pwa_item['meta'] ) : ?>
+								<span><?php echo esc_html( $site_pwa_item['meta'] ); ?></span>
+							<?php endif; ?>
+						</span>
+						<?php echo Icons::svg( 'chevron' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a fixed drawing from Icons::PATHS. ?>
+					</a>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+		<?php endif; ?>
+	</section>
 
 	<section class="site-pwa-section" aria-labelledby="site-pwa-news-heading">
 		<div class="site-pwa-section-head">
