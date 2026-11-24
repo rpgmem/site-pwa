@@ -14,8 +14,8 @@ use SitePwa\Settings;
 
 /**
  * Prints the invite's markup and loads the script that decides whether to
- * show it: a card on the app's home screen, and a "Use the app" banner on the
- * site's own pages for signed-in visitors. Both are hidden in the markup;
+ * show it: a card on the app's home screen, and an "Install" banner on the
+ * site's own pages that leads to the public install page (#34). Both are hidden in the markup;
  * `assets/js/install.js` reveals them only on a phone or tablet, outside the
  * installed app, and not after a dismissal in the last 30 days.
  */
@@ -52,7 +52,7 @@ final class Invite {
 	 * Whether a site page should carry the banner: the app is on, the
 	 * setting allows it, the request is not one of the app's own, and the
 	 * visitor is signed in or the setting also invites visitors who are not.
-	 * Those go to the login and then into the app.
+	 * Both go to the install page, which needs no login.
 	 *
 	 * The markup is the same for every visitor who is not signed in and holds
 	 * no personal data, so a page cache that stores it serves nobody anything
@@ -110,7 +110,8 @@ final class Invite {
 			'site-banner',
 			array(
 				'name' => $settings['short_name'],
-				'url'  => Routes::url( 'home' ),
+				'text' => Settings::bannerText(),
+				'url'  => Routes::url( 'install' ),
 				'icon' => Manifest::touchIcon(),
 			)
 		);
