@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-24 09:31+0000\n"
+"POT-Creation-Date: 2026-11-24 09:34+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -170,53 +170,57 @@ msgstr "De onde o app tira a cor de destaque e os cantos. Enquanto o design esco
 msgid "In use now: accent %1$s, cards %2$d px, buttons %3$d px."
 msgstr "Em uso agora: destaque %1$s, cartões %2$d px, botões %3$d px."
 
+#: src/admin/settings-page.php:315
+msgid "A phone that already installed the app picks up a new colour, name or icon when its browser next refreshes the installed app, which can take a few days; reinstalling the app applies it at once."
+msgstr "Um celular que já instalou o app recebe uma nova cor, nome ou ícone quando o navegador atualiza o app instalado, o que pode levar alguns dias; reinstalar o app aplica na hora."
+
 #. translators: %s: a colour such as #8a6d00
-#: src/admin/settings-page.php:320
+#: src/admin/settings-page.php:321
 #, php-format
 msgid "The accent is too light to read as text, so links and icons use the darker %s."
 msgstr "A cor de destaque é clara demais para ser lida como texto, então links e ícones usam o tom mais escuro %s."
 
-#: src/admin/settings-page.php:330
+#: src/admin/settings-page.php:331
 msgid "Light or dark"
 msgstr "Claro ou escuro"
 
-#: src/admin/settings-page.php:340
+#: src/admin/settings-page.php:341
 msgid "Whether the app draws light, dark, or follows the device. Following Free Form Certificate's Dark Mode keeps the app's header and menu in the same theme as the screens it draws inside them. While the chosen plugin is inactive, the app follows the device."
 msgstr "Se o app fica claro, escuro ou segue o aparelho. Seguir o Modo Escuro do Free Form Certificate mantém o cabeçalho e o menu do app no mesmo tema das telas que ele mostra dentro deles. Enquanto o plugin escolhido estiver inativo, o app segue o aparelho."
 
-#: src/admin/settings-page.php:344
+#: src/admin/settings-page.php:345
 msgid "Theme colour"
 msgstr "Cor do tema"
 
-#: src/admin/settings-page.php:348
+#: src/admin/settings-page.php:349
 msgid "Background colour"
 msgstr "Cor de fundo"
 
-#: src/admin/settings-page.php:351
+#: src/admin/settings-page.php:352
 msgid "Shown while the app opens."
 msgstr "Aparece enquanto o app abre."
 
-#: src/admin/settings-page.php:355 src/admin/settings-page.php:366
+#: src/admin/settings-page.php:356 src/admin/settings-page.php:367
 msgid "Icon"
 msgstr "Ícone"
 
-#: src/admin/settings-page.php:359
+#: src/admin/settings-page.php:360
 msgid "The site icon"
 msgstr "O ícone do site"
 
-#: src/admin/settings-page.php:360
+#: src/admin/settings-page.php:361
 msgid "The plugin's icon"
 msgstr "O ícone do plugin"
 
-#: src/admin/settings-page.php:361
+#: src/admin/settings-page.php:362
 msgid "A custom icon"
 msgstr "Um ícone personalizado"
 
-#: src/admin/settings-page.php:377
+#: src/admin/settings-page.php:378
 msgid "Choose image"
 msgstr "Escolher imagem"
 
-#: src/admin/settings-page.php:379
+#: src/admin/settings-page.php:380
 msgid "The site icon is the one set in Settings → General; without one, the app uses the plugin's icon. A custom icon is a square PNG of at least 512 px from the Media Library; the app makes the sizes it needs from it. Only the plugin's icon is shaped for launchers that crop icons into circles or squircles."
 msgstr "O ícone do site é o definido em Configurações → Geral; sem ele, o app usa o ícone do plugin. Um ícone personalizado é um PNG quadrado de pelo menos 512 px da Biblioteca de Mídia; o app gera a partir dele os tamanhos de que precisa. Só o ícone do plugin é desenhado para os lançadores que recortam ícones em círculos ou formas arredondadas."
 

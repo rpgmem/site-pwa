@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-24 09:31+0000\n"
+"POT-Creation-Date: 2026-11-24 09:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -171,53 +171,57 @@ msgstr ""
 msgid "In use now: accent %1$s, cards %2$d px, buttons %3$d px."
 msgstr ""
 
+#: src/admin/settings-page.php:315
+msgid "A phone that already installed the app picks up a new colour, name or icon when its browser next refreshes the installed app, which can take a few days; reinstalling the app applies it at once."
+msgstr ""
+
 #. translators: %s: a colour such as #8a6d00
-#: src/admin/settings-page.php:320
+#: src/admin/settings-page.php:321
 #, php-format
 msgid "The accent is too light to read as text, so links and icons use the darker %s."
 msgstr ""
 
-#: src/admin/settings-page.php:330
+#: src/admin/settings-page.php:331
 msgid "Light or dark"
 msgstr ""
 
-#: src/admin/settings-page.php:340
+#: src/admin/settings-page.php:341
 msgid "Whether the app draws light, dark, or follows the device. Following Free Form Certificate's Dark Mode keeps the app's header and menu in the same theme as the screens it draws inside them. While the chosen plugin is inactive, the app follows the device."
 msgstr ""
 
-#: src/admin/settings-page.php:344
+#: src/admin/settings-page.php:345
 msgid "Theme colour"
 msgstr ""
 
-#: src/admin/settings-page.php:348
+#: src/admin/settings-page.php:349
 msgid "Background colour"
 msgstr ""
 
-#: src/admin/settings-page.php:351
+#: src/admin/settings-page.php:352
 msgid "Shown while the app opens."
 msgstr ""
 
-#: src/admin/settings-page.php:355 src/admin/settings-page.php:366
+#: src/admin/settings-page.php:356 src/admin/settings-page.php:367
 msgid "Icon"
 msgstr ""
 
-#: src/admin/settings-page.php:359
+#: src/admin/settings-page.php:360
 msgid "The site icon"
 msgstr ""
 
-#: src/admin/settings-page.php:360
+#: src/admin/settings-page.php:361
 msgid "The plugin's icon"
 msgstr ""
 
-#: src/admin/settings-page.php:361
+#: src/admin/settings-page.php:362
 msgid "A custom icon"
 msgstr ""
 
-#: src/admin/settings-page.php:377
+#: src/admin/settings-page.php:378
 msgid "Choose image"
 msgstr ""
 
-#: src/admin/settings-page.php:379
+#: src/admin/settings-page.php:380
 msgid "The site icon is the one set in Settings → General; without one, the app uses the plugin's icon. A custom icon is a square PNG of at least 512 px from the Media Library; the app makes the sizes it needs from it. Only the plugin's icon is shaped for launchers that crop icons into circles or squircles."
 msgstr ""
 

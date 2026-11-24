@@ -73,6 +73,7 @@ final class AppRoutesTest extends WP_UnitTestCase {
 		$manifest = json_decode( $response['body'], true );
 
 		self::assertSame( 'application/manifest+json; charset=utf-8', $response['headers']['Content-Type'] );
+		self::assertSame( 'no-cache', $response['headers']['Cache-Control'], 'a changed colour or icon must reach an installed app (#28)' );
 		self::assertSame( 'Escola Viva', $manifest['name'] );
 		self::assertSame( 'Viva', $manifest['short_name'] );
 		self::assertSame( home_url( '/app/' ), $manifest['start_url'] );
