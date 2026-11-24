@@ -39,6 +39,19 @@ describe( 'share.js', () => {
 		expect( box.querySelector( '[data-status]' ).textContent ).toBe( '' );
 	} );
 
+	it( 'tells the app lock the share sheet is the app\'s own exit', async () => {
+		const share = vi.fn().mockResolvedValue();
+		window.SitePwaLock = { allowExit: vi.fn() };
+		try {
+			init( box, { share } );
+			box.querySelector( '[data-share]' ).click();
+			await flush();
+			expect( window.SitePwaLock.allowExit ).toHaveBeenCalledTimes( 1 );
+		} finally {
+			delete window.SitePwaLock;
+		}
+	} );
+
 	it( 'copies the permalink and says so', async () => {
 		const writeText = vi.fn().mockResolvedValue( undefined );
 		init( box, { clipboard: { writeText } } );

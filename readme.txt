@@ -49,6 +49,8 @@ A browser keeps one service worker per site root, so the app's and another plugi
 
 The plugin stores no personal data. It keeps its settings, the revision of its URL rules and one cache of the latest GitHub release, all deleted with the plugin. In the browser, the app's service worker caches only the offline page and the app's stylesheet: never a page, so nothing a signed-in user sees stays on the device.
 
+The app lock keeps nothing on the server either: the phone keeps the credential it unlocks with (a passkey for the site, in the phone's password manager), and the app keeps in the browser only that credential's id and when it was last seen.
+
 == Changelog ==
 
 The full history of every release is in [CHANGELOG.md](https://github.com/rpgmem/site-pwa/blob/main/CHANGELOG.md).

@@ -4,7 +4,7 @@
  *
  * @package SitePwa
  *
- * @var array{name: string, icon: string, home: string, route: string, greeting: string, user_name: string, pending: int, back: string, navigation: list<array{id: string, label: string, url: string, icon: string, raised: bool, current: bool}>, content: string} $site_pwa Values built by Frame::render().
+ * @var array{name: string, icon: string, home: string, route: string, greeting: string, user_name: string, pending: int, back: string, navigation: list<array{id: string, label: string, url: string, icon: string, raised: bool, current: bool}>, content: string, lock: array{logout: string}} $site_pwa Values built by Frame::render().
  */
 
 use SitePwa\App\Icons;
@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </head>
 <body class="site-pwa-app <?php echo esc_attr( \SitePwa\App\Scheme::bodyClass() ); ?>">
 <?php wp_body_open(); ?>
+<?php echo \SitePwa\App\Frame::template( 'partial-lock', $site_pwa ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a template, built escaped. ?>
 <a class="site-pwa-skip" href="#site-pwa-main"><?php esc_html_e( 'Skip to content', 'site-pwa' ); ?></a>
 <?php if ( 'home' === $site_pwa['route'] ) : ?>
 <header class="site-pwa-header site-pwa-header-home">

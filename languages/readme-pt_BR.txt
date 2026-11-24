@@ -41,6 +41,8 @@ O navegador mantém um service worker por raiz de site, então o do app e o de o
 
 O plugin não guarda dados pessoais. Ele mantém as próprias configurações, a revisão das suas regras de URL e um cache do release mais recente no GitHub, tudo apagado junto com o plugin. No navegador, o service worker do app guarda em cache só a página offline e a folha de estilo do app: nunca uma página, então nada do que um usuário conectado vê fica no aparelho.
 
+A trava do app também não guarda nada no servidor: o celular guarda a credencial com que destrava (uma chave de acesso do site, no gerenciador de senhas do celular), e o app guarda no navegador apenas o id dessa credencial e quando foi visto por último.
+
 == Changelog ==
 
 O histórico completo de cada versão está no [CHANGELOG.md](https://github.com/rpgmem/site-pwa/blob/main/CHANGELOG.md).

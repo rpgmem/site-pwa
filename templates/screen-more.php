@@ -110,6 +110,15 @@ $site_pwa_groups = array(
 				</span>
 				<input type="checkbox" role="switch" data-site-pwa-dark>
 			</label>
+			<label class="site-pwa-switch">
+				<span>
+					<strong><?php esc_html_e( 'Lock with the phone\'s screen lock', 'site-pwa' ); ?></strong>
+					<span><?php esc_html_e( 'Fingerprint, face or the phone\'s PIN when the app opens, and when it comes back after a few seconds away.', 'site-pwa' ); ?></span>
+					<span data-site-pwa-lock="required-note" hidden><?php esc_html_e( 'Required for your account: it cannot be turned off.', 'site-pwa' ); ?></span>
+				</span>
+				<input type="checkbox" role="switch" data-site-pwa-lock-switch>
+			</label>
+			<p class="site-pwa-lock-status" role="status" aria-live="polite" data-site-pwa-lock="status"></p>
 		</div>
 	</section>
 

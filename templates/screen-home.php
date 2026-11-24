@@ -17,6 +17,17 @@ $site_pwa_home = $site_pwa['home_items'];
 ?>
 <h1 class="site-pwa-visually-hidden"><?php esc_html_e( 'Home', 'site-pwa' ); ?></h1>
 <div class="site-pwa-home">
+	<div class="site-pwa-banner site-pwa-tone-warning site-pwa-lock-nudge" data-site-pwa-lock-nudge data-mode="invite" hidden>
+		<?php echo Icons::svg( 'lock' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a fixed drawing from Icons::PATHS. ?>
+		<span>
+			<span class="site-pwa-lock-for-invite"><?php esc_html_e( 'Lock the app with your phone\'s screen lock, so nobody else opens it on this phone.', 'site-pwa' ); ?></span>
+			<span class="site-pwa-lock-for-nolock"><?php esc_html_e( 'This phone has no screen lock. That is highly unsafe: anyone holding the phone opens the app and everything in it. Turn the screen lock on in the phone\'s settings.', 'site-pwa' ); ?></span>
+			<button type="button" class="site-pwa-link-button site-pwa-lock-for-invite" data-site-pwa-lock-on><?php esc_html_e( 'Turn it on', 'site-pwa' ); ?></button>
+		</span>
+		<button type="button" class="site-pwa-dismiss" data-dismiss aria-label="<?php esc_attr_e( 'Dismiss', 'site-pwa' ); ?>">
+			<?php echo Icons::svg( 'close' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a fixed drawing from Icons::PATHS. ?>
+		</button>
+	</div>
 	<?php foreach ( $site_pwa_home['banners'] as $site_pwa_banner ) : ?>
 		<div class="site-pwa-banner site-pwa-tone-<?php echo esc_attr( $site_pwa_banner['tone'] ); ?>" role="status" data-banner="<?php echo esc_attr( $site_pwa_banner['id'] ); ?>">
 			<?php echo Icons::svg( 'success' === $site_pwa_banner['tone'] ? 'check' : 'bell' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a fixed drawing from Icons::PATHS. ?>
