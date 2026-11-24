@@ -66,11 +66,13 @@
 	}
 
 	/**
-	 * Which iPhone or iPad browser this is, or null off iOS: `safari`, `other`
-	 * (Chrome, Edge, Firefox... on iOS 16.4 or later, which add web apps to
-	 * the home screen through their own Share menu) or `old` (another browser
-	 * on an earlier iOS, where only Safari can). An iPad asking for the
-	 * desktop site reports no iOS version, and is taken as recent.
+	 * Which iPhone or iPad browser this is, or null off iOS: `safari` (Safari
+	 * on an iPhone, whose Share is at the bottom), `other` (Safari on an iPad,
+	 * whose Share is at the top beside the address, and Chrome, Edge,
+	 * Firefox... on iOS 16.4 or later, which add web apps to the home screen
+	 * through their own Share menu) or `old` (another browser on an earlier
+	 * iOS, where only Safari can). An iPad asking for the desktop site reports
+	 * no iOS version, and is taken as recent.
 	 *
 	 * @param {Navigator} nav The navigator.
 	 * @return {string|null} The kind, or null.
@@ -81,8 +83,9 @@
 		if ( ! ios ) {
 			return null;
 		}
+		var ipad = /iPad/.test( ua ) || ( nav.platform === 'MacIntel' && nav.maxTouchPoints > 1 );
 		if ( isIosSafari( nav ) ) {
-			return 'safari';
+			return ipad ? 'other' : 'safari';
 		}
 		var version = /OS (\d+)_(\d+)/.exec( ua );
 		if ( version ) {

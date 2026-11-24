@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-24 11:01+0000\n"
+"POT-Creation-Date: 2026-11-24 11:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -422,7 +422,7 @@ msgid "Choose Add to Home Screen. If it is not there, scroll the list or tap Mor
 msgstr ""
 
 #: templates/install.php:103
-msgid "On iPhone no browser installs with a button. In Safari, Share is at the bottom."
+msgid "On iPad and iPhone no browser installs with a button; these steps are the official way."
 msgstr ""
 
 #: templates/install.php:107

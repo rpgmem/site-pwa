@@ -34,4 +34,5 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **A changed colour or icon reaches an installed app** (#28). The manifest is served with `Cache-Control: no-cache`, so a host page cache cannot keep the old one; an installed app on Android takes the new colour of its system bar and its icon when the browser next refreshes it, which Settings → Site PWA now says.
 - **The settings screen no longer warns about a service worker that never reaches the app** (#30). The browser check lists only a worker on the app's own scope or on a narrower one covering the app's pages, so Free Form Certificate's `/terminal/` worker is left out.
 - **The bell always answers a tap** (#32). With nothing pending it was a plain icon and Home drew no Pending section, so a tap did nothing; it now always leads to Pending, which says "Nothing pending." when empty.
+- **Safari on an iPad gets the Share-at-the-top steps** (#36). The install page told it Share is at the bottom, which is only true on an iPhone.
 
