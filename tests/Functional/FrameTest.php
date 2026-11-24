@@ -74,7 +74,8 @@ final class FrameTest extends WP_UnitTestCase {
 		self::assertStringContainsString( 'class="site-pwa-bell"', $html );
 		self::assertStringContainsString( 'Notifications: nothing pending', $html );
 		self::assertStringNotContainsString( 'site-pwa-badge', $html, 'no badge without anything pending' );
-		self::assertMatchesRegularExpression( '#id="site-pwa-home-js" src="[^"]*assets/js/home(\.min)?\.js#', $html, 'the banner script loads on home' );
+		// Attribute order differs between WordPress releases (src first on 6.8).
+		self::assertMatchesRegularExpression( '#<script(?=[^>]*\sid="site-pwa-home-js")(?=[^>]*\ssrc="[^"]*assets/js/home(\.min)?\.js)[^>]*>#', $html, 'the banner script loads on home' );
 	}
 
 	public function test_the_greeting_follows_the_hour(): void {
