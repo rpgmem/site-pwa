@@ -71,12 +71,13 @@ final class Login {
 		wp_add_inline_style(
 			self::HANDLE,
 			sprintf(
-				':root{--site-pwa-logo:url("%1$s");--site-pwa-accent:%2$s;--site-pwa-on-accent:%3$s;--site-pwa-radius:%4$dpx;--site-pwa-control-radius:%5$dpx}',
+				':root{--site-pwa-logo:url("%1$s");--site-pwa-accent:%2$s;--site-pwa-on-accent:%3$s;--site-pwa-radius:%4$dpx;--site-pwa-control-radius:%5$dpx;--site-pwa-accent-text:%6$s}',
 				esc_url_raw( Manifest::touchIcon() ),
 				$look['accent'],
 				Identity::onAccent( $look['accent'] ),
 				$look['radius'],
-				$look['control_radius']
+				$look['control_radius'],
+				Identity::accentText( $look['accent'] )
 			)
 		);
 	}

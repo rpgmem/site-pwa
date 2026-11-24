@@ -93,7 +93,7 @@ final class Invite {
 			$look = Identity::current();
 			wp_add_inline_style(
 				self::BANNER_STYLE,
-				sprintf( '.site-pwa-site-banner{--site-pwa-accent:%1$s;--site-pwa-on-accent:%2$s}', $look['accent'], Identity::onAccent( $look['accent'] ) )
+				sprintf( '.site-pwa-site-banner{--site-pwa-accent:%1$s;--site-pwa-on-accent:%2$s;--site-pwa-accent-text:%3$s}', $look['accent'], Identity::onAccent( $look['accent'] ), Identity::accentText( $look['accent'] ) )
 			);
 		}
 	}

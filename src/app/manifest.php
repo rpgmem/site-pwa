@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SitePwa\App;
 
-use SitePwa\Plugin;
 use SitePwa\Settings;
 
 /**
@@ -42,51 +41,12 @@ final class Manifest {
 	}
 
 	/**
-	 * The app's icons: the site icon (Settings → General) when there is one,
-	 * otherwise the plugin's own, which also ships a maskable version.
-	 *
-	 * The site icon is not offered as maskable: nothing guarantees its
-	 * drawing stays inside the safe zone a launcher may crop to.
+	 * The app's icons, from the source chosen in the settings (AppIcon).
 	 *
 	 * @return list<array{src: string, sizes: string, type: string, purpose: string}>
 	 */
 	public static function icons(): array {
-		if ( has_site_icon() ) {
-			$icons = array();
-			foreach ( array( 192, 512 ) as $size ) {
-				$url     = (string) get_site_icon_url( $size );
-				$type    = wp_check_filetype( (string) wp_parse_url( $url, PHP_URL_PATH ) );
-				$icons[] = array(
-					'src'     => $url,
-					'sizes'   => $size . 'x' . $size,
-					'type'    => is_string( $type['type'] ) ? $type['type'] : 'image/png',
-					'purpose' => 'any',
-				);
-			}
-			return $icons;
-		}
-
-		$base = Plugin::url() . 'assets/img/brand/';
-		return array(
-			array(
-				'src'     => $base . 'icon-192.png',
-				'sizes'   => '192x192',
-				'type'    => 'image/png',
-				'purpose' => 'any',
-			),
-			array(
-				'src'     => $base . 'icon-512.png',
-				'sizes'   => '512x512',
-				'type'    => 'image/png',
-				'purpose' => 'any',
-			),
-			array(
-				'src'     => $base . 'icon-maskable-512.png',
-				'sizes'   => '512x512',
-				'type'    => 'image/png',
-				'purpose' => 'maskable',
-			),
-		);
+		return AppIcon::icons();
 	}
 
 	/**

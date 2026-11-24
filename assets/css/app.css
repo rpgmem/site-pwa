@@ -14,12 +14,15 @@
 	--site-pwa-border: #d9dee5;
 	--site-pwa-accent: #1d5e8c;
 	--site-pwa-on-accent: #fff;
+	/* The accent as text or an icon on light surfaces, and the Info tint:
+	   both derived from the configured accent by App\\Identity (#26). */
+	--site-pwa-accent-text: #1d5e8c;
 	--site-pwa-neutral-bg: #e9edf1;
 	--site-pwa-success-bg: #e3f3e8;
 	--site-pwa-success-text: #14532d;
 	--site-pwa-warning-bg: #fff4dc;
 	--site-pwa-warning-text: #7a4f00;
-	--site-pwa-info-bg: #e6eef8;
+	--site-pwa-info-bg: #e4ecf1;
 	--site-pwa-danger-text: #a4161a;
 	--site-pwa-shadow: 0 1px 2px rgb(20 30 50 / 8%);
 	--site-pwa-radius: 12px;
@@ -42,6 +45,7 @@
 	--site-pwa-border: #2f3b48;
 	--site-pwa-accent: #7cc3f0;
 	--site-pwa-on-accent: #0d1a24;
+	--site-pwa-accent-text: #7cc3f0;
 	--site-pwa-neutral-bg: #243140;
 	--site-pwa-success-bg: #133222;
 	--site-pwa-success-text: #a7e3bb;
@@ -62,6 +66,7 @@
 		--site-pwa-border: #2f3b48;
 		--site-pwa-accent: #7cc3f0;
 		--site-pwa-on-accent: #0d1a24;
+		--site-pwa-accent-text: #7cc3f0;
 		--site-pwa-neutral-bg: #243140;
 	--site-pwa-success-bg: #133222;
 	--site-pwa-success-text: #a7e3bb;
@@ -132,7 +137,7 @@
 	gap: 4px;
 	min-height: 44px;
 	padding-right: 8px;
-	color: var(--site-pwa-accent);
+	color: var(--site-pwa-accent-text);
 	font-weight: 600;
 	text-decoration: none;
 }
@@ -309,7 +314,7 @@
 .site-pwa-bell:focus-visible,
 .site-pwa-logo:focus-visible,
 .site-pwa-nav a:focus-visible {
-	outline: 2px solid var(--site-pwa-accent);
+	outline: 2px solid var(--site-pwa-accent-text);
 	outline-offset: 2px;
 }
 
@@ -333,7 +338,7 @@
 }
 
 .site-pwa-content a {
-	color: var(--site-pwa-accent);
+	color: var(--site-pwa-accent-text);
 }
 
 .site-pwa-content blockquote {
@@ -407,7 +412,7 @@
 }
 
 .site-pwa-list .site-pwa-icon:first-child {
-	color: var(--site-pwa-accent);
+	color: var(--site-pwa-accent-text);
 }
 
 .site-pwa-list .site-pwa-icon:last-child {
@@ -417,7 +422,7 @@
 }
 
 .site-pwa-list a:focus-visible {
-	outline: 2px solid var(--site-pwa-accent);
+	outline: 2px solid var(--site-pwa-accent-text);
 	outline-offset: -2px;
 }
 
@@ -450,7 +455,7 @@
 }
 
 .site-pwa-news a:focus-visible {
-	outline: 2px solid var(--site-pwa-accent);
+	outline: 2px solid var(--site-pwa-accent-text);
 	outline-offset: -2px;
 }
 
@@ -487,7 +492,7 @@
 }
 
 .site-pwa-more-link a {
-	color: var(--site-pwa-accent);
+	color: var(--site-pwa-accent-text);
 	font-weight: 600;
 }
 
@@ -527,7 +532,7 @@
 }
 
 .site-pwa-install-close:focus-visible {
-	outline: 2px solid var(--site-pwa-accent);
+	outline: 2px solid var(--site-pwa-accent-text);
 	outline-offset: 2px;
 }
 
@@ -563,7 +568,7 @@
 
 .site-pwa-steps .site-pwa-icon {
 	flex: 0 0 auto;
-	color: var(--site-pwa-accent);
+	color: var(--site-pwa-accent-text);
 }
 
 /* Bottom navigation. */
@@ -601,7 +606,7 @@
 }
 
 .site-pwa-nav a[aria-current="page"] {
-	color: var(--site-pwa-accent);
+	color: var(--site-pwa-accent-text);
 	font-weight: 600;
 }
 
@@ -665,7 +670,7 @@
 
 .site-pwa-tone-info {
 	background: var(--site-pwa-info-bg);
-	color: var(--site-pwa-accent);
+	color: var(--site-pwa-accent-text);
 }
 
 .site-pwa-dismiss {
@@ -717,7 +722,7 @@
 }
 
 .site-pwa-section-head a {
-	color: var(--site-pwa-accent);
+	color: var(--site-pwa-accent-text);
 	font-size: 13px;
 	font-weight: 500;
 }
@@ -776,7 +781,7 @@
 }
 
 .site-pwa-pending a:focus-visible {
-	outline: 2px solid var(--site-pwa-accent);
+	outline: 2px solid var(--site-pwa-accent-text);
 	outline-offset: -2px;
 }
 
@@ -875,7 +880,7 @@
 }
 
 .site-pwa-chips a[aria-current="page"] {
-	border-color: var(--site-pwa-accent);
+	border-color: var(--site-pwa-accent-text);
 	background: var(--site-pwa-accent);
 	color: var(--site-pwa-on-accent);
 	font-weight: 600;
@@ -885,7 +890,7 @@
 .site-pwa-story:focus-visible,
 .site-pwa-profile-link:focus-visible,
 .site-pwa-signout:focus-visible {
-	outline: 2px solid var(--site-pwa-accent);
+	outline: 2px solid var(--site-pwa-accent-text);
 	outline-offset: 2px;
 }
 
@@ -989,7 +994,7 @@
 
 .site-pwa-profile-link {
 	flex: 0 0 auto;
-	color: var(--site-pwa-accent);
+	color: var(--site-pwa-accent-text);
 	font-size: 14px;
 	font-weight: 600;
 	text-decoration: none;
@@ -1068,7 +1073,7 @@
 }
 
 .site-pwa-switch input:focus-visible {
-	outline: 2px solid var(--site-pwa-accent);
+	outline: 2px solid var(--site-pwa-accent-text);
 	outline-offset: 2px;
 }
 

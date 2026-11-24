@@ -122,7 +122,7 @@ final class IdentityTest extends WP_UnitTestCase {
 		PublicDesign::$stored = self::FFC_ON;
 
 		self::assertSame(
-			':root{--site-pwa-radius:20px;--site-pwa-control-radius:2px;--site-pwa-accent:#b32d2e;--site-pwa-on-accent:#ffffff}',
+			':root{--site-pwa-radius:20px;--site-pwa-control-radius:2px;--site-pwa-accent:#b32d2e;--site-pwa-on-accent:#ffffff;--site-pwa-accent-text:#b32d2e;--site-pwa-info-bg:#f6e6e6}',
 			Identity::css()
 		);
 	}
@@ -132,6 +132,34 @@ final class IdentityTest extends WP_UnitTestCase {
 		self::assertSame( '#000000', Identity::onAccent( '#f0c419' ) );
 		self::assertSame( '#000000', Identity::onAccent( '#ffffff' ) );
 		self::assertSame( '#ffffff', Identity::onAccent( '#000000' ) );
+	}
+
+	public function test_a_light_accent_is_darkened_where_it_is_text_and_kept_where_it_is_a_background(): void {
+		// A dark accent reads as it is.
+		self::assertSame( '#1d5e8c', Identity::accentText( '#1d5e8c' ) );
+		self::assertSame( '#c2185b', Identity::accentText( '#c2185b' ) );
+
+		foreach ( array( '#ffd54f', '#00e5ff', '#ffffff', '#7cb342', '#ff9800', '#e91e63', '#1d5e8c', '#000000' ) as $accent ) {
+			$text = Identity::accentText( $accent );
+			foreach ( array( '#ffffff', Identity::PAGE_BACKGROUND, Identity::tint( $accent ) ) as $ground ) {
+				self::assertGreaterThanOrEqual( 4.5, Identity::contrast( $text, $ground ), "$text on $ground for $accent" );
+			}
+		}
+		// The shade keeps the hue: yellow stays a gold, never a grey.
+		$gold = Identity::accentText( '#ffd54f' );
+		self::assertNotSame( '#ffd54f', $gold );
+		self::assertGreaterThan( hexdec( substr( $gold, 5, 2 ) ), hexdec( substr( $gold, 1, 2 ) ), 'red still above blue' );
+
+		self::assertSame( '#e4ecf1', Identity::tint( '#1d5e8c' ), 'the stylesheet default matches the default accent' );
+		self::assertSame( '#ffffff', Identity::tint( '#ffffff' ) );
+		self::assertEqualsWithDelta( 21.0, Identity::contrast( '#000000', '#ffffff' ), 0.01 );
+		self::assertEqualsWithDelta( 1.0, Identity::contrast( '#777777', '#777777' ), 0.001 );
+
+		$css = (string) file_get_contents( dirname( __DIR__, 2 ) . '/assets/css/app.css' );
+		self::assertStringContainsString( '--site-pwa-accent-text: #1d5e8c;', $css );
+		self::assertStringContainsString( '--site-pwa-info-bg: #e4ecf1;', $css );
+		self::assertDoesNotMatchRegularExpression( '/(?<![-\w])color: var\(--site-pwa-accent\)/', $css, 'the accent is never text on its own: it may be too light' );
+		self::assertStringNotContainsString( 'solid var(--site-pwa-accent)', $css, 'nor an outline' );
 	}
 
 	public function test_every_place_that_draws_the_app_takes_the_inherited_accent(): void {
@@ -146,7 +174,7 @@ final class IdentityTest extends WP_UnitTestCase {
 
 		Login::enqueue();
 		$inline = implode( '', wp_styles()->get_data( Login::HANDLE, 'after' ) );
-		self::assertStringContainsString( '--site-pwa-accent:#b32d2e;--site-pwa-on-accent:#ffffff;--site-pwa-radius:20px;--site-pwa-control-radius:2px', $inline );
+		self::assertStringContainsString( '--site-pwa-accent:#b32d2e;--site-pwa-on-accent:#ffffff;--site-pwa-radius:20px;--site-pwa-control-radius:2px;--site-pwa-accent-text:#b32d2e', $inline );
 	}
 
 	public function test_the_frame_carries_the_look_after_its_stylesheet_and_in_its_theme_colour(): void {

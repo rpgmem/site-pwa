@@ -24,7 +24,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **The app's frame follows the approved mockup** (#23). Home opens on an accent band with the site's logo, a greeting, the name and a bell; then a dismissible banner, the next commitment, the pending items and the news. Other plugins feed it through the `site_pwa_home` filter, and a `nav` screen can take the raised centre slot of the bar (`'slot' => 'center'`). Inner screens lose the brand bar for a large title, with a back arrow on a post and the account. "Your screens" leaves Home, since the bar and More already list them. Contract: `docs/screens.md`.
 - **More, News and the login follow the mockup** (#23). More opens on the person (initials, name, a line from `site_pwa_profile_line`, My details), groups screens into Services and Operator by the new `section` argument with a `subtitle` and a `badge` each, and ends with the site's pages, a dark theme kept on this device only, and Sign out. News offers its categories as chips (`?topic=`) and features the newest story. The login from the app names it, shows the tagline, keeps the lost-password link in the card and says "Keep me signed in on this device".
 
+- **The app's icon is a setting** (#26). Settings → Site PWA → Icon picks the site icon (the plugin's when the site has none), the plugin's icon, or a square PNG of at least 512 px from the Media Library, refused with a message otherwise; the app makes the 192 and 512 px sizes from it, and the manifest, the home-screen icon and the login logo follow.
+
 ### Fixed
 
 - **The app's screens have a title on a block theme** (#3). WordPress prints `<title>` only for a theme declaring `title-tag`, which a block theme does only inside its own template; the frame now prints it itself.
+- **A light accent stays readable** (#26). Where the accent is text or an icon on a light surface (the bar's current item, links, Back, the Info tone, focus outlines, the login's link, the site banner's outline), a darker shade of the same colour reaching 4.5:1 is used; where it is a background it stays exact. The Info tone's background is now a tint of the accent instead of a fixed blue.
 

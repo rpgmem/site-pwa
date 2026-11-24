@@ -15,7 +15,7 @@ namespace SitePwa;
  * The app is off until an administrator turns it on: a site that installs the
  * plugin gets no manifest and no service worker by surprise.
  *
- * @phpstan-type SettingsShape array{enabled: bool, replace_confirmed: bool, name: string, short_name: string, theme_color: string, background_color: string, identity_source: string, color_scheme: string, site_banner: bool, site_banner_guests: bool, news_categories: list<int>, app_pages: array<int, bool>}
+ * @phpstan-type SettingsShape array{enabled: bool, replace_confirmed: bool, name: string, short_name: string, theme_color: string, background_color: string, identity_source: string, color_scheme: string, icon_source: string, icon_id: int, site_banner: bool, site_banner_guests: bool, news_categories: list<int>, app_pages: array<int, bool>}
  */
 final class Settings {
 
@@ -46,6 +46,8 @@ final class Settings {
 			'background_color'   => '#ffffff',
 			'identity_source'    => App\Identity::OWN,
 			'color_scheme'       => App\Scheme::FFC,
+			'icon_source'        => App\AppIcon::SITE,
+			'icon_id'            => 0,
 			'site_banner'        => true,
 			'site_banner_guests' => true,
 			'news_categories'    => array(),
@@ -97,6 +99,8 @@ final class Settings {
 			'background_color'   => self::color( $input['background_color'] ?? '', $defaults['background_color'] ),
 			'identity_source'    => self::source( $input['identity_source'] ?? '' ),
 			'color_scheme'       => self::scheme( $input['color_scheme'] ?? '' ),
+			'icon_source'        => in_array( $input['icon_source'] ?? null, App\AppIcon::SOURCES, true ) ? (string) $input['icon_source'] : $defaults['icon_source'],
+			'icon_id'            => is_numeric( $input['icon_id'] ?? null ) ? max( 0, (int) $input['icon_id'] ) : 0,
 			// Absent means "never saved", so the default holds; the form posts
 			// a hidden 0 before the checkbox, so unticking it is a real false.
 			'site_banner'        => array_key_exists( 'site_banner', $input ) ? ! empty( $input['site_banner'] ) : $defaults['site_banner'],
