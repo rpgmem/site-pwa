@@ -30,4 +30,5 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - **The app's screens have a title on a block theme** (#3). WordPress prints `<title>` only for a theme declaring `title-tag`, which a block theme does only inside its own template; the frame now prints it itself.
 - **A light accent stays readable** (#26). Where the accent is text or an icon on a light surface (the bar's current item, links, Back, the Info tone, focus outlines, the login's link, the site banner's outline), a darker shade of the same colour reaching 4.5:1 is used; where it is a background it stays exact. The Info tone's background is now a tint of the accent instead of a fixed blue.
+- **The bell always answers a tap** (#32). With nothing pending it was a plain icon and Home drew no Pending section, so a tap did nothing; it now always leads to Pending, which says "Nothing pending." when empty.
 
