@@ -180,21 +180,44 @@ final class Frame {
 
 	/**
 	 * Where a screen's back arrow leads, or '' for a screen the navigation
-	 * reaches directly: a post goes back to the news, the account to More.
+	 * reaches directly (#44): the app screen the person came from, or Home
+	 * when they arrived from outside the app (a link, a notification, a
+	 * reload of a page reached that way).
 	 *
 	 * @param string $route The route being drawn.
 	 */
 	public static function back( string $route ): string {
-		switch ( $route ) {
-			case 'post':
-				return News::url();
-			case 'account':
-				return Routes::url( 'more' );
-			case 'news':
-				return Routes::url( 'home' );
-			default:
-				return '';
+		if ( ! in_array( $route, array( 'post', 'account', 'news' ), true ) ) {
+			return '';
 		}
+		$previous = self::previous();
+		return '' === $previous ? Routes::url( 'home' ) : $previous;
+	}
+
+	/**
+	 * The app screen the request came from, read from the referrer: on this
+	 * host, under the app's prefix, and not the page being drawn. Anything
+	 * else (another site, a site page outside the app, the login, none) is ''.
+	 */
+	private static function previous(): string {
+		$referer = wp_get_raw_referer();
+		if ( ! is_string( $referer ) || '' === $referer ) {
+			return '';
+		}
+		$from = wp_parse_url( $referer );
+		$home = wp_parse_url( home_url( '/' ) );
+		if ( ! is_array( $from ) || ! is_array( $home ) || strtolower( (string) ( $from['host'] ?? '' ) ) !== strtolower( (string) ( $home['host'] ?? '' ) ) ) {
+			return '';
+		}
+		$app  = Routes::scope() . Routes::prefix() . '/';
+		$path = (string) ( $from['path'] ?? '' );
+		if ( 0 !== strpos( trailingslashit( $path ), $app ) ) {
+			return '';
+		}
+		$current = add_query_arg( array() );
+		$here    = wp_parse_url( is_string( $current ) ? $current : '' );
+		$same    = is_array( $here ) && ( $here['path'] ?? '' ) === $path && ( $here['query'] ?? '' ) === ( $from['query'] ?? '' );
+		return $same ? '' : esc_url_raw( $referer );
 	}
 
 	/**

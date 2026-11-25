@@ -28,6 +28,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Links to site pages stay inside the app** (#40). Other plugins pass a URL through `site_pwa_app_url` to get the app address of a page the app can draw (`/app/?p=ID`), and the links inside a post drawn in the app are converted the same way; anything else comes back unchanged. A link to another site opens in the phone's own browser.
 - **A public install page** (#34) at `/app/install/`, in the app's look, with no login: one tap on Android (the browser's own dialog), the Share steps on iPhone in Safari, Chrome, Edge or Firefox, "Open the app" once installed, and Copy address elsewhere. The site banner now says Install and leads there; its sentence and the page's are settings.
 - **The app locks with the phone's screen lock** (#38). On opening and after 10 s away (not after the app's own exits), unlocked offline by fingerprint, face or PIN through a passkey. `site_pwa_lock_required` makes it mandatory; others are invited, and a phone without a lock is warned.
+- **The back arrow returns to the screen the person came from** (#44). A post, page, the account or News opened from an app screen goes back to it; arriving from outside the app, it leads to Home instead of a fixed screen.
 
 ### Fixed
 
