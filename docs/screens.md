@@ -100,6 +100,16 @@ add_filter( 'site_pwa_home', static function ( array $home, WP_User $user, int $
 
 `tone` is `info`, `success` or `warning`; anything else is `info`, and a banner without one is `success`. Text loses its markup, and an `icon` must be one of the app's. An action or a pending item leads either to a registered screen, named by `screen` (its id), or to a page in `url`, which must be on this site (absolute, or starting with `/`); a screen the user may not open counts as no link. An item that fails those is left out rather than drawn half-way. Nothing here is cached by the app or its service worker.
 
+## Links that stay in the app
+
+A link to a page of the site leaves the app: the page is outside the app's scope, so the phone opens it in a browser tab, inside the theme. Pass the URL through `site_pwa_app_url` and a page the app can draw comes back as its app address (`/app/?p=ID`). Anything else comes back unchanged: another site, an admin address, an archive, a post the user may not read, and a page with a page template or a page-builder layout, which opens on the site (`site_pwa_opens_in_app`). Without Site PWA the filter is not hooked and returns the URL as given, so no check is needed.
+
+```php
+$url = apply_filters( 'site_pwa_app_url', get_permalink( $page_id ) );
+```
+
+Inside a post or page the app draws, its links to other such pages are converted the same way, so following one keeps the app's frame. A link to another site goes the other way: on any app screen it opens in the phone's own browser, in a new tab, instead of a browser tab inside the app.
+
 ## Requiring the app lock
 
 The app locks with the phone's own screen lock (fingerprint, face or the phone's PIN) when it opens and when it comes back after ten seconds out of sight; it is optional, and More and Home invite the person to turn it on. A consumer makes it mandatory for an account with the `site_pwa_lock_required` filter: the app then shows nothing but the lock screen until it is turned on.
