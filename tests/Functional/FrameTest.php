@@ -88,15 +88,53 @@ final class FrameTest extends WP_UnitTestCase {
 	}
 
 	public function test_an_inner_screen_has_a_back_arrow_only_where_it_was_reached_from_another(): void {
+		$_SERVER['HTTP_REFERER'] = Routes::url( 'more' );
 		$account = $this->screen( 'account' );
 		self::assertStringContainsString( '<a class="site-pwa-back" href="' . esc_url( Routes::url( 'more' ) ) . '">', $account );
 
 		$more = $this->screen( 'more' );
 		self::assertStringNotContainsString( 'site-pwa-back', $more, 'More is in the bar' );
 		self::assertStringNotContainsString( '<header', $more );
-		self::assertSame( \SitePwa\App\News::url(), Frame::back( 'post' ) );
-		self::assertSame( Routes::url( 'home' ), Frame::back( 'news' ), 'News is reached from Home' );
 		self::assertSame( '', Frame::back( 'more' ) );
+		self::assertSame( '', Frame::back( 'home' ) );
+		self::assertSame( '', Frame::back( 'screen' ) );
+		unset( $_SERVER['HTTP_REFERER'] );
+	}
+
+	public function test_the_back_arrow_returns_to_the_app_screen_the_person_came_from(): void {
+		$from = add_query_arg( 'topic', 'eventos', \SitePwa\App\News::url() );
+		$_SERVER['HTTP_REFERER'] = $from;
+		self::assertSame( $from, Frame::back( 'post' ), 'News with its category' );
+
+		$_SERVER['HTTP_REFERER'] = home_url( '/app/s/agenda/' );
+		self::assertSame( home_url( '/app/s/agenda/' ), Frame::back( 'post' ), 'a screen another plugin registered' );
+		unset( $_SERVER['HTTP_REFERER'] );
+	}
+
+	public function test_without_an_app_screen_behind_it_the_back_arrow_leads_home(): void {
+		$home = Routes::url( 'home' );
+		$page = self::factory()->post->create( array( 'post_type' => 'page' ) );
+		foreach ( array(
+			'none'          => null,
+			'another site'  => 'https://other.test/app/',
+			'a site page'   => (string) get_permalink( $page ),
+			'the login'     => wp_login_url(),
+			'not a URL'     => 'http://',
+		) as $case => $referer ) {
+			if ( null === $referer ) {
+				unset( $_SERVER['HTTP_REFERER'] );
+			} else {
+				$_SERVER['HTTP_REFERER'] = $referer;
+			}
+			self::assertSame( $home, Frame::back( 'post' ), $case );
+			self::assertSame( $home, Frame::back( 'account' ), $case );
+		}
+
+		// The page itself (a reload keeps its own address as the referrer).
+		$this->go_to( add_query_arg( 'p', 7, Routes::url( 'home' ) ) );
+		$_SERVER['HTTP_REFERER'] = add_query_arg( 'p', 7, Routes::url( 'home' ) );
+		self::assertSame( $home, Frame::back( 'post' ), 'itself' );
+		unset( $_SERVER['HTTP_REFERER'] );
 	}
 
 	public function test_the_account_screen_shows_the_users_own_details_and_the_way_out(): void {
