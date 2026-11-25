@@ -250,4 +250,71 @@ final class ContentTest extends WP_UnitTestCase {
 	public function test_the_request_filter_is_wired(): void {
 		self::assertSame( 10, has_filter( 'request', array( Content::class, 'request' ) ) );
 	}
+
+	// ---- Links that stay in the app (#40) ---------------------------------
+
+	public function test_the_app_url_filter_maps_a_page_that_opens_in_the_app(): void {
+		$page = self::factory()->post->create( array( 'post_type' => 'page', 'post_title' => 'Agendar' ) );
+
+		self::assertSame( Content::url( $page ), apply_filters( 'site_pwa_app_url', get_permalink( $page ) ) );
+		self::assertSame( Content::url( $page ) . '#hoje', apply_filters( 'site_pwa_app_url', get_permalink( $page ) . '#hoje' ), 'The fragment survives.' );
+	}
+
+	public function test_the_app_url_filter_returns_anything_else_unchanged(): void {
+		$templated = self::factory()->post->create( array( 'post_type' => 'page' ) );
+		update_post_meta( $templated, '_wp_page_template', 'full-width.php' );
+		$draft = self::factory()->post->create( array( 'post_type' => 'page', 'post_status' => 'draft' ) );
+
+		foreach ( array(
+			'https://other.test/elsewhere/',
+			admin_url( 'profile.php' ),
+			home_url( '/no-such-page/' ),
+			get_permalink( $templated ),
+			add_query_arg( 'page_id', $draft, home_url( '/' ) ),
+			'#top',
+			'',
+		) as $url ) {
+			self::assertSame( $url, apply_filters( 'site_pwa_app_url', $url ), $url );
+		}
+		self::assertSame( array( 1 ), apply_filters( 'site_pwa_app_url', array( 1 ) ), 'A value that is not a URL comes back as given.' );
+	}
+
+	public function test_a_root_relative_link_is_read_as_this_site(): void {
+		$page = self::factory()->post->create( array( 'post_type' => 'page', 'post_name' => 'agendar' ) );
+		$this->set_permalink_structure( '/%postname%/' );
+
+		self::assertSame( Content::url( $page ), Content::appUrl( '/agendar/' ) );
+		self::assertSame( '//other.test/agendar/', Content::appUrl( '//other.test/agendar/' ), 'A protocol-relative link may name another host.' );
+	}
+
+	public function test_links_in_a_post_drawn_in_the_app_stay_in_the_app(): void {
+		$this->signIn();
+		$target = self::factory()->post->create( array( 'post_type' => 'page', 'post_title' => 'Calendário' ) );
+		$link   = (string) get_permalink( $target );
+		$id     = $this->post(
+			array(
+				'post_content' => sprintf(
+					'<a href="%1$s">Agendar</a> <a href="%1$s" download>PDF</a> <a href="https://other.test/">Fora</a>',
+					esc_url( $link )
+				),
+			)
+		);
+
+		$body = $this->open( $id )['body'];
+
+		self::assertStringContainsString( 'href="' . esc_url( Content::url( $target ) ) . '">Agendar', $body );
+		self::assertStringContainsString( 'href="' . esc_url( $link ) . '" download', $body, 'A download link is left alone.' );
+		self::assertStringContainsString( 'href="https://other.test/"', $body );
+	}
+
+	public function test_content_outside_the_app_is_untouched(): void {
+		$target = self::factory()->post->create( array( 'post_type' => 'page' ) );
+		$html   = '<a href="' . esc_url( (string) get_permalink( $target ) ) . '">x</a>';
+
+		$this->go_to( home_url( '/' ) );
+
+		self::assertSame( $html, Content::keepLinksInApp( $html ) );
+		self::assertSame( 'plain text', Content::keepLinksInApp( 'plain text' ) );
+		self::assertNull( Content::keepLinksInApp( null ) );
+	}
 }
