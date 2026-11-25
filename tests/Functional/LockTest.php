@@ -57,7 +57,12 @@ final class LockTest extends WP_UnitTestCase {
 		self::assertSame( 16, strlen( Lock::key( $this->user ) ) );
 		self::assertSame( Lock::key( $this->user ), Lock::key( $this->user ) );
 		self::assertNotSame( Lock::key( $this->user ), Lock::key( $other ) );
-		self::assertStringNotContainsString( (string) $this->user->ID, Lock::key( $this->user ), 'the key does not show the account id' );
+		// The key must not let anyone read the account back: a salted hash,
+		// not the id and not a plain hash of it. Asserting that the id's
+		// digits are absent measured chance instead (id 57 sits in
+		// "ccfbd157d768fdc2"), and failed the same way on every run.
+		self::assertMatchesRegularExpression( '/^[0-9a-f]{16}$/', Lock::key( $this->user ) );
+		self::assertNotSame( substr( md5( 'site-pwa-lock|' . $this->user->ID ), 0, 16 ), Lock::key( $this->user ), 'salted, not a plain hash of the id' );
 	}
 
 	public function test_the_device_gets_its_key_the_grace_and_the_way_out_and_nothing_personal(): void {
