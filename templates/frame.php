@@ -33,11 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<span><?php echo esc_html( $site_pwa['greeting'] ); ?></span>
 		<strong><?php echo esc_html( $site_pwa['user_name'] ); ?></strong>
 	</p>
-	<?php if ( $site_pwa['pending'] > 0 ) : ?>
 	<a class="site-pwa-bell" href="#site-pwa-pending-heading">
-	<?php else : ?>
-	<span class="site-pwa-bell">
-	<?php endif; ?>
 		<?php echo Icons::svg( 'bell' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a fixed drawing from Icons::PATHS. ?>
 		<span class="site-pwa-visually-hidden">
 			<?php
@@ -51,10 +47,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</span>
 	<?php if ( $site_pwa['pending'] > 0 ) : ?>
 		<span class="site-pwa-badge" aria-hidden="true"></span>
-	</a>
-	<?php else : ?>
-	</span>
 	<?php endif; ?>
+	</a>
 </header>
 <?php elseif ( '' !== $site_pwa['back'] ) : ?>
 <header class="site-pwa-header">

@@ -15,7 +15,7 @@ namespace SitePwa;
  * The app is off until an administrator turns it on: a site that installs the
  * plugin gets no manifest and no service worker by surprise.
  *
- * @phpstan-type SettingsShape array{enabled: bool, replace_confirmed: bool, name: string, short_name: string, theme_color: string, background_color: string, identity_source: string, color_scheme: string, icon_source: string, icon_id: int, site_banner: bool, site_banner_guests: bool, news_categories: list<int>, app_pages: array<int, bool>}
+ * @phpstan-type SettingsShape array{enabled: bool, replace_confirmed: bool, name: string, short_name: string, theme_color: string, background_color: string, identity_source: string, color_scheme: string, icon_source: string, icon_id: int, site_banner: bool, site_banner_guests: bool, banner_text: string, install_text: string, news_categories: list<int>, app_pages: array<int, bool>}
  */
 final class Settings {
 
@@ -29,6 +29,16 @@ final class Settings {
 	 * beyond about twelve characters.
 	 */
 	public const SHORT_NAME_MAX = 12;
+
+	/**
+	 * The longest sentence the site banner carries beside the name.
+	 */
+	public const BANNER_TEXT_MAX = 40;
+
+	/**
+	 * The longest sentence under the name on the install page.
+	 */
+	public const INSTALL_TEXT_MAX = 120;
 
 	/**
 	 * The defaults, the site's name included.
@@ -50,6 +60,8 @@ final class Settings {
 			'icon_id'            => 0,
 			'site_banner'        => true,
 			'site_banner_guests' => true,
+			'banner_text'        => '',
+			'install_text'       => '',
 			'news_categories'    => array(),
 			'app_pages'          => array(),
 		);
@@ -105,9 +117,40 @@ final class Settings {
 			// a hidden 0 before the checkbox, so unticking it is a real false.
 			'site_banner'        => array_key_exists( 'site_banner', $input ) ? ! empty( $input['site_banner'] ) : $defaults['site_banner'],
 			'site_banner_guests' => array_key_exists( 'site_banner_guests', $input ) ? ! empty( $input['site_banner_guests'] ) : $defaults['site_banner_guests'],
+			// Empty keeps the translated default, read through bannerText()
+			// and installText(), so a site in another language gets its own.
+			'banner_text'        => self::sentence( $input['banner_text'] ?? '', self::BANNER_TEXT_MAX ),
+			'install_text'       => self::sentence( $input['install_text'] ?? '', self::INSTALL_TEXT_MAX ),
 			'news_categories'    => self::ids( $input['news_categories'] ?? array() ),
 			'app_pages'          => self::pages( $input['app_pages'] ?? array() ),
 		);
+	}
+
+	/**
+	 * The sentence beside the name on the site banner.
+	 */
+	public static function bannerText(): string {
+		$text = self::get()['banner_text'];
+		return '' === $text ? __( 'Faster in the app.', 'site-pwa' ) : $text;
+	}
+
+	/**
+	 * The sentence under the name on the install page.
+	 */
+	public static function installText(): string {
+		$text = self::get()['install_text'];
+		return '' === $text ? __( 'Open it faster, straight from your home screen.', 'site-pwa' ) : $text;
+	}
+
+	/**
+	 * One line of plain text, cut to a length in characters.
+	 *
+	 * @param mixed $value Raw value.
+	 * @param int   $max   Longest length kept.
+	 */
+	private static function sentence( $value, int $max ): string {
+		$text = sanitize_text_field( is_string( $value ) ? $value : '' );
+		return mb_substr( $text, 0, $max );
 	}
 
 	/**

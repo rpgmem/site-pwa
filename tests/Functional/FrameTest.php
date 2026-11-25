@@ -71,7 +71,7 @@ final class FrameTest extends WP_UnitTestCase {
 
 		self::assertStringContainsString( '<header class="site-pwa-header site-pwa-header-home">', $html );
 		self::assertMatchesRegularExpression( '#<p class="site-pwa-hello">\s*<span>Good (morning|afternoon|evening),</span>\s*<strong>Maria Souza</strong>#', $html );
-		self::assertStringContainsString( 'class="site-pwa-bell"', $html );
+		self::assertStringContainsString( '<a class="site-pwa-bell" href="#site-pwa-pending-heading">', $html, 'the bell leads to Pending even with nothing pending' );
 		self::assertStringContainsString( 'Notifications: nothing pending', $html );
 		self::assertStringNotContainsString( 'site-pwa-badge', $html, 'no badge without anything pending' );
 		// Attribute order differs between WordPress releases (src first on 6.8).

@@ -73,11 +73,14 @@ final class AppRoutesTest extends WP_UnitTestCase {
 		$manifest = json_decode( $response['body'], true );
 
 		self::assertSame( 'application/manifest+json; charset=utf-8', $response['headers']['Content-Type'] );
+		self::assertSame( 'no-cache', $response['headers']['Cache-Control'], 'a changed colour or icon must reach an installed app (#28)' );
 		self::assertSame( 'Escola Viva', $manifest['name'] );
 		self::assertSame( 'Viva', $manifest['short_name'] );
 		self::assertSame( home_url( '/app/' ), $manifest['start_url'] );
 		self::assertSame( home_url( '/app/' ), $manifest['scope'] );
 		self::assertSame( 'standalone', $manifest['display'] );
+		self::assertSame( array( array( 'platform' => 'webapp', 'url' => Routes::url( 'manifest' ) ) ), $manifest['related_applications'], 'names itself, so the install page can tell it is installed (#34)' );
+		self::assertArrayNotHasKey( 'prefer_related_applications', $manifest );
 	}
 
 	public function test_without_a_site_icon_the_plugin_icons_ship_including_a_maskable_one(): void {
@@ -138,6 +141,43 @@ final class AppRoutesTest extends WP_UnitTestCase {
 		self::assertStringContainsString( esc_url( Routes::url( 'home' ) ), $body );
 	}
 
+	public function test_the_install_page_is_public_and_in_the_apps_look(): void {
+		update_option( Settings::OPTION, array( 'enabled' => true, 'name' => 'Escola Viva', 'short_name' => 'Viva', 'theme_color' => '#841d8c', 'install_text' => 'Tudo da escola no celular.' ) );
+		wp_set_current_user( 0 );
+
+		$response = Routes::response( 'install' );
+		$body     = $response['body'];
+
+		self::assertSame( 200, $response['status'], 'no login: the visitor sees the app before signing in (#34)' );
+		self::assertSame( 'no-cache', $response['headers']['Cache-Control'] );
+		self::assertStringContainsString( '<title>' . "\n" . 'Install Escola Viva</title>', $body );
+		self::assertStringContainsString( '<h1>Escola Viva</h1>', $body );
+		self::assertStringContainsString( '<p>Tudo da escola no celular.</p>', $body );
+		self::assertStringContainsString( '<link rel="manifest" href="' . esc_url( Routes::url( 'manifest' ) ) . '">', $body );
+		self::assertStringContainsString( '<meta name="theme-color" content="#841d8c">', $body );
+		self::assertStringContainsString( 'data-install-page data-home="' . esc_url( Routes::url( 'home' ) ) . '"', $body );
+		foreach ( array( 'wait', 'prompt', 'ios-safari', 'ios-other', 'ios-old', 'installed', 'unsupported' ) as $state ) {
+			self::assertMatchesRegularExpression( '#data-state="' . $state . '" hidden>#', $body, "every state starts hidden: {$state}" );
+		}
+		self::assertStringContainsString( 'value="' . esc_url( Routes::url( 'install' ) ) . '"', $body );
+		self::assertMatchesRegularExpression( '#<script src="[^"]*assets/js/install(\.min)?\.js\?ver=[^"]*" defer></script>#', $body );
+		self::assertStringNotContainsString( '_wpnonce', $body );
+	}
+
+	public function test_the_install_page_reads_the_same_for_a_signed_in_user(): void {
+		$this->turnOn();
+		wp_set_current_user( self::factory()->user->create( array( 'display_name' => 'Maria Souza' ) ) );
+
+		$body = Routes::response( 'install' )['body'];
+
+		self::assertStringNotContainsString( 'Maria Souza', $body, 'the page holds no personal data' );
+		self::assertStringContainsString( 'Open it faster, straight from your home screen.', $body, 'an empty sentence reads the default' );
+	}
+
+	public function test_the_install_page_is_off_with_the_app(): void {
+		self::assertNull( Routes::response( 'install' ) );
+	}
+
 	public function test_an_unknown_route_answers_nothing(): void {
 		$this->turnOn();
 		self::assertNull( Routes::response( 'wp-admin' ) );
@@ -158,6 +198,8 @@ final class AppRoutesTest extends WP_UnitTestCase {
 		self::assertSame( 'index.php?site_pwa_route=sw', $rules['^site\-pwa\-sw\.js$'] );
 		self::assertSame( 'index.php?site_pwa_route=manifest', $rules['^app/manifest\.webmanifest$'] );
 		self::assertSame( 'index.php?site_pwa_route=offline', $rules['^app/offline/?$'] );
+		self::assertSame( 'index.php?site_pwa_route=install', $rules['^app/install/?$'] );
+		self::assertSame( home_url( '/app/install/' ), Routes::url( 'install' ) );
 		self::assertSame( 'index.php?site_pwa_route=home', $rules['^app/?$'] );
 	}
 

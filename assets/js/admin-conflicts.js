@@ -1,16 +1,32 @@
 /**
  * Settings → Site PWA: lists the service workers this browser already holds
- * for the site that are not the app's, and then requires the replacement to
- * be confirmed before the app can be turned on.
+ * for the site that would compete with the app's, and then requires the
+ * replacement to be confirmed before the app can be turned on.
+ *
+ * A worker competes only when its scope reaches the app: the same scope as
+ * the app's worker (the browser keeps one per scope, so one replaces the
+ * other), or a narrower one that still covers the app's pages (the longest
+ * matching scope controls a page). A worker scoped to another part of the
+ * site, such as `/terminal/`, controls none of the app's pages and is left
+ * out of the list.
  */
 ( function () {
 	'use strict';
 
+	function competes( registration, scope, app ) {
+		if ( ! scope || ! app || typeof registration.scope !== 'string' ) {
+			return true;
+		}
+		return registration.scope.indexOf( scope ) === 0 && app.indexOf( registration.scope ) === 0;
+	}
+
 	function check( box, registrations ) {
 		var own = box.getAttribute( 'data-own' );
+		var scope = box.getAttribute( 'data-scope' );
+		var app = box.getAttribute( 'data-app' );
 		var foreign = registrations.filter( function ( registration ) {
 			var worker = registration.active || registration.waiting || registration.installing;
-			return worker && worker.scriptURL.split( '?' )[ 0 ] !== own;
+			return worker && worker.scriptURL.split( '?' )[ 0 ] !== own && competes( registration, scope, app );
 		} );
 		if ( foreign.length === 0 ) {
 			return 0;
