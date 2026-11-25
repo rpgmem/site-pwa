@@ -26,6 +26,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - **The app's icon is a setting** (#26). Settings → Site PWA → Icon picks the site icon (the plugin's when the site has none), the plugin's icon, or a square PNG of at least 512 px from the Media Library, refused with a message otherwise; the app makes the 192 and 512 px sizes from it, and the manifest, the home-screen icon and the login logo follow.
 - **A public install page** (#34) at `/app/install/`, in the app's look, with no login: one tap on Android (the browser's own dialog), the Share steps on iPhone in Safari, Chrome, Edge or Firefox, "Open the app" once installed, and Copy address elsewhere. The site banner now says Install and leads there; its sentence and the page's are settings.
+- **The app locks with the phone's screen lock** (#38). On opening and after 10 s away (not after the app's own exits), unlocked offline by fingerprint, face or PIN through a passkey. `site_pwa_lock_required` makes it mandatory; others are invited, and a phone without a lock is warned.
 
 ### Fixed
 

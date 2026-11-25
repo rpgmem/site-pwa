@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-24 11:50+0000\n"
+"POT-Creation-Date: 2026-11-25 00:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,7 +56,7 @@ msgstr ""
 msgid "The app is on at"
 msgstr ""
 
-#: src/admin/settings-page.php:180 templates/frame.php:63
+#: src/admin/settings-page.php:180 templates/frame.php:64
 #: templates/site-banner.php:17
 msgid "App"
 msgstr ""
@@ -145,8 +145,8 @@ msgstr ""
 msgid "Public, no login. The banner leads here, and the address can go on a poster, a QR code or an e-mail. It uses the app's name, icon and colours, and shows the install button, the iPhone steps or \"Open the app\" for each browser."
 msgstr ""
 
-#: src/admin/settings-page.php:252 src/app/frame.php:369
-#: templates/screen-home.php:92 templates/screen-more.php:35
+#: src/admin/settings-page.php:252 src/app/frame.php:374
+#: templates/screen-home.php:103 templates/screen-more.php:35
 #: templates/screen-news.php:22
 msgid "News"
 msgstr ""
@@ -159,7 +159,7 @@ msgstr ""
 msgid "The app shows the posts of the ticked categories, newest first: the three latest on the home screen and all of them under More → News. With none ticked, it shows every post."
 msgstr ""
 
-#: src/admin/settings-page.php:270 templates/screen-home.php:110
+#: src/admin/settings-page.php:270 templates/screen-home.php:121
 msgid "Pages"
 msgstr ""
 
@@ -281,19 +281,19 @@ msgstr ""
 msgid "The custom icon must be at least %2$d px wide; this image is %1$d px."
 msgstr ""
 
-#: src/app/frame.php:365 templates/screen-account.php:16
+#: src/app/frame.php:370 templates/screen-account.php:16
 msgid "Account"
 msgstr ""
 
-#: src/app/frame.php:367 src/app/navigation.php:51 templates/screen-more.php:47
+#: src/app/frame.php:372 src/app/navigation.php:51 templates/screen-more.php:47
 msgid "More"
 msgstr ""
 
-#: src/app/frame.php:372 src/app/frame.php:375
+#: src/app/frame.php:377 src/app/frame.php:380
 msgid "Not available"
 msgstr ""
 
-#: src/app/frame.php:377 src/app/navigation.php:41 templates/screen-home.php:18
+#: src/app/frame.php:382 src/app/navigation.php:41 templates/screen-home.php:18
 msgid "Home"
 msgstr ""
 
@@ -311,6 +311,38 @@ msgstr ""
 
 #: src/app/identity.php:60
 msgid "Free Form Certificate: Public Design"
+msgstr ""
+
+#: src/app/lock.php:90
+msgid "Confirm with your phone's screen lock…"
+msgstr ""
+
+#: src/app/lock.php:91
+msgid "Not unlocked. Try again, or sign out and in again."
+msgstr ""
+
+#: src/app/lock.php:92
+msgid "Confirm with your phone's screen lock to turn the lock on…"
+msgstr ""
+
+#: src/app/lock.php:93
+msgid "The app now locks with your phone's screen lock."
+msgstr ""
+
+#: src/app/lock.php:94
+msgid "The lock was not turned on. Try again."
+msgstr ""
+
+#: src/app/lock.php:95
+msgid "This phone has no screen lock. That is highly unsafe: anyone holding the phone opens the app and everything in it. Turn the screen lock on in the phone's settings, then come back."
+msgstr ""
+
+#: src/app/lock.php:96
+msgid "The app no longer locks on this phone."
+msgstr ""
+
+#: src/app/lock.php:97 templates/screen-more.php:117
+msgid "Required for your account: it cannot be turned off."
 msgstr ""
 
 #: src/app/login.php:134
@@ -341,21 +373,21 @@ msgstr ""
 msgid "Update package integrity check (SHA-256) failed. Installation aborted."
 msgstr ""
 
-#: templates/frame.php:25
+#: templates/frame.php:26
 msgid "Skip to content"
 msgstr ""
 
-#: templates/frame.php:41
+#: templates/frame.php:42
 msgid "Notifications: nothing pending"
 msgstr ""
 
 #. translators: %d: number of pending items
-#: templates/frame.php:43
+#: templates/frame.php:44
 #, php-format
 msgid "Notifications, pending items: %d"
 msgstr ""
 
-#: templates/frame.php:56
+#: templates/frame.php:57
 msgid "Back"
 msgstr ""
 
@@ -385,7 +417,7 @@ msgstr ""
 msgid "Checking this browser…"
 msgstr ""
 
-#: templates/install.php:62 templates/screen-home.php:132
+#: templates/install.php:62 templates/screen-home.php:143
 msgid "Install the app"
 msgstr ""
 
@@ -401,7 +433,7 @@ msgstr ""
 msgid "Tap Share in Safari’s toolbar, at the bottom."
 msgstr ""
 
-#: templates/install.php:77 templates/screen-home.php:151
+#: templates/install.php:77 templates/screen-home.php:162
 msgid "Choose Add to Home Screen."
 msgstr ""
 
@@ -463,8 +495,40 @@ msgstr ""
 msgid "This page needs the internet. Check the connection and try again."
 msgstr ""
 
-#: templates/offline.php:26
+#: templates/offline.php:26 templates/partial-lock.php:33
 msgid "Try again"
+msgstr ""
+
+#: templates/partial-lock.php:24
+msgid "The app is locked"
+msgstr ""
+
+#: templates/partial-lock.php:25
+msgid "Lock the app with your phone's screen lock"
+msgstr ""
+
+#: templates/partial-lock.php:26
+msgid "This phone has no screen lock"
+msgstr ""
+
+#: templates/partial-lock.php:28
+msgid "Unlock with your fingerprint, face or the phone's PIN."
+msgstr ""
+
+#: templates/partial-lock.php:29
+msgid "Required for your account. The phone asks for its own screen lock once, then every time the app opens or comes back after a few seconds away. No new password."
+msgstr ""
+
+#: templates/partial-lock.php:31
+msgid "Unlock"
+msgstr ""
+
+#: templates/partial-lock.php:32
+msgid "Turn the lock on"
+msgstr ""
+
+#: templates/partial-lock.php:34
+msgid "Sign out and in again"
 msgstr ""
 
 #: templates/screen-account.php:18
@@ -479,55 +543,67 @@ msgstr ""
 msgid "Edit profile"
 msgstr ""
 
-#: templates/screen-account.php:27 templates/screen-more.php:118
+#: templates/screen-account.php:27 templates/screen-more.php:127
 msgid "Sign out"
 msgstr ""
 
-#: templates/screen-home.php:33
+#: templates/screen-home.php:23
+msgid "Lock the app with your phone's screen lock, so nobody else opens it on this phone."
+msgstr ""
+
+#: templates/screen-home.php:24
+msgid "This phone has no screen lock. That is highly unsafe: anyone holding the phone opens the app and everything in it. Turn the screen lock on in the phone's settings."
+msgstr ""
+
+#: templates/screen-home.php:25
+msgid "Turn it on"
+msgstr ""
+
+#: templates/screen-home.php:27 templates/screen-home.php:44
 msgid "Dismiss"
 msgstr ""
 
-#: templates/screen-home.php:41
+#: templates/screen-home.php:52
 msgid "Next commitment"
 msgstr ""
 
-#: templates/screen-home.php:64
+#: templates/screen-home.php:75
 msgid "Pending"
 msgstr ""
 
-#: templates/screen-home.php:68
+#: templates/screen-home.php:79
 msgid "Nothing pending."
 msgstr ""
 
-#: templates/screen-home.php:94
+#: templates/screen-home.php:105
 msgid "See all"
 msgstr ""
 
-#: templates/screen-home.php:99 templates/screen-news.php:32
+#: templates/screen-home.php:110 templates/screen-news.php:32
 msgid "No news yet."
 msgstr ""
 
-#: templates/screen-home.php:112
+#: templates/screen-home.php:123
 msgid "No pages yet. The pages chosen in the app's settings appear here."
 msgstr ""
 
-#: templates/screen-home.php:129 templates/site-banner.php:24
+#: templates/screen-home.php:140 templates/site-banner.php:24
 msgid "Not now"
 msgstr ""
 
-#: templates/screen-home.php:134
+#: templates/screen-home.php:145
 msgid "Open it from your home screen, full screen, like any other app."
 msgstr ""
 
-#: templates/screen-home.php:138
+#: templates/screen-home.php:149
 msgid "Install app"
 msgstr ""
 
-#: templates/screen-home.php:143
+#: templates/screen-home.php:154
 msgid "Add it to your home screen to open it like any other app:"
 msgstr ""
 
-#: templates/screen-home.php:147
+#: templates/screen-home.php:158
 msgid "Tap Share in Safari’s toolbar."
 msgstr ""
 
@@ -573,6 +649,14 @@ msgstr ""
 
 #: templates/screen-more.php:109
 msgid "On this device only. Off follows the site."
+msgstr ""
+
+#: templates/screen-more.php:115
+msgid "Lock with the phone's screen lock"
+msgstr ""
+
+#: templates/screen-more.php:116
+msgid "Fingerprint, face or the phone's PIN when the app opens, and when it comes back after a few seconds away."
 msgstr ""
 
 #: templates/screen-news.php:24

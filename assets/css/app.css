@@ -1109,6 +1109,108 @@
 	height: 20px;
 }
 
+/* The app lock (#38): a locked document shows nothing but the lock screen.
+   The head check adds the class before the first paint. */
+.site-pwa-locked .site-pwa-skip,
+.site-pwa-locked .site-pwa-header,
+.site-pwa-locked .site-pwa-main,
+.site-pwa-locked .site-pwa-nav {
+	visibility: hidden;
+}
+
+.site-pwa-lock {
+	position: fixed;
+	z-index: 1000;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	padding: max(24px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom));
+	inset: 0;
+	background: var(--site-pwa-bg);
+	color: var(--site-pwa-text);
+}
+
+.site-pwa-locked .site-pwa-lock {
+	display: flex;
+}
+
+.site-pwa-lock-card {
+	display: grid;
+	max-width: 360px;
+	gap: 14px;
+	justify-items: center;
+	text-align: center;
+}
+
+.site-pwa-lock-card img {
+	border-radius: 14px;
+}
+
+.site-pwa-lock-icon .site-pwa-icon {
+	width: 32px;
+	height: 32px;
+	color: var(--site-pwa-accent-text);
+}
+
+.site-pwa-lock-card h1 {
+	margin: 0;
+	font-size: 22px;
+	line-height: 1.25;
+	text-wrap: balance;
+}
+
+.site-pwa-lock-card p {
+	margin: 0;
+}
+
+.site-pwa-lock-status:empty {
+	display: none;
+}
+
+.site-pwa-lock-signout {
+	color: var(--site-pwa-accent-text);
+	font-size: 14px;
+}
+
+/* Each part shows in its mode only. */
+.site-pwa-lock[data-mode="unlock"] .site-pwa-lock-for-setup,
+.site-pwa-lock[data-mode="unlock"] .site-pwa-lock-for-nolock,
+.site-pwa-lock[data-mode="setup"] .site-pwa-lock-for-unlock,
+.site-pwa-lock[data-mode="setup"] .site-pwa-lock-for-nolock,
+.site-pwa-lock[data-mode="nolock"] .site-pwa-lock-for-unlock,
+.site-pwa-lock[data-mode="nolock"] .site-pwa-lock-for-setup,
+.site-pwa-lock-nudge[data-mode="invite"] .site-pwa-lock-for-nolock,
+.site-pwa-lock-nudge[data-mode="nolock"] .site-pwa-lock-for-invite {
+	display: none;
+}
+
+.site-pwa-lock-nudge > span {
+	display: grid;
+	gap: 6px;
+	justify-items: start;
+}
+
+.site-pwa-link-button {
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	font-weight: 600;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.site-pwa-link-button:focus-visible {
+	outline: 2px solid currentcolor;
+	outline-offset: 2px;
+}
+
+.site-pwa-preferences .site-pwa-lock-status {
+	margin: 0;
+	padding: 0 14px 12px;
+	font-size: 14px;
+}
 /* The public install page, /app/install/ (#34): its own document, in the
    app's look. The accent band carries the icon, the name and the sentence;
    one card below shows the state assets/js/install.js picks. */
