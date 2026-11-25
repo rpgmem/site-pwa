@@ -108,7 +108,7 @@ A link to a page of the site leaves the app: the page is outside the app's scope
 $url = apply_filters( 'site_pwa_app_url', get_permalink( $page_id ) );
 ```
 
-Inside a post or page the app draws, its links to other such pages are converted the same way, so following one keeps the app's frame.
+Inside a post or page the app draws, its links to other such pages are converted the same way, so following one keeps the app's frame. A link to another site goes the other way: on any app screen it opens in the phone's own browser, in a new tab, instead of a browser tab inside the app.
 
 ## Requiring the app lock
 
