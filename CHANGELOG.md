@@ -25,6 +25,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **More, News and the login follow the mockup** (#23). More opens on the person (initials, name, a line from `site_pwa_profile_line`, My details), groups screens into Services and Operator by the new `section` argument with a `subtitle` and a `badge` each, and ends with the site's pages, a dark theme kept on this device only, and Sign out. News offers its categories as chips (`?topic=`) and features the newest story. The login from the app names it, shows the tagline, keeps the lost-password link in the card and says "Keep me signed in on this device".
 
 - **The app's icon is a setting** (#26). Settings → Site PWA → Icon picks the site icon (the plugin's when the site has none), the plugin's icon, or a square PNG of at least 512 px from the Media Library, refused with a message otherwise; the app makes the 192 and 512 px sizes from it, and the manifest, the home-screen icon and the login logo follow.
+- **Links to site pages stay inside the app** (#40). Other plugins pass a URL through `site_pwa_app_url` to get the app address of a page the app can draw (`/app/?p=ID`), and the links inside a post drawn in the app are converted the same way; anything else comes back unchanged.
 
 ### Fixed
 

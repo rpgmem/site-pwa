@@ -41,6 +41,78 @@ final class Content {
 		// what makes the main query load the post, so `is_singular()` and the
 		// global `$post` are right when plugins enqueue their assets.
 		add_filter( 'request', array( self::class, 'request' ) );
+		// The contract other plugins call without depending on Site PWA:
+		// with the app absent the filter is a no-op (#40).
+		add_filter( 'site_pwa_app_url', array( self::class, 'appUrl' ) );
+		// After shortcodes (11), so the links a shortcode prints are read too.
+		add_filter( 'the_content', array( self::class, 'keepLinksInApp' ), 99 );
+	}
+
+	/**
+	 * The app URL of a same-site URL whose post opens in the app, or the URL
+	 * unchanged: another site, an admin or REST address, an archive, a post
+	 * the user may not read, one that opens on the site.
+	 *
+	 * @param mixed $url A URL.
+	 * @return mixed The app URL, or what was given.
+	 */
+	public static function appUrl( $url ) {
+		if ( ! is_string( $url ) || '' === $url ) {
+			return $url;
+		}
+		// A root-relative link names this site.
+		$absolute = 0 === strpos( $url, '/' ) && 0 !== strpos( $url, '//' ) ? home_url( $url ) : $url;
+		$parts    = wp_parse_url( $absolute );
+		$home     = wp_parse_url( home_url( '/' ) );
+		if ( ! is_array( $parts ) || ! is_array( $home ) || ! isset( $parts['host'] ) || strtolower( $parts['host'] ) !== strtolower( (string) ( $home['host'] ?? '' ) ) ) {
+			return $url;
+		}
+		$id = url_to_postid( $absolute );
+		if ( $id <= 0 ) {
+			return $url;
+		}
+		$post = get_post( $id );
+		if ( ! $post instanceof WP_Post || ! is_post_type_viewable( $post->post_type ) || ! self::readable( $post ) || ! self::opensInApp( $post ) ) {
+			return $url;
+		}
+		$app = self::url( $id );
+		return isset( $parts['fragment'] ) ? $app . '#' . $parts['fragment'] : $app;
+	}
+
+	/**
+	 * In a post drawn in the app, point each link to another post that opens
+	 * in the app at its app URL, so following it keeps the app's frame instead
+	 * of leaving for the theme (#40). Outside the app the content is untouched.
+	 *
+	 * @param mixed $html The post content.
+	 * @return mixed
+	 */
+	public static function keepLinksInApp( $html ) {
+		if ( ! is_string( $html ) || '' === $html || 'post' !== Routes::current() || false === stripos( $html, '<a' ) ) {
+			return $html;
+		}
+		$tags = new \WP_HTML_Tag_Processor( $html );
+		while ( $tags->next_tag( array( 'tag_name' => 'a' ) ) ) {
+			$href = $tags->get_attribute( 'href' );
+			if ( ! is_string( $href ) || null !== $tags->get_attribute( 'download' ) ) {
+				continue;
+			}
+			$app = self::appUrl( $href );
+			if ( $app !== $href ) {
+				$tags->set_attribute( 'href', $app );
+			}
+		}
+		return $tags->get_updated_html();
+	}
+
+	/**
+	 * Whether the current user may read a post.
+	 *
+	 * @param WP_Post $post The post.
+	 */
+	private static function readable( WP_Post $post ): bool {
+		return 'publish' === $post->post_status
+			|| ( 'private' === $post->post_status && current_user_can( 'read_post', $post->ID ) );
 	}
 
 	/**
@@ -88,9 +160,7 @@ final class Content {
 		if ( ! is_post_type_viewable( $post->post_type ) ) {
 			return null;
 		}
-		$readable = 'publish' === $post->post_status
-			|| ( 'private' === $post->post_status && current_user_can( 'read_post', $post->ID ) );
-		return $readable ? $post : null;
+		return self::readable( $post ) ? $post : null;
 	}
 
 	/**
