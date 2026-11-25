@@ -1108,3 +1108,222 @@
 	width: 20px;
 	height: 20px;
 }
+
+/* The app lock (#38): a locked document shows nothing but the lock screen.
+   The head check adds the class before the first paint. */
+.site-pwa-locked .site-pwa-skip,
+.site-pwa-locked .site-pwa-header,
+.site-pwa-locked .site-pwa-main,
+.site-pwa-locked .site-pwa-nav {
+	visibility: hidden;
+}
+
+.site-pwa-lock {
+	position: fixed;
+	z-index: 1000;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	padding: max(24px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom));
+	inset: 0;
+	background: var(--site-pwa-bg);
+	color: var(--site-pwa-text);
+}
+
+.site-pwa-locked .site-pwa-lock {
+	display: flex;
+}
+
+.site-pwa-lock-card {
+	display: grid;
+	max-width: 360px;
+	gap: 14px;
+	justify-items: center;
+	text-align: center;
+}
+
+.site-pwa-lock-card img {
+	border-radius: 14px;
+}
+
+.site-pwa-lock-icon .site-pwa-icon {
+	width: 32px;
+	height: 32px;
+	color: var(--site-pwa-accent-text);
+}
+
+.site-pwa-lock-card h1 {
+	margin: 0;
+	font-size: 22px;
+	line-height: 1.25;
+	text-wrap: balance;
+}
+
+.site-pwa-lock-card p {
+	margin: 0;
+}
+
+.site-pwa-lock-status:empty {
+	display: none;
+}
+
+.site-pwa-lock-signout {
+	color: var(--site-pwa-accent-text);
+	font-size: 14px;
+}
+
+/* Each part shows in its mode only. */
+.site-pwa-lock[data-mode="unlock"] .site-pwa-lock-for-setup,
+.site-pwa-lock[data-mode="unlock"] .site-pwa-lock-for-nolock,
+.site-pwa-lock[data-mode="setup"] .site-pwa-lock-for-unlock,
+.site-pwa-lock[data-mode="setup"] .site-pwa-lock-for-nolock,
+.site-pwa-lock[data-mode="nolock"] .site-pwa-lock-for-unlock,
+.site-pwa-lock[data-mode="nolock"] .site-pwa-lock-for-setup,
+.site-pwa-lock-nudge[data-mode="invite"] .site-pwa-lock-for-nolock,
+.site-pwa-lock-nudge[data-mode="nolock"] .site-pwa-lock-for-invite {
+	display: none;
+}
+
+.site-pwa-lock-nudge > span {
+	display: grid;
+	gap: 6px;
+	justify-items: start;
+}
+
+.site-pwa-link-button {
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	font-weight: 600;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.site-pwa-link-button:focus-visible {
+	outline: 2px solid currentcolor;
+	outline-offset: 2px;
+}
+
+.site-pwa-preferences .site-pwa-lock-status {
+	margin: 0;
+	padding: 0 14px 12px;
+	font-size: 14px;
+}
+/* The public install page, /app/install/ (#34): its own document, in the
+   app's look. The accent band carries the icon, the name and the sentence;
+   one card below shows the state assets/js/install.js picks. */
+.site-pwa-install-doc {
+	margin: 0;
+	min-height: 100vh;
+	background: var(--site-pwa-bg);
+	color: var(--site-pwa-text);
+	font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.site-pwa-install-page {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+.site-pwa-install-hero {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+	padding: max(48px, calc(24px + env(safe-area-inset-top))) max(24px, env(safe-area-inset-right)) 36px max(24px, env(safe-area-inset-left));
+	background: var(--site-pwa-accent);
+	color: var(--site-pwa-on-accent);
+	text-align: center;
+}
+
+.site-pwa-install-hero img {
+	width: 96px;
+	height: 96px;
+	border-radius: 24px;
+	box-shadow: 0 6px 20px rgb(0 0 0 / 18%);
+}
+
+.site-pwa-install-hero h1 {
+	margin: 0;
+	font-size: 28px;
+	line-height: 1.2;
+}
+
+.site-pwa-install-hero p {
+	max-width: 320px;
+	margin: 0;
+}
+
+.site-pwa-install-body {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	width: 100%;
+	max-width: 480px;
+	box-sizing: border-box;
+	margin: 0 auto;
+	padding: 24px max(20px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+}
+
+.site-pwa-install-body .site-pwa-card[hidden] {
+	display: none;
+}
+
+.site-pwa-install-wide {
+	width: 100%;
+	min-height: 52px;
+	box-sizing: border-box;
+	font-size: 17px;
+	text-decoration: none;
+}
+
+.site-pwa-install-body .site-pwa-steps {
+	margin-bottom: 16px;
+}
+
+.site-pwa-install-done {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--site-pwa-success-text);
+	font-weight: 600;
+}
+
+.site-pwa-install-done .site-pwa-icon {
+	width: 22px;
+	height: 22px;
+}
+
+.site-pwa-install-address input {
+	width: 100%;
+	min-height: 44px;
+	box-sizing: border-box;
+	padding: 0 12px;
+	border: 1px solid var(--site-pwa-border);
+	border-radius: var(--site-pwa-control-radius);
+	background: var(--site-pwa-bg);
+	color: var(--site-pwa-text);
+	font: inherit;
+	font-size: 14px;
+}
+
+.site-pwa-install-continue {
+	margin: 0;
+	text-align: center;
+}
+
+.site-pwa-install-continue a {
+	display: inline-block;
+	padding: 12px;
+	color: var(--site-pwa-accent-text);
+	font-weight: 600;
+}
+
+.site-pwa-install-continue a:focus-visible,
+.site-pwa-install-address input:focus-visible {
+	outline: 2px solid var(--site-pwa-accent-text);
+	outline-offset: 2px;
+}

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-24 03:45+0000\n"
+"POT-Creation-Date: 2026-11-25 00:10+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -55,7 +55,7 @@ msgstr "Ligar o app o substitui. Confirme a substituição abaixo para continuar
 msgid "The app is on at"
 msgstr "O app está ligado em"
 
-#: src/admin/settings-page.php:180 templates/frame.php:69
+#: src/admin/settings-page.php:180 templates/frame.php:64
 #: templates/site-banner.php:17
 msgid "App"
 msgstr "App"
@@ -84,139 +84,179 @@ msgstr "Só é necessário quando outro plugin registra um worker na raiz do sit
 msgid "Name"
 msgstr "Nome"
 
-#: src/admin/settings-page.php:204
+#: src/admin/settings-page.php:203
+msgid "The app's name: at the top of the install page, in the browser's install dialog and on the offline page."
+msgstr "O nome do app: no alto da página de instalação, na janela de instalação do navegador e na página sem conexão."
+
+#: src/admin/settings-page.php:207
 msgid "Short name"
 msgstr "Nome curto"
 
-#: src/admin/settings-page.php:207
-msgid "Shown under the icon on a home screen."
-msgstr "Aparece sob o ícone na tela inicial."
+#: src/admin/settings-page.php:210
+msgid "Shown under the icon on a home screen, and on the site banner."
+msgstr "Aparece sob o ícone na tela inicial e no banner do site."
 
-#: src/admin/settings-page.php:211
+#: src/admin/settings-page.php:214
 msgid "Invite to the app"
 msgstr "Convite para o app"
 
-#: src/admin/settings-page.php:216
-msgid "Show a \"Use the app\" banner on the site's pages"
-msgstr "Mostrar a faixa \"Use o app\" nas páginas do site"
+#: src/admin/settings-page.php:219
+msgid "Show an \"Install\" banner on the site's pages"
+msgstr "Mostrar um banner \"Instalar\" nas páginas do site"
 
-#: src/admin/settings-page.php:222
+#: src/admin/settings-page.php:225
 msgid "Also show it to visitors who are not signed in"
 msgstr "Mostrar também para visitantes não conectados"
 
-#: src/admin/settings-page.php:224
-msgid "Only on phones and tablets, and never inside the installed app. A visitor who is not signed in goes to the login first, then into the app. A visitor who closes the banner does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
-msgstr "Só em celulares e tablets, e nunca dentro do app instalado. Um visitante não conectado passa primeiro pelo login e depois entra no app. Quem fecha a faixa não a vê de novo naquele aparelho por 30 dias. A tela inicial do app convida para instalá-lo da mesma forma."
+#: src/admin/settings-page.php:227
+msgid "Only on phones and tablets, and never inside the installed app. The banner leads to the install page, which needs no login; the app asks for it once installed. A visitor who closes the banner does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
+msgstr "Só em celulares e tablets, e nunca dentro do app instalado. O banner leva à página de instalação, que não exige login; o app pede o login depois de instalado. Quem fecha o banner não o vê de novo naquele aparelho por 30 dias. A tela inicial do app convida a instalar do mesmo jeito."
 
-#: src/admin/settings-page.php:228 src/app/frame.php:369
-#: templates/screen-home.php:87 templates/screen-more.php:35
+#: src/admin/settings-page.php:231
+msgid "Banner sentence"
+msgstr "Frase do banner"
+
+#: src/admin/settings-page.php:233 src/settings.php:134
+msgid "Faster in the app."
+msgstr "Mais rápido no app."
+
+#: src/admin/settings-page.php:234
+msgid "Beside the name on the site banner. Empty uses the default text."
+msgstr "Ao lado do nome, no banner do site. Vazio usa o texto padrão."
+
+#: src/admin/settings-page.php:238
+msgid "Install page sentence"
+msgstr "Frase da página de instalação"
+
+#: src/admin/settings-page.php:240 src/settings.php:142
+msgid "Open it faster, straight from your home screen."
+msgstr "Acesse mais rápido, direto da tela inicial do celular."
+
+#: src/admin/settings-page.php:241
+msgid "Under the name at the top of the install page. Empty uses the default text."
+msgstr "Sob o nome, no alto da página de instalação. Vazio usa o texto padrão."
+
+#: src/admin/settings-page.php:245
+msgid "Install page"
+msgstr "Página de instalação"
+
+#: src/admin/settings-page.php:248
+msgid "Public, no login. The banner leads here, and the address can go on a poster, a QR code or an e-mail. It uses the app's name, icon and colours, and shows the install button, the iPhone steps or \"Open the app\" for each browser."
+msgstr "Pública, sem login. O banner leva para cá, e o endereço pode ir em cartaz, QR code ou e-mail. Usa o nome, o ícone e as cores do app, e mostra o botão de instalar, os passos do iPhone ou \"Abrir o app\" conforme o navegador."
+
+#: src/admin/settings-page.php:252 src/app/frame.php:374
+#: templates/screen-home.php:103 templates/screen-more.php:35
 #: templates/screen-news.php:22
 msgid "News"
 msgstr "Notícias"
 
-#: src/admin/settings-page.php:231
+#: src/admin/settings-page.php:255
 msgid "Categories shown in the app"
 msgstr "Categorias mostradas no app"
 
-#: src/admin/settings-page.php:242
+#: src/admin/settings-page.php:266
 msgid "The app shows the posts of the ticked categories, newest first: the three latest on the home screen and all of them under More → News. With none ticked, it shows every post."
 msgstr "O app mostra os posts das categorias marcadas, do mais recente ao mais antigo: os três últimos na tela inicial e todos em Mais → Notícias. Sem nenhuma marcada, mostra todos os posts."
 
-#: src/admin/settings-page.php:246 templates/screen-home.php:105
+#: src/admin/settings-page.php:270 templates/screen-home.php:121
 msgid "Pages"
 msgstr "Páginas"
 
-#: src/admin/settings-page.php:251
+#: src/admin/settings-page.php:275
 msgid "The site has no published pages."
 msgstr "O site não tem páginas publicadas."
 
-#: src/admin/settings-page.php:256
+#: src/admin/settings-page.php:280
 msgid "In the app"
 msgstr "No app"
 
-#: src/admin/settings-page.php:257 templates/screen-post.php:43
+#: src/admin/settings-page.php:281 templates/screen-post.php:43
 msgid "Open on the site"
 msgstr "Abrir no site"
 
-#: src/admin/settings-page.php:265
+#: src/admin/settings-page.php:289
 msgid "(no title)"
 msgstr "(sem título)"
 
 #. translators: %s: a page title
-#: src/admin/settings-page.php:280
+#: src/admin/settings-page.php:304
 #, php-format
 msgid "Open %s on the site"
 msgstr "Abrir %s no site"
 
-#: src/admin/settings-page.php:290
+#: src/admin/settings-page.php:314
 msgid "The ticked pages appear under More and on the home screen. A page opens inside the app, unless it is marked to open on the site, as a page built with a page builder should be."
 msgstr "As páginas marcadas aparecem em Mais e na tela inicial. Uma página abre dentro do app, a menos que esteja marcada para abrir no site, como deve ser uma página feita com um construtor de páginas."
 
-#: src/admin/settings-page.php:294
+#: src/admin/settings-page.php:318
 msgid "Look"
 msgstr "Aparência"
 
-#: src/admin/settings-page.php:297
+#: src/admin/settings-page.php:321
 msgid "These settings"
 msgstr "Estas configurações"
 
-#: src/admin/settings-page.php:302
+#: src/admin/settings-page.php:326
 msgid "Where the app takes its accent colour and its corners from. While the chosen design is switched off, or its plugin is inactive, the app uses the theme colour below."
 msgstr "De onde o app tira a cor de destaque e os cantos. Enquanto o design escolhido estiver desligado, ou o plugin dele estiver inativo, o app usa a cor do tema abaixo."
 
 #. translators: 1: a colour such as #1d5e8c, 2: corner radius of cards in px, 3: corner radius of buttons in px
-#: src/admin/settings-page.php:309
+#: src/admin/settings-page.php:333
 #, php-format
 msgid "In use now: accent %1$s, cards %2$d px, buttons %3$d px."
 msgstr "Em uso agora: destaque %1$s, cartões %2$d px, botões %3$d px."
 
+#: src/admin/settings-page.php:339
+msgid "A phone that already installed the app picks up a new colour, name or icon when its browser next refreshes the installed app, which can take a few days; reinstalling the app applies it at once."
+msgstr "Um celular que já instalou o app recebe uma nova cor, nome ou ícone quando o navegador atualiza o app instalado, o que pode levar alguns dias; reinstalar o app aplica na hora."
+
 #. translators: %s: a colour such as #8a6d00
-#: src/admin/settings-page.php:320
+#: src/admin/settings-page.php:345
 #, php-format
 msgid "The accent is too light to read as text, so links and icons use the darker %s."
 msgstr "A cor de destaque é clara demais para ser lida como texto, então links e ícones usam o tom mais escuro %s."
 
-#: src/admin/settings-page.php:330
+#: src/admin/settings-page.php:355
 msgid "Light or dark"
 msgstr "Claro ou escuro"
 
-#: src/admin/settings-page.php:340
+#: src/admin/settings-page.php:365
 msgid "Whether the app draws light, dark, or follows the device. Following Free Form Certificate's Dark Mode keeps the app's header and menu in the same theme as the screens it draws inside them. While the chosen plugin is inactive, the app follows the device."
 msgstr "Se o app fica claro, escuro ou segue o aparelho. Seguir o Modo Escuro do Free Form Certificate mantém o cabeçalho e o menu do app no mesmo tema das telas que ele mostra dentro deles. Enquanto o plugin escolhido estiver inativo, o app segue o aparelho."
 
-#: src/admin/settings-page.php:344
+#: src/admin/settings-page.php:369
 msgid "Theme colour"
 msgstr "Cor do tema"
 
-#: src/admin/settings-page.php:348
+#: src/admin/settings-page.php:373
 msgid "Background colour"
 msgstr "Cor de fundo"
 
-#: src/admin/settings-page.php:351
+#: src/admin/settings-page.php:376
 msgid "Shown while the app opens."
 msgstr "Aparece enquanto o app abre."
 
-#: src/admin/settings-page.php:355 src/admin/settings-page.php:366
+#: src/admin/settings-page.php:380 src/admin/settings-page.php:391
 msgid "Icon"
 msgstr "Ícone"
 
-#: src/admin/settings-page.php:359
+#: src/admin/settings-page.php:384
 msgid "The site icon"
 msgstr "O ícone do site"
 
-#: src/admin/settings-page.php:360
+#: src/admin/settings-page.php:385
 msgid "The plugin's icon"
 msgstr "O ícone do plugin"
 
-#: src/admin/settings-page.php:361
+#: src/admin/settings-page.php:386
 msgid "A custom icon"
 msgstr "Um ícone personalizado"
 
-#: src/admin/settings-page.php:377
+#: src/admin/settings-page.php:402
 msgid "Choose image"
 msgstr "Escolher imagem"
 
-#: src/admin/settings-page.php:379
+#: src/admin/settings-page.php:404
 msgid "The site icon is the one set in Settings → General; without one, the app uses the plugin's icon. A custom icon is a square PNG of at least 512 px from the Media Library; the app makes the sizes it needs from it. Only the plugin's icon is shaped for launchers that crop icons into circles or squircles."
 msgstr "O ícone do site é o definido em Configurações → Geral; sem ele, o app usa o ícone do plugin. Um ícone personalizado é um PNG quadrado de pelo menos 512 px da Biblioteca de Mídia; o app gera a partir dele os tamanhos de que precisa. Só o ícone do plugin é desenhado para os lançadores que recortam ícones em círculos ou formas arredondadas."
 
@@ -240,19 +280,19 @@ msgstr "O ícone personalizado precisa ser quadrado; esta imagem tem %1$d × %2$
 msgid "The custom icon must be at least %2$d px wide; this image is %1$d px."
 msgstr "O ícone personalizado precisa ter pelo menos %2$d px de lado; esta imagem tem %1$d px."
 
-#: src/app/frame.php:365 templates/screen-account.php:16
+#: src/app/frame.php:370 templates/screen-account.php:16
 msgid "Account"
 msgstr "Conta"
 
-#: src/app/frame.php:367 src/app/navigation.php:51 templates/screen-more.php:47
+#: src/app/frame.php:372 src/app/navigation.php:51 templates/screen-more.php:47
 msgid "More"
 msgstr "Mais"
 
-#: src/app/frame.php:372 src/app/frame.php:375
+#: src/app/frame.php:377 src/app/frame.php:380
 msgid "Not available"
 msgstr "Indisponível"
 
-#: src/app/frame.php:377 src/app/navigation.php:41 templates/screen-home.php:18
+#: src/app/frame.php:382 src/app/navigation.php:41 templates/screen-home.php:18
 msgid "Home"
 msgstr "Início"
 
@@ -271,6 +311,38 @@ msgstr "Boa noite,"
 #: src/app/identity.php:60
 msgid "Free Form Certificate: Public Design"
 msgstr "Free Form Certificate: Design Público"
+
+#: src/app/lock.php:90
+msgid "Confirm with your phone's screen lock…"
+msgstr "Confirme com o bloqueio de tela do celular…"
+
+#: src/app/lock.php:91
+msgid "Not unlocked. Try again, or sign out and in again."
+msgstr "Não destravou. Tente de novo, ou saia e entre de novo."
+
+#: src/app/lock.php:92
+msgid "Confirm with your phone's screen lock to turn the lock on…"
+msgstr "Confirme com o bloqueio de tela do celular para ativar a trava…"
+
+#: src/app/lock.php:93
+msgid "The app now locks with your phone's screen lock."
+msgstr "O app agora trava com o bloqueio de tela do celular."
+
+#: src/app/lock.php:94
+msgid "The lock was not turned on. Try again."
+msgstr "A trava não foi ativada. Tente de novo."
+
+#: src/app/lock.php:95
+msgid "This phone has no screen lock. That is highly unsafe: anyone holding the phone opens the app and everything in it. Turn the screen lock on in the phone's settings, then come back."
+msgstr "Este celular não tem bloqueio de tela. Isso é altamente inseguro: qualquer pessoa com o celular na mão abre o app e tudo o que há nele. Ative o bloqueio de tela nas configurações do celular e volte aqui."
+
+#: src/app/lock.php:96
+msgid "The app no longer locks on this phone."
+msgstr "O app não trava mais neste celular."
+
+#: src/app/lock.php:97 templates/screen-more.php:117
+msgid "Required for your account: it cannot be turned off."
+msgstr "Obrigatória para a sua conta: não pode ser desativada."
 
 #: src/app/login.php:134
 msgid "Forgot your password?"
@@ -300,23 +372,119 @@ msgstr "Free Form Certificate: Modo Escuro"
 msgid "Update package integrity check (SHA-256) failed. Installation aborted."
 msgstr "A verificação de integridade do pacote de atualização (SHA-256) falhou. Instalação cancelada."
 
-#: templates/frame.php:25
+#: templates/frame.php:26
 msgid "Skip to content"
 msgstr "Pular para o conteúdo"
 
-#: templates/frame.php:45
+#: templates/frame.php:42
 msgid "Notifications: nothing pending"
 msgstr "Notificações: nada pendente"
 
 #. translators: %d: number of pending items
-#: templates/frame.php:47
+#: templates/frame.php:44
 #, php-format
 msgid "Notifications, pending items: %d"
 msgstr "Notificações, itens pendentes: %d"
 
-#: templates/frame.php:62
+#: templates/frame.php:57
 msgid "Back"
 msgstr "Voltar"
+
+#: templates/install.php:23
+msgid "Address of this page"
+msgstr "Endereço desta página"
+
+#: templates/install.php:28
+msgid "Copy address"
+msgstr "Copiar endereço"
+
+#. translators: %s: the app's name
+#: templates/install.php:41
+#, php-format
+msgid "Install %s"
+msgstr "Instalar %s"
+
+#: templates/install.php:46
+msgid "Address copied."
+msgstr "Endereço copiado."
+
+#: templates/install.php:46
+msgid "Select the address and copy it."
+msgstr "Selecione o endereço e copie."
+
+#: templates/install.php:55
+msgid "Checking this browser…"
+msgstr "Verificando este navegador…"
+
+#: templates/install.php:62 templates/screen-home.php:143
+msgid "Install the app"
+msgstr "Instale o app"
+
+#: templates/install.php:65
+msgid "The icon goes to your home screen. You sign in inside the app, once."
+msgstr "O ícone vai para a tela inicial. O login é feito dentro do app, uma vez."
+
+#: templates/install.php:69 templates/install.php:88
+msgid "Add it to your home screen in three taps"
+msgstr "Adicione à tela de início em 3 toques"
+
+#: templates/install.php:73
+msgid "Tap Share in Safari’s toolbar, at the bottom."
+msgstr "Toque em Compartilhar na barra do Safari, embaixo."
+
+#: templates/install.php:77 templates/screen-home.php:162
+msgid "Choose Add to Home Screen."
+msgstr "Escolha Adicionar à Tela de Início."
+
+#: templates/install.php:81 templates/install.php:100
+msgid "Tap Add."
+msgstr "Toque em Adicionar."
+
+#: templates/install.php:84
+msgid "On iPhone no browser installs with a button; these steps are the official way."
+msgstr "No iPhone nenhum navegador instala com um botão; estes passos são o caminho oficial."
+
+#: templates/install.php:92
+msgid "Tap Share, at the top, beside the address."
+msgstr "Toque em Compartilhar, no alto, ao lado do endereço."
+
+#: templates/install.php:96
+msgid "Choose Add to Home Screen. If it is not there, scroll the list or tap More."
+msgstr "Escolha Adicionar à Tela de Início. Se não aparecer, role a lista ou toque em Mais."
+
+#: templates/install.php:103
+msgid "On iPad and iPhone no browser installs with a button; these steps are the official way."
+msgstr "No iPad e no iPhone nenhum navegador instala com um botão; estes passos são o caminho oficial."
+
+#: templates/install.php:107
+msgid "On this version of iOS only Safari adds apps to the home screen. Open this address in Safari to install."
+msgstr "Nesta versão do iOS só o Safari adiciona apps à tela de início. Abra este endereço no Safari para instalar."
+
+#: templates/install.php:114
+msgid "Already installed on this device"
+msgstr "Já instalado neste aparelho"
+
+#: templates/install.php:119
+msgid "Open the app"
+msgstr "Abrir o app"
+
+#. translators: %s: the app's short name, as under its icon
+#: templates/install.php:125
+#, php-format
+msgid "It did not open? Look for the %s icon on your home screen."
+msgstr "Não abriu? Procure o ícone %s na tela inicial do celular."
+
+#: templates/install.php:131
+msgid "This browser offers no install button. Open this address in Chrome (Android) or Safari (iPhone), or look for Install app or Add to Home screen in the browser’s menu."
+msgstr "Este navegador não oferece um botão de instalar. Abra este endereço no Chrome (Android) ou no Safari (iPhone), ou procure Instalar app ou Adicionar à tela inicial no menu do navegador."
+
+#: templates/install.php:136
+msgid "Look for Install app or Add to Home screen in the browser’s menu."
+msgstr "Procure Instalar app ou Adicionar à tela inicial no menu do navegador."
+
+#: templates/install.php:141
+msgid "Continue in the browser"
+msgstr "Continuar no navegador"
 
 #: templates/offline.php:20 templates/offline.php:24
 msgid "No connection"
@@ -326,9 +494,41 @@ msgstr "Sem conexão"
 msgid "This page needs the internet. Check the connection and try again."
 msgstr "Esta página precisa de internet. Confira a conexão e tente de novo."
 
-#: templates/offline.php:26
+#: templates/offline.php:26 templates/partial-lock.php:33
 msgid "Try again"
 msgstr "Tentar de novo"
+
+#: templates/partial-lock.php:24
+msgid "The app is locked"
+msgstr "O app está travado"
+
+#: templates/partial-lock.php:25
+msgid "Lock the app with your phone's screen lock"
+msgstr "Trave o app com o bloqueio de tela do celular"
+
+#: templates/partial-lock.php:26
+msgid "This phone has no screen lock"
+msgstr "Este celular não tem bloqueio de tela"
+
+#: templates/partial-lock.php:28
+msgid "Unlock with your fingerprint, face or the phone's PIN."
+msgstr "Destrave com a digital, o rosto ou o PIN do celular."
+
+#: templates/partial-lock.php:29
+msgid "Required for your account. The phone asks for its own screen lock once, then every time the app opens or comes back after a few seconds away. No new password."
+msgstr "Obrigatória para a sua conta. O celular pede o próprio bloqueio de tela uma vez e, depois, sempre que o app abre ou volta após alguns segundos fora. Nenhuma senha nova."
+
+#: templates/partial-lock.php:31
+msgid "Unlock"
+msgstr "Destravar"
+
+#: templates/partial-lock.php:32
+msgid "Turn the lock on"
+msgstr "Ativar a trava"
+
+#: templates/partial-lock.php:34
+msgid "Sign out and in again"
+msgstr "Sair e entrar de novo"
 
 #: templates/screen-account.php:18
 msgid "Signed in as"
@@ -342,61 +542,69 @@ msgstr "E-mail"
 msgid "Edit profile"
 msgstr "Editar perfil"
 
-#: templates/screen-account.php:27 templates/screen-more.php:118
+#: templates/screen-account.php:27 templates/screen-more.php:127
 msgid "Sign out"
 msgstr "Sair"
 
-#: templates/screen-home.php:33
+#: templates/screen-home.php:23
+msgid "Lock the app with your phone's screen lock, so nobody else opens it on this phone."
+msgstr "Trave o app com o bloqueio de tela do celular, para ninguém mais abri-lo neste aparelho."
+
+#: templates/screen-home.php:24
+msgid "This phone has no screen lock. That is highly unsafe: anyone holding the phone opens the app and everything in it. Turn the screen lock on in the phone's settings."
+msgstr "Este celular não tem bloqueio de tela. Isso é altamente inseguro: qualquer pessoa com o celular na mão abre o app e tudo o que há nele. Ative o bloqueio de tela nas configurações do celular."
+
+#: templates/screen-home.php:25
+msgid "Turn it on"
+msgstr "Ativar"
+
+#: templates/screen-home.php:27 templates/screen-home.php:44
 msgid "Dismiss"
 msgstr "Dispensar"
 
-#: templates/screen-home.php:41
+#: templates/screen-home.php:52
 msgid "Next commitment"
 msgstr "Próximo compromisso"
 
-#: templates/screen-home.php:64
+#: templates/screen-home.php:75
 msgid "Pending"
 msgstr "Pendências"
 
-#: templates/screen-home.php:89
+#: templates/screen-home.php:79
+msgid "Nothing pending."
+msgstr "Nada pendente."
+
+#: templates/screen-home.php:105
 msgid "See all"
 msgstr "Ver todas"
 
-#: templates/screen-home.php:94 templates/screen-news.php:32
+#: templates/screen-home.php:110 templates/screen-news.php:32
 msgid "No news yet."
 msgstr "Ainda não há notícias."
 
-#: templates/screen-home.php:107
+#: templates/screen-home.php:123
 msgid "No pages yet. The pages chosen in the app's settings appear here."
 msgstr "Ainda não há páginas. As páginas escolhidas nas configurações do app aparecem aqui."
 
-#: templates/screen-home.php:124 templates/site-banner.php:24
+#: templates/screen-home.php:140 templates/site-banner.php:24
 msgid "Not now"
 msgstr "Agora não"
 
-#: templates/screen-home.php:127
-msgid "Install the app"
-msgstr "Instale o app"
-
-#: templates/screen-home.php:129
+#: templates/screen-home.php:145
 msgid "Open it from your home screen, full screen, like any other app."
 msgstr "Abra pela tela inicial, em tela cheia, como qualquer outro app."
 
-#: templates/screen-home.php:133
+#: templates/screen-home.php:149
 msgid "Install app"
 msgstr "Instalar app"
 
-#: templates/screen-home.php:138
+#: templates/screen-home.php:154
 msgid "Add it to your home screen to open it like any other app:"
 msgstr "Adicione à tela de início para abrir como qualquer outro app:"
 
-#: templates/screen-home.php:142
+#: templates/screen-home.php:158
 msgid "Tap Share in Safari’s toolbar."
 msgstr "Toque em Compartilhar, na barra do Safari."
-
-#: templates/screen-home.php:146
-msgid "Choose Add to Home Screen."
-msgstr "Escolha Adicionar à Tela de Início."
 
 #: templates/screen-missing.php:16
 msgid "This page is not available"
@@ -442,6 +650,14 @@ msgstr "Tema escuro"
 msgid "On this device only. Off follows the site."
 msgstr "Só neste aparelho. Desligado, segue o site."
 
+#: templates/screen-more.php:115
+msgid "Lock with the phone's screen lock"
+msgstr "Travar com o bloqueio do celular"
+
+#: templates/screen-more.php:116
+msgid "Fingerprint, face or the phone's PIN when the app opens, and when it comes back after a few seconds away."
+msgstr "Digital, rosto ou PIN do celular quando o app abre e quando volta após alguns segundos fora."
+
 #: templates/screen-news.php:24
 msgid "News categories"
 msgstr "Categorias de notícias"
@@ -484,17 +700,28 @@ msgstr "Compartilhar"
 msgid "Copy link"
 msgstr "Copiar link"
 
-#: templates/site-banner.php:21
-msgid "Faster in the app."
-msgstr "Mais rápido no app."
-
 #: templates/site-banner.php:23
-msgid "Use the app"
-msgstr "Use o app"
+msgid "Install"
+msgstr "Instalar"
 
 #. Plugin header: Description
 msgid "Turns the site into an installable app: a home-screen icon, an app shell for signed-in users and screens other plugins register."
 msgstr "Transforma o site em um app instalável: um ícone na tela inicial, uma estrutura de app para quem está conectado e telas que outros plugins registram."
+
+#~ msgid "On iPhone no browser installs with a button. In Safari, Share is at the bottom."
+#~ msgstr "No iPhone nenhum navegador instala com um botão. No Safari, o Compartilhar fica embaixo."
+
+#~ msgid "Shown under the icon on a home screen."
+#~ msgstr "Aparece sob o ícone na tela inicial."
+
+#~ msgid "Show a \"Use the app\" banner on the site's pages"
+#~ msgstr "Mostrar a faixa \"Use o app\" nas páginas do site"
+
+#~ msgid "Only on phones and tablets, and never inside the installed app. A visitor who is not signed in goes to the login first, then into the app. A visitor who closes the banner does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
+#~ msgstr "Só em celulares e tablets, e nunca dentro do app instalado. Um visitante não conectado passa primeiro pelo login e depois entra no app. Quem fecha a faixa não a vê de novo naquele aparelho por 30 dias. A tela inicial do app convida para instalá-lo da mesma forma."
+
+#~ msgid "Use the app"
+#~ msgstr "Use o app"
 
 #~ msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
 #~ msgstr "O app usa o ícone do site, de Configurações → Geral; sem ele, usa o ícone do plugin."

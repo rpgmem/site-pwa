@@ -125,6 +125,14 @@ final class ConflictsTest extends WP_UnitTestCase {
 		self::assertStringContainsString( 'data-own="' . esc_url( Routes::url( 'sw' ) ) . '"', $this->render() );
 	}
 
+	public function test_the_browser_check_says_where_the_apps_worker_and_pages_live(): void {
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+		$html = $this->render();
+
+		self::assertStringContainsString( 'data-scope="' . esc_url( home_url( '/' ) ) . '"', $html );
+		self::assertStringContainsString( 'data-app="' . esc_url( Routes::url( 'home' ) ) . '"', $html );
+	}
+
 	public function test_the_browser_check_loads_on_this_screen_only(): void {
 		SettingsPage::enqueue( 'options-general.php' );
 		self::assertFalse( wp_script_is( 'site-pwa-admin-conflicts', 'enqueued' ) );

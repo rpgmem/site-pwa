@@ -23,6 +23,10 @@
 		if ( share && typeof nav.share === 'function' ) {
 			share.hidden = false;
 			share.addEventListener( 'click', function () {
+				// The share sheet takes the app out of sight: not a reason to lock it.
+				if ( typeof window !== 'undefined' && window.SitePwaLock ) {
+					window.SitePwaLock.allowExit();
+				}
 				nav.share( { title: title, url: url } ).catch( function () {
 					// Cancelled by the user, or refused: nothing to report.
 				} );

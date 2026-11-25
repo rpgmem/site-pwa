@@ -26,9 +26,15 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - **The app's icon is a setting** (#26). Settings → Site PWA → Icon picks the site icon (the plugin's when the site has none), the plugin's icon, or a square PNG of at least 512 px from the Media Library, refused with a message otherwise; the app makes the 192 and 512 px sizes from it, and the manifest, the home-screen icon and the login logo follow.
 - **Links to site pages stay inside the app** (#40). Other plugins pass a URL through `site_pwa_app_url` to get the app address of a page the app can draw (`/app/?p=ID`), and the links inside a post drawn in the app are converted the same way; anything else comes back unchanged.
+- **A public install page** (#34) at `/app/install/`, in the app's look, with no login: one tap on Android (the browser's own dialog), the Share steps on iPhone in Safari, Chrome, Edge or Firefox, "Open the app" once installed, and Copy address elsewhere. The site banner now says Install and leads there; its sentence and the page's are settings.
+- **The app locks with the phone's screen lock** (#38). On opening and after 10 s away (not after the app's own exits), unlocked offline by fingerprint, face or PIN through a passkey. `site_pwa_lock_required` makes it mandatory; others are invited, and a phone without a lock is warned.
 
 ### Fixed
 
 - **The app's screens have a title on a block theme** (#3). WordPress prints `<title>` only for a theme declaring `title-tag`, which a block theme does only inside its own template; the frame now prints it itself.
 - **A light accent stays readable** (#26). Where the accent is text or an icon on a light surface (the bar's current item, links, Back, the Info tone, focus outlines, the login's link, the site banner's outline), a darker shade of the same colour reaching 4.5:1 is used; where it is a background it stays exact. The Info tone's background is now a tint of the accent instead of a fixed blue.
+- **A changed colour or icon reaches an installed app** (#28). The manifest is served with `Cache-Control: no-cache`, so a host page cache cannot keep the old one; an installed app on Android takes the new colour of its system bar and its icon when the browser next refreshes it, which Settings → Site PWA now says.
+- **The settings screen no longer warns about a service worker that never reaches the app** (#30). The browser check lists only a worker on the app's own scope or on a narrower one covering the app's pages, so Free Form Certificate's `/terminal/` worker is left out.
+- **The bell always answers a tap** (#32). With nothing pending it was a plain icon and Home drew no Pending section, so a tap did nothing; it now always leads to Pending, which says "Nothing pending." when empty.
+- **Safari on an iPad gets the Share-at-the-top steps** (#36). The install page told it Share is at the bottom, which is only true on an iPhone.
 

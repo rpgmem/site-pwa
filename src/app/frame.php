@@ -133,6 +133,7 @@ final class Frame {
 				'back'       => self::back( $route ),
 				'navigation' => Navigation::items( Navigation::key( $route, Routes::screen() ) ),
 				'content'    => $content,
+				'lock'       => Lock::config( $user ),
 			)
 		);
 	}
@@ -242,6 +243,7 @@ final class Frame {
 				'strategy'  => 'defer',
 			)
 		);
+		Lock::enqueue( wp_get_current_user() );
 		if ( 'home' === Routes::current() ) {
 			$home = Plugin::asset( 'assets/js/home.js' );
 			wp_enqueue_script(
@@ -304,6 +306,9 @@ final class Frame {
 		// before the first paint. `ffc-dark-mode` is FFC's own root class,
 		// so the screens it draws inside the frame turn dark with it.
 		wp_print_inline_script_tag( self::DARK_SCRIPT );
+		// The app lock (#38), also before the first paint: a locked app
+		// shows nothing until the phone is unlocked.
+		wp_print_inline_script_tag( Lock::headScript( wp_get_current_user() ) );
 	}
 
 	/**

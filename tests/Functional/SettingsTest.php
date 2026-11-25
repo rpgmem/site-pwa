@@ -57,6 +57,24 @@ final class SettingsTest extends WP_UnitTestCase {
 		self::assertSame( 'Escola Munic', $clean['short_name'] );
 	}
 
+	public function test_the_invite_sentences_are_plain_text_cut_to_length_and_default_when_empty(): void {
+		$clean = Settings::sanitize(
+			array(
+				'banner_text'  => '<i>Mais</i> rápido ' . str_repeat( 'á', 60 ),
+				'install_text' => array( 'not text' ),
+			)
+		);
+
+		self::assertSame( Settings::BANNER_TEXT_MAX, mb_strlen( $clean['banner_text'] ) );
+		self::assertStringStartsWith( 'Mais rápido á', $clean['banner_text'] );
+		self::assertSame( '', $clean['install_text'] );
+
+		update_option( Settings::OPTION, array( 'install_text' => str_repeat( 'x', 200 ) ) );
+		self::assertSame( Settings::INSTALL_TEXT_MAX, mb_strlen( Settings::installText() ) );
+		self::assertSame( 'Faster in the app.', Settings::bannerText() );
+		delete_option( Settings::OPTION );
+	}
+
 	public function test_a_value_that_is_not_an_array_reads_as_the_defaults(): void {
 		update_option( Settings::OPTION, 'garbage' );
 		self::assertSame( Settings::defaults(), Settings::get() );

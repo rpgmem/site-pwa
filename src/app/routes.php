@@ -41,7 +41,7 @@ final class Routes {
 	 * Bumped whenever the rules change, so an install that updated without
 	 * an activation still gets them: a GitHub update runs no activation hook.
 	 */
-	public const REVISION = 4;
+	public const REVISION = 5;
 
 	/**
 	 * Option holding the rules revision last flushed. Deleted by uninstall.php.
@@ -51,7 +51,7 @@ final class Routes {
 	/**
 	 * The routes and the path each one answers under the prefix.
 	 */
-	public const ROUTES = array( 'home', 'account', 'more', 'news', 'screen', 'post', 'offline', 'manifest' );
+	public const ROUTES = array( 'home', 'account', 'more', 'news', 'screen', 'post', 'offline', 'install', 'manifest' );
 
 	/**
 	 * The routes drawn inside the app frame; they need a signed-in user.
@@ -93,6 +93,7 @@ final class Routes {
 		add_rewrite_rule( '^' . preg_quote( self::SW_FILE, '/' ) . '$', 'index.php?' . self::QUERY_VAR . '=sw', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/manifest\.webmanifest$', 'index.php?' . self::QUERY_VAR . '=manifest', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/offline/?$', 'index.php?' . self::QUERY_VAR . '=offline', 'top' );
+		add_rewrite_rule( '^' . $prefix . '/install/?$', 'index.php?' . self::QUERY_VAR . '=install', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/account/?$', 'index.php?' . self::QUERY_VAR . '=account', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/more/?$', 'index.php?' . self::QUERY_VAR . '=more', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/news/?$', 'index.php?' . self::QUERY_VAR . '=news', 'top' );
@@ -127,7 +128,7 @@ final class Routes {
 	/**
 	 * The URL of a route.
 	 *
-	 * @param string $route `home`, `account`, `more`, `news`, `offline`, `manifest` or `sw`.
+	 * @param string $route `home`, `account`, `more`, `news`, `offline`, `install`, `manifest` or `sw`.
 	 */
 	public static function url( string $route ): string {
 		if ( 'sw' === $route ) {
@@ -139,6 +140,7 @@ final class Routes {
 			'more'     => '/more/',
 			'news'     => '/news/',
 			'offline'  => '/offline/',
+			'install'  => '/install/',
 			'manifest' => '/manifest.webmanifest',
 		);
 		return home_url( '/' . self::prefix() . ( $path[ $route ] ?? '/' ) );
@@ -184,8 +186,28 @@ final class Routes {
 		if ( 'manifest' === $route ) {
 			return array(
 				'status'  => 200,
-				'headers' => array( 'Content-Type' => 'application/manifest+json; charset=utf-8' ),
+				// Revalidated on every fetch (#28): an installed app takes its
+				// colour, name and icon from it, and a cached copy would keep
+				// the old ones on every phone.
+				'headers' => array(
+					'Content-Type'  => 'application/manifest+json; charset=utf-8',
+					'Cache-Control' => 'no-cache',
+				),
 				'body'    => (string) wp_json_encode( Manifest::data(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ),
+			);
+		}
+
+		// The install page is public and the same for everyone (#34): the
+		// browser decides which of its states shows, so no login and no
+		// personal data. Revalidated, so a changed name or colour shows.
+		if ( 'install' === $route ) {
+			return array(
+				'status'  => 200,
+				'headers' => array(
+					'Content-Type'  => 'text/html; charset=utf-8',
+					'Cache-Control' => 'no-cache',
+				),
+				'body'    => Pages::render( 'install' ),
 			);
 		}
 

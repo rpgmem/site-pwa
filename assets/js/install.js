@@ -1,7 +1,9 @@
 /**
- * The invite to install the app, on phones only: a card on the app's home
- * screen (`.site-pwa-install`) and a banner on the site's own pages
- * (`.site-pwa-site-banner`). Both start hidden and stay hidden unless every
+ * The invite to install the app: a card on the app's home screen
+ * (`.site-pwa-install`), a banner on the site's own pages
+ * (`.site-pwa-site-banner`) that leads to the install page, and the install
+ * page itself (`[data-install-page]`, #34), which picks one state for the
+ * browser it runs in. The card and the banner show on phones only. Both start hidden and stay hidden unless every
  * condition holds:
  * - the device is a phone or tablet, never a desktop;
  * - the app is not already running installed;
@@ -17,6 +19,9 @@
 	var DAY = 24 * 60 * 60 * 1000;
 	var QUIET_DAYS = 30;
 	var INSTALLED = 'installed';
+	// How long the install page waits for the browser to offer the install
+	// before it says this browser offers no button.
+	var WAIT_MS = 3000;
 
 	/**
 	 * Whether the device is a phone or tablet. The client hint answers where
@@ -58,6 +63,39 @@
 		var ua = nav.userAgent || '';
 		var ios = /iPad|iPhone|iPod/.test( ua ) || ( nav.platform === 'MacIntel' && nav.maxTouchPoints > 1 );
 		return ios && /Safari\//.test( ua ) && ! /CriOS|FxiOS|EdgiOS|OPiOS/.test( ua );
+	}
+
+	/**
+	 * Which iPhone or iPad browser this is, or null off iOS: `safari` (Safari
+	 * on an iPhone, whose Share is at the bottom), `other` (Safari on an iPad,
+	 * whose Share is at the top beside the address, and Chrome, Edge,
+	 * Firefox... on iOS 16.4 or later, which add web apps to the home screen
+	 * through their own Share menu) or `old` (another browser on an earlier
+	 * iOS, where only Safari can). An iPad asking for the desktop site reports
+	 * no iOS version, and is taken as recent.
+	 *
+	 * @param {Navigator} nav The navigator.
+	 * @return {string|null} The kind, or null.
+	 */
+	function iosBrowser( nav ) {
+		var ua = nav.userAgent || '';
+		var ios = /iPad|iPhone|iPod/.test( ua ) || ( nav.platform === 'MacIntel' && nav.maxTouchPoints > 1 );
+		if ( ! ios ) {
+			return null;
+		}
+		var ipad = /iPad/.test( ua ) || ( nav.platform === 'MacIntel' && nav.maxTouchPoints > 1 );
+		if ( isIosSafari( nav ) ) {
+			return ipad ? 'other' : 'safari';
+		}
+		var version = /OS (\d+)_(\d+)/.exec( ua );
+		if ( version ) {
+			var major = parseInt( version[ 1 ], 10 );
+			var minor = parseInt( version[ 2 ], 10 );
+			if ( major < 16 || ( major === 16 && minor < 4 ) ) {
+				return 'old';
+			}
+		}
+		return 'other';
 	}
 
 	/**
@@ -168,7 +206,7 @@
 	}
 
 	/**
-	 * Wire the banner on the site's own pages: a link to the app.
+	 * Wire the banner on the site's own pages: a link to the install page.
 	 *
 	 * @param {HTMLElement} banner  The banner.
 	 * @param {Window}      win     The window.
@@ -184,6 +222,107 @@
 		if ( isMobile( win ) && ! isStandalone( win ) && ! isQuiet( storage, key, now() ) ) {
 			banner.hidden = false;
 		}
+	}
+
+	/**
+	 * Wire the install page: show the one state that fits this browser.
+	 *
+	 * @param {HTMLElement} page The `[data-install-page]` element.
+	 * @param {Window}      win  The window.
+	 * @return {string} The state shown first (`app` when it left for the app).
+	 */
+	function installPage( page, win ) {
+		var nav = win.navigator || {};
+		var panels = page.querySelectorAll( '[data-state]' );
+		var status = page.querySelector( '[data-copy-status]' );
+		var current = '';
+		var show = function ( state ) {
+			current = state;
+			Array.prototype.forEach.call( panels, function ( panel ) {
+				panel.hidden = panel.getAttribute( 'data-state' ) !== state;
+			} );
+		};
+
+		// Inside the installed app this page has nothing to offer.
+		if ( isStandalone( win ) ) {
+			win.location.replace( page.getAttribute( 'data-home' ) );
+			return 'app';
+		}
+
+		Array.prototype.forEach.call( page.querySelectorAll( '[data-copy]' ), function ( button ) {
+			button.addEventListener( 'click', function () {
+				var field = button.closest( '[data-state]' ).querySelector( '[data-address]' );
+				var say = function ( key ) {
+					if ( status ) {
+						status.textContent = page.getAttribute( key ) || '';
+					}
+				};
+				var fallback = function () {
+					field.focus();
+					field.select();
+					say( 'data-copy-failed' );
+				};
+				if ( nav.clipboard && typeof nav.clipboard.writeText === 'function' ) {
+					nav.clipboard.writeText( field.value ).then( function () {
+						say( 'data-copied' );
+					}, fallback );
+				} else {
+					fallback();
+				}
+			} );
+		} );
+
+		var ios = iosBrowser( nav );
+		if ( ios ) {
+			show( 'ios-' + ios );
+			return current;
+		}
+
+		var deferred = null;
+		var settled = false;
+		var settle = function ( state ) {
+			settled = true;
+			show( state );
+		};
+		show( 'wait' );
+
+		win.addEventListener( 'beforeinstallprompt', function ( event ) {
+			event.preventDefault();
+			deferred = event;
+			settle( 'prompt' );
+		} );
+		win.addEventListener( 'appinstalled', function () {
+			deferred = null;
+			settle( INSTALLED );
+		} );
+		page.querySelector( '[data-install]' ).addEventListener( 'click', function () {
+			if ( ! deferred ) {
+				return;
+			}
+			var event = deferred;
+			deferred = null;
+			event.prompt();
+			event.userChoice.then( function ( choice ) {
+				if ( choice && choice.outcome === 'accepted' ) {
+					settle( INSTALLED );
+				}
+			} );
+		} );
+		// The manifest names the app itself, so a browser that supports
+		// this answers whether it is already on the device.
+		if ( typeof nav.getInstalledRelatedApps === 'function' ) {
+			nav.getInstalledRelatedApps().then( function ( apps ) {
+				if ( apps && apps.length > 0 && ! deferred ) {
+					settle( INSTALLED );
+				}
+			}, function () {} );
+		}
+		win.setTimeout( function () {
+			if ( ! settled ) {
+				settle( 'unsupported' );
+			}
+		}, WAIT_MS );
+		return current;
 	}
 
 	/**
@@ -208,10 +347,13 @@
 		Array.prototype.forEach.call( doc.querySelectorAll( '.site-pwa-site-banner' ), function ( el ) {
 			banner( el, win, storage, now );
 		} );
+		Array.prototype.forEach.call( doc.querySelectorAll( '[data-install-page]' ), function ( el ) {
+			installPage( el, win );
+		} );
 	}
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = { isMobile: isMobile, isStandalone: isStandalone, isIosSafari: isIosSafari, isQuiet: isQuiet, card: card, banner: banner, init: init };
+		module.exports = { isMobile: isMobile, isStandalone: isStandalone, isIosSafari: isIosSafari, iosBrowser: iosBrowser, isQuiet: isQuiet, card: card, banner: banner, installPage: installPage, init: init, WAIT_MS: WAIT_MS };
 		return;
 	}
 

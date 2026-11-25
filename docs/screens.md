@@ -110,6 +110,16 @@ $url = apply_filters( 'site_pwa_app_url', get_permalink( $page_id ) );
 
 Inside a post or page the app draws, its links to other such pages are converted the same way, so following one keeps the app's frame.
 
+## Requiring the app lock
+
+The app locks with the phone's own screen lock (fingerprint, face or the phone's PIN) when it opens and when it comes back after ten seconds out of sight; it is optional, and More and Home invite the person to turn it on. A consumer makes it mandatory for an account with the `site_pwa_lock_required` filter: the app then shows nothing but the lock screen until it is turned on.
+
+```php
+add_filter( 'site_pwa_lock_required', static fn( bool $required, WP_User $user ): bool => $required || user_can( $user, 'my_operator_capability' ), 10, 2 );
+```
+
+Only a real `true` counts. The lock lives on the phone, through a platform credential (a passkey) the phone keeps for the site; nothing about it is stored on the server, and unlocking works offline. It protects against someone holding an unlocked phone, not against someone who changes the app's code on the phone.
+
 ## What the app does and does not do
 
 - **It checks the capability.** A user without it sees the screen nowhere. Its URL answers with the same "not available" page as an unknown id, so the app never confirms the screen exists.

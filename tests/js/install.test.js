@@ -2,9 +2,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createRequire } from 'node:module';
 
 const require = createRequire( import.meta.url );
-const { isMobile, isStandalone, isIosSafari, isQuiet, card, banner } = require( '../../assets/js/install.js' );
+const { isMobile, isStandalone, isIosSafari, iosBrowser, isQuiet, card, banner, installPage, WAIT_MS } = require( '../../assets/js/install.js' );
 
 const IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1';
+const IPAD = 'Mozilla/5.0 (iPad; CPU OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1';
+const IPAD_DESKTOP = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15';
 const IPHONE_CHROME = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/124.0 Mobile/15E148 Safari/604.1';
 const ANDROID = 'Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Mobile Safari/537.36';
 const DAY = 24 * 60 * 60 * 1000;
@@ -59,6 +61,16 @@ describe( 'install.js decisions', () => {
 		expect( isIosSafari( { userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Version/17.4 Safari/605.1.15', platform: 'MacIntel', maxTouchPoints: 0 } ) ).toBe( false );
 		expect( isIosSafari( { userAgent: IPHONE_CHROME } ) ).toBe( false );
 		expect( isIosSafari( { userAgent: ANDROID } ) ).toBe( false );
+	} );
+
+	it( 'sorts iOS browsers into Safari, a recent other browser and an old one', () => {
+		expect( iosBrowser( { userAgent: IPHONE } ) ).toBe( 'safari' );
+		expect( iosBrowser( { userAgent: IPHONE_CHROME } ) ).toBe( 'other' );
+		expect( iosBrowser( { userAgent: IPHONE_CHROME.replace( '17_4', '16_4' ) } ) ).toBe( 'other' );
+		expect( iosBrowser( { userAgent: IPHONE_CHROME.replace( '17_4', '16_3' ) } ) ).toBe( 'old' );
+		expect( iosBrowser( { userAgent: IPHONE_CHROME.replace( '17_4', '15_7' ) } ) ).toBe( 'old' );
+		expect( iosBrowser( { userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/124.0 Safari/604.1', platform: 'MacIntel', maxTouchPoints: 5 } ) ).toBe( 'other' );
+		expect( iosBrowser( { userAgent: ANDROID } ) ).toBeNull();
 	} );
 
 	it( 'stays quiet for 30 days after a dismissal and for good after installing', () => {
@@ -224,5 +236,136 @@ describe( 'install.js init', () => {
 		expect( document.querySelector( '.site-pwa-site-banner' ).hidden ).toBe( false );
 		document.querySelector( '.site-pwa-site-banner [data-dismiss]' ).click();
 		expect( document.querySelector( '.site-pwa-site-banner' ).hidden ).toBe( true );
+	} );
+} );
+
+describe( 'install.js install page', () => {
+	let page;
+
+	const STATES = [ 'wait', 'prompt', 'ios-safari', 'ios-other', 'ios-old', 'installed', 'unsupported' ];
+
+	beforeEach( () => {
+		vi.useRealTimers();
+		document.body.innerHTML = `
+			<main data-install-page data-home="https://example.org/app/" data-copied="Copied." data-copy-failed="Select it.">
+				${ STATES.map( ( state ) => `<section data-state="${ state }" hidden>${
+					state === 'prompt' ? '<button type="button" data-install>Install</button>' : ''
+				}${
+					state === 'unsupported' || state === 'ios-old' ? '<input data-address value="https://example.org/app/install/"><button type="button" data-copy>Copy</button>' : ''
+				}</section>` ).join( '' ) }
+				<p data-copy-status></p>
+			</main>`;
+		page = document.querySelector( '[data-install-page]' );
+	} );
+
+	const shown = () => STATES.filter( ( state ) => ! page.querySelector( `[data-state="${ state }"]` ).hidden );
+
+	function pageWindow( nav = {}, media = [] ) {
+		const win = fakeWindow( { nav, media } );
+		win.timers = [];
+		win.setTimeout = ( fn, ms ) => win.timers.push( { fn, ms } );
+		win.location = { replace: vi.fn() };
+		return win;
+	}
+
+	it( 'shows the browser\'s install button when the browser offers it, and installs on one tap', async () => {
+		const win = pageWindow();
+		installPage( page, win );
+		expect( shown() ).toEqual( [ 'wait' ] );
+
+		const event = { preventDefault: vi.fn(), prompt: vi.fn(), userChoice: Promise.resolve( { outcome: 'accepted' } ) };
+		win.fire( 'beforeinstallprompt', event );
+		expect( event.preventDefault ).toHaveBeenCalled();
+		expect( shown() ).toEqual( [ 'prompt' ] );
+
+		page.querySelector( '[data-install]' ).click();
+		expect( event.prompt ).toHaveBeenCalledTimes( 1 );
+		await event.userChoice;
+		await Promise.resolve();
+		expect( shown() ).toEqual( [ 'installed' ] );
+
+		page.querySelector( '[data-install]' ).click();
+		expect( event.prompt ).toHaveBeenCalledTimes( 1 );
+	} );
+
+	it( 'keeps the button after a dismissed dialog, and shows Open the app once installed', async () => {
+		const win = pageWindow();
+		installPage( page, win );
+		const event = { preventDefault: vi.fn(), prompt: vi.fn(), userChoice: Promise.resolve( { outcome: 'dismissed' } ) };
+		win.fire( 'beforeinstallprompt', event );
+		page.querySelector( '[data-install]' ).click();
+		await event.userChoice;
+		expect( shown() ).toEqual( [ 'prompt' ] );
+
+		win.fire( 'appinstalled' );
+		expect( shown() ).toEqual( [ 'installed' ] );
+	} );
+
+	it( 'says the app is installed when the browser reports it, and never reverts to unsupported', async () => {
+		const win = pageWindow( { getInstalledRelatedApps: () => Promise.resolve( [ { platform: 'webapp' } ] ) } );
+		installPage( page, win );
+		await Promise.resolve();
+		await Promise.resolve();
+		expect( shown() ).toEqual( [ 'installed' ] );
+
+		win.timers.forEach( ( t ) => t.fn() );
+		expect( shown() ).toEqual( [ 'installed' ] );
+	} );
+
+	it( 'falls back to the unsupported text when nothing is offered in time', async () => {
+		const win = pageWindow( { getInstalledRelatedApps: () => Promise.resolve( [] ) } );
+		installPage( page, win );
+		await Promise.resolve();
+		expect( shown() ).toEqual( [ 'wait' ] );
+		expect( win.timers[ 0 ].ms ).toBe( WAIT_MS );
+
+		win.timers[ 0 ].fn();
+		expect( shown() ).toEqual( [ 'unsupported' ] );
+	} );
+
+	it.each( [
+		[ IPHONE, 'ios-safari' ],
+		[ IPAD, 'ios-other' ],
+		[ IPHONE_CHROME, 'ios-other' ],
+		[ IPHONE_CHROME.replace( '17_4', '15_7' ), 'ios-old' ],
+	] )( 'shows the iPhone steps that fit the browser', ( userAgent, state ) => {
+		const win = pageWindow( { userAgent } );
+		expect( installPage( page, win ) ).toBe( state );
+		expect( shown() ).toEqual( [ state ] );
+		expect( win.timers ).toEqual( [] );
+	} );
+
+	it( 'sends Safari on an iPad to the top, where its Share is, even asking for the desktop site', () => {
+		expect( iosBrowser( { userAgent: IPAD } ) ).toBe( 'other' );
+		expect( iosBrowser( { userAgent: IPAD_DESKTOP, platform: 'MacIntel', maxTouchPoints: 5 } ) ).toBe( 'other' );
+		expect( iosBrowser( { userAgent: IPHONE } ) ).toBe( 'safari' );
+	} );
+
+	it( 'goes straight to the app inside the installed app', () => {
+		const win = pageWindow( {}, [ '(display-mode: standalone)' ] );
+		expect( installPage( page, win ) ).toBe( 'app' );
+		expect( win.location.replace ).toHaveBeenCalledWith( 'https://example.org/app/' );
+		expect( shown() ).toEqual( [] );
+	} );
+
+	it( 'copies the address and says so, or selects it when the clipboard refuses', async () => {
+		const writeText = vi.fn().mockResolvedValueOnce().mockRejectedValueOnce( new Error( 'denied' ) );
+		const win = pageWindow( { clipboard: { writeText } } );
+		installPage( page, win );
+		win.timers[ 0 ].fn();
+		const button = page.querySelector( '[data-state="unsupported"] [data-copy]' );
+		const status = page.querySelector( '[data-copy-status]' );
+
+		button.click();
+		await Promise.resolve();
+		await Promise.resolve();
+		expect( writeText ).toHaveBeenCalledWith( 'https://example.org/app/install/' );
+		expect( status.textContent ).toBe( 'Copied.' );
+
+		button.click();
+		await Promise.resolve();
+		await Promise.resolve();
+		expect( status.textContent ).toBe( 'Select it.' );
+		expect( document.activeElement ).toBe( page.querySelector( '[data-state="unsupported"] [data-address]' ) );
 	} );
 } );

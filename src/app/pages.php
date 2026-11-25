@@ -15,8 +15,9 @@ use SitePwa\Settings;
 /**
  * Renders the app's pages from `templates/`.
  *
- * The offline page: its own small document, with no user data and no nonce,
- * because the service worker keeps a copy of it. Screens are drawn by Frame.
+ * The offline page and the install page: each its own small document, with
+ * no user data and no nonce. The worker keeps a copy of the offline page; the
+ * install page is public. Screens are drawn by Frame.
  */
 final class Pages {
 
@@ -35,10 +36,12 @@ final class Pages {
 	}
 
 	/**
-	 * Render the offline page.
+	 * Render the offline page or the install page.
+	 *
+	 * @param string $template `offline` or `install`.
 	 */
-	public static function render(): string {
-		$template = 'offline';
+	public static function render( string $template = 'offline' ): string {
+		$template = 'install' === $template ? 'install' : 'offline';
 		$settings = Settings::get();
 
 		$vars = array(
@@ -53,6 +56,10 @@ final class Pages {
 			'sw'          => Routes::url( 'sw' ),
 			'scope'       => Routes::scope(),
 			'home'        => Routes::url( 'home' ),
+			'install_url' => Routes::url( 'install' ),
+			'short_name'  => $settings['short_name'],
+			'pitch'       => Settings::installText(),
+			'install_js'  => self::assetUrl( 'assets/js/install.js' ),
 		);
 
 		ob_start();
