@@ -182,6 +182,40 @@ describe( 'lock.js', () => {
 		expect( locked() ).toBe( true );
 	} );
 
+	it( 'stays locked when the lock screen is reloaded or left (#42)', async () => {
+		document.documentElement.classList.add( 'site-pwa-locked' );
+		const e = env( { local: memory( ON ), session: memory( { 'site-pwa-lock-seen:k1': '999000' } ) } );
+		const lock = start( CONFIG, e );
+		await lock.ready;
+		expect( e.session.data.has( 'site-pwa-lock-seen:k1' ) ).toBe( false, 'locking forgets the last use' );
+
+		// Pull to refresh hides the page before it reloads.
+		setVisibility( 'hidden' );
+		expect( e.session.data.has( 'site-pwa-lock-seen:k1' ) ).toBe( false, 'the lock screen out of sight is not a use' );
+
+		// The head check of the reloaded page reads that "seen" and locks again.
+		setVisibility( 'visible' );
+		await flush();
+		expect( locked() ).toBe( true );
+	} );
+
+	it( 'locking on return also forgets the last use', async () => {
+		const e = env( { local: memory( ON ) } );
+		const lock = start( CONFIG, e );
+		await lock.ready;
+		expect( e.session.data.has( 'site-pwa-lock-seen:k1' ) ).toBe( true );
+
+		setVisibility( 'hidden' );
+		e.tick( 11000 );
+		setVisibility( 'visible' );
+		await flush();
+		expect( locked() ).toBe( true );
+		expect( e.session.data.has( 'site-pwa-lock-seen:k1' ) ).toBe( false );
+
+		setVisibility( 'hidden' );
+		expect( e.session.data.has( 'site-pwa-lock-seen:k1' ) ).toBe( false );
+	} );
+
 	it( 'does not lock on return from something the app opened', async () => {
 		const e = env( { local: memory( ON ) } );
 		const lock = start( CONFIG, e );

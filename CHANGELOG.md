@@ -37,4 +37,5 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **The settings screen no longer warns about a service worker that never reaches the app** (#30). The browser check lists only a worker on the app's own scope or on a narrower one covering the app's pages, so Free Form Certificate's `/terminal/` worker is left out.
 - **The bell always answers a tap** (#32). With nothing pending it was a plain icon and Home drew no Pending section, so a tap did nothing; it now always leads to Pending, which says "Nothing pending." when empty.
 - **Safari on an iPad gets the Share-at-the-top steps** (#36). The install page told it Share is at the bottom, which is only true on an iPhone.
+- **Reloading the lock screen no longer unlocks the app** (#42). Pulling down to refresh recorded the hidden lock screen as a use, so the reloaded page skipped the lock; out of sight while locked now records nothing, and locking forgets the last use.
 

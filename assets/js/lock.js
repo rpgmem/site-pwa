@@ -128,6 +128,9 @@
 		 */
 		function lock() {
 			root.classList.add( LOCKED );
+			// A locked app has not been seen: a reload (pull to refresh)
+			// must find the lock again, not a fresh "seen" from before (#42).
+			write( env.session, SEEN + config.key, null );
 			var overlay = part( 'overlay' );
 			if ( ! overlay ) {
 				return Promise.resolve( null );
@@ -260,6 +263,11 @@
 		function hide() {
 			if ( busy ) {
 				// The phone's own unlock sheet can take the page out of sight.
+				return;
+			}
+			if ( root.classList.contains( LOCKED ) ) {
+				// Out of sight while locked is not use: leaving or reloading
+				// the lock screen keeps the app locked (#42).
 				return;
 			}
 			hiddenAt = env.now();
