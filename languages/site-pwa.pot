@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-26 14:14+0000\n"
+"POT-Creation-Date: 2026-11-26 14:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -145,7 +145,7 @@ msgstr ""
 msgid "Public, no login. The banner leads here, and the address can go on a poster, a QR code or an e-mail. It uses the app's name, icon and colours, and shows the install button, the iPhone steps or \"Open the app\" for each browser."
 msgstr ""
 
-#: src/admin/settings-page.php:252 src/app/frame.php:434
+#: src/admin/settings-page.php:252 src/app/frame.php:461
 #: templates/screen-home.php:103 templates/screen-more.php:36
 #: templates/screen-news.php:22
 msgid "News"
@@ -281,19 +281,19 @@ msgstr ""
 msgid "The custom icon must be at least %2$d px wide; this image is %1$d px."
 msgstr ""
 
-#: src/app/frame.php:430 templates/screen-account.php:16
+#: src/app/frame.php:457 templates/screen-account.php:16
 msgid "Account"
 msgstr ""
 
-#: src/app/frame.php:432 src/app/navigation.php:51 templates/screen-more.php:48
+#: src/app/frame.php:459 src/app/navigation.php:51 templates/screen-more.php:48
 msgid "More"
 msgstr ""
 
-#: src/app/frame.php:437 src/app/frame.php:440
+#: src/app/frame.php:464 src/app/frame.php:467
 msgid "Not available"
 msgstr ""
 
-#: src/app/frame.php:442 src/app/navigation.php:41 templates/screen-home.php:18
+#: src/app/frame.php:469 src/app/navigation.php:41 templates/screen-home.php:18
 msgid "Home"
 msgstr ""
 

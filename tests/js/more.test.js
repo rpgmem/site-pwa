@@ -65,6 +65,18 @@ describe( 'more.js', () => {
 		}
 	} );
 
+	it( 'turning it on turns the phone bars dark too', () => {
+		input.setAttribute( 'data-site-pwa-dark-bar', '#10161d' );
+		root.innerHTML = '<head><meta name="theme-color" content="#841d8c" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#10161d" media="(prefers-color-scheme: dark)"></head>';
+		init( input, memory(), root, vi.fn() );
+		input.checked = true;
+		input.dispatchEvent( new Event( 'change' ) );
+
+		const metas = Array.from( root.querySelectorAll( 'meta[name=theme-color]' ) );
+		expect( metas.map( ( m ) => m.getAttribute( 'content' ) ) ).toEqual( [ '#10161d', '#10161d' ] );
+		expect( metas.some( ( m ) => m.hasAttribute( 'media' ) ) ).toBe( false );
+	} );
+
 	it( 'turning it off forgets it and reloads so the site choice applies', () => {
 		const storage = memory( { 'site-pwa-dark': '1' } );
 		const reload = vi.fn();

@@ -154,7 +154,7 @@ final class AppRoutesTest extends WP_UnitTestCase {
 		self::assertStringContainsString( '<h1>Escola Viva</h1>', $body );
 		self::assertStringContainsString( '<p>Tudo da escola no celular.</p>', $body );
 		self::assertStringContainsString( '<link rel="manifest" href="' . esc_url( Routes::url( 'manifest' ) ) . '">', $body );
-		self::assertStringContainsString( '<meta name="theme-color" content="#841d8c">', $body );
+		self::assertStringContainsString( '<meta name="theme-color" content="#841d8c" media="(prefers-color-scheme: light)">', $body );
 		self::assertStringContainsString( 'data-install-page data-home="' . esc_url( Routes::url( 'home' ) ) . '"', $body );
 		foreach ( array( 'wait', 'prompt', 'ios-safari', 'ios-other', 'ios-old', 'installed', 'unsupported' ) as $state ) {
 			self::assertMatchesRegularExpression( '#data-state="' . $state . '" hidden>#', $body, "every state starts hidden: {$state}" );

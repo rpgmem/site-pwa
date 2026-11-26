@@ -150,7 +150,7 @@ final class FrameTest extends WP_UnitTestCase {
 		$html = $this->screen( 'home' );
 
 		self::assertStringContainsString( '<link rel="manifest" href="' . esc_url( Routes::url( 'manifest' ) ) . '">', $html );
-		self::assertStringContainsString( '<meta name="theme-color" content="#1d5e8c">', $html );
+		self::assertStringContainsString( '<meta name="theme-color" content="#1d5e8c" media="(prefers-color-scheme: light)">', $html );
 		self::assertStringContainsString( "noindex", $html );
 		self::assertMatchesRegularExpression( '#<script data-sw="' . preg_quote( esc_url( Routes::url( 'sw' ) ), '#' ) . '" data-scope="/"[^>]*register#', $html );
 		self::assertStringContainsString( 'site-pwa-app-css', $html );
@@ -291,7 +291,8 @@ final class FrameTest extends WP_UnitTestCase {
 
 		$more = $this->screen( 'more' );
 		self::assertTrue( wp_script_is( Frame::MORE_HANDLE, 'enqueued' ) );
-		self::assertStringContainsString( '<input type="checkbox" role="switch" data-site-pwa-dark data-site-pwa-dark-classes="[]">', $more );
+		self::assertStringContainsString( '<input type="checkbox" role="switch" data-site-pwa-dark data-site-pwa-dark-classes="[]" data-site-pwa-dark-bar="' . Frame::DARK_BAR . '">', $more );
+		self::assertStringContainsString( "'" . Frame::DARK_BAR . "'", Frame::darkScript(), 'the head script turns the phone bars dark too' );
 	}
 
 	public function test_the_dark_root_classes_come_from_the_filter_and_only_plain_class_names_pass(): void {
