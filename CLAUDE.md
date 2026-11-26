@@ -2,6 +2,8 @@
 
 Project conventions for Claude (Anthropic CLI / agent sessions) working on this repository. Sessions inherit nothing across cold starts, so the durable rules live here. The workflow mirrors `rpgmem/ffcertificate`, `rpgmem/institutional-email`, `rpgmem/email-signature-generator` and `rpgmem/total-mail-queue`. Where this file is silent, Free Form Certificate's is the reference.
 
+**Where a section lives.** This file loads in every session. A section that only work on certain files needs can move to `.claude/rules/<topic>.md` with a `paths:` list: Claude Code loads that file when a session reads or edits a matching file, and this file keeps a short pointer that names it. A rule that must be known before code is written anywhere — a prohibition, a rule a push can break, a convention across the code — stays here. A rule file without `paths:` loads in every session like this one, so its text belongs here instead.
+
 ## What this repository ships
 
 **Site PWA** turns a WordPress site into an installable app (PWA): a web app manifest and a home-screen icon, an app shell for signed-in users, and a **screen registration contract** through which other plugins add their screens. Free Form Certificate is the first consumer, and its attendance terminal stays in Free Form Certificate (rpgmem/ffcertificate#2738 is the umbrella issue). Every GitHub release attaches one asset, the plugin zip (`site-pwa-X.Y.Z.zip`).
@@ -130,7 +132,7 @@ Two guards read the code rather than test it:
 - `ReadmeUpgradeNoticeTest`: the Upgrade Notice holds one entry, for the Stable tag, at most 300 characters, pointing at `CHANGELOG.md`, and the updater's own parser returns it.
 - `SuppressionTest`: every `phpcs:ignore` or `phpcs:disable` names a sniff and gives a reason after `--`; a `@phpstan-ignore` names an identifier with a reason, and the `-line` forms are refused.
 
-A browser script under test runs through `runScript()` in `tests/js/helpers.js`, never `new Function()`, which V8 cannot attribute coverage to.
+A browser script under test is loaded so that V8 attributes coverage to its file, never through `new Function()`. A script that exports what it tests (`module.exports` behind a `typeof module` guard) is `require()`d through `createRequire`; one that only runs for its effects is read and run with `vm.runInThisContext()` under its real file name.
 
 There is no deploy to the testes site yet: the plugin has nothing to see there until the app shell lands, and the deploy workflow arrives with it.
 
@@ -139,9 +141,10 @@ Locally:
 ```bash
 composer install && npm ci
 vendor/bin/phpunit --testsuite unit
-# The functional suite needs MySQL. A cloud session's container ships MariaDB stopped;
-# the environment's setup script starts it with the CI credentials (root / root).
-service mariadb start
+# The functional suite needs MySQL. A cloud session's container has MariaDB with no
+# service unit, so `service mariadb start` fails; the environment's setup script starts
+# it with mysqld_safe and the CI credentials (root / root). If it is down:
+(nohup mysqld_safe >/dev/null 2>&1 &)
 bash bin/install-wp-tests.sh wp_site_pwa_tests root root 127.0.0.1 false latest
 vendor/bin/phpunit -c phpunit.functional.xml.dist
 vendor/bin/phpstan analyse --no-progress

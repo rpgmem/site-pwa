@@ -13,7 +13,6 @@ export default defineConfig( {
 			exclude: [ 'assets/js/**/*.min.js' ],
 			reporter: [ 'text-summary' ],
 			// The floor rule of CLAUDE.md ("Quality gates"): never below 90%.
-			// No script ships yet; the first one arrives with its tests.
 			thresholds: { lines: 90 },
 		},
 	},
