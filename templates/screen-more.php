@@ -8,6 +8,7 @@
  * @var array{more: list<array{id: string, label: string, icon: string, section: string, subtitle: string, badge: callable|string, render: callable|null, url: string}>, profile: array{initials: string, name: string, line: string}, account_url: string, logout_url: string, news_url: string, pages: list<array{id: int, label: string, url: string, external: bool}>} $site_pwa Values built by Frame::render().
  */
 
+use SitePwa\App\Frame;
 use SitePwa\App\Icons;
 use SitePwa\App\Screens;
 
@@ -108,7 +109,7 @@ $site_pwa_groups = array(
 					<strong><?php esc_html_e( 'Dark theme', 'site-pwa' ); ?></strong>
 					<span><?php esc_html_e( 'On this device only. Off follows the site.', 'site-pwa' ); ?></span>
 				</span>
-				<input type="checkbox" role="switch" data-site-pwa-dark data-site-pwa-dark-bar="<?php echo esc_attr( \SitePwa\App\Frame::DARK_BAR ); ?>">
+				<input type="checkbox" role="switch" data-site-pwa-dark data-site-pwa-dark-classes="<?php echo esc_attr( (string) wp_json_encode( Frame::darkRootClasses() ) ); ?>" data-site-pwa-dark-bar="<?php echo esc_attr( Frame::DARK_BAR ); ?>">
 			</label>
 			<label class="site-pwa-switch">
 				<span>

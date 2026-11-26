@@ -19,7 +19,7 @@ describe( 'more.js', () => {
 	let root;
 
 	beforeEach( () => {
-		document.body.innerHTML = '<input type="checkbox" data-site-pwa-dark>';
+		document.body.innerHTML = '<input type="checkbox" data-site-pwa-dark data-site-pwa-dark-classes=\'["ffc-dark-mode"]\'>';
 		input = document.querySelector( 'input' );
 		root = document.createElement( 'html' );
 	} );
@@ -42,6 +42,27 @@ describe( 'more.js', () => {
 		expect( root.getAttribute( 'data-site-pwa-scheme' ) ).toBe( 'dark' );
 		expect( root.classList.contains( 'ffc-dark-mode' ) ).toBe( true );
 		expect( reload ).not.toHaveBeenCalled();
+	} );
+
+	it( 'adds only the root classes the page lists, and none when the list is missing or broken', () => {
+		for ( const [ attribute, expected ] of [
+			[ null, [] ],
+			[ 'not json', [] ],
+			[ '{"a":1}', [] ],
+			[ '["theme-dark", 3, "bad class"]', [ 'theme-dark' ] ],
+		] ) {
+			document.body.innerHTML = '<input type="checkbox" data-site-pwa-dark>';
+			const switchInput = document.querySelector( 'input' );
+			if ( null !== attribute ) {
+				switchInput.setAttribute( 'data-site-pwa-dark-classes', attribute );
+			}
+			const html = document.createElement( 'html' );
+			init( switchInput, memory(), html, vi.fn() );
+			switchInput.checked = true;
+			switchInput.dispatchEvent( new Event( 'change' ) );
+			expect( [ ...html.classList ] ).toEqual( expected );
+			expect( html.getAttribute( 'data-site-pwa-scheme' ) ).toBe( 'dark' );
+		}
 	} );
 
 	it( 'turning it on turns the phone bars dark too', () => {

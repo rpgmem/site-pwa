@@ -1,7 +1,7 @@
 /**
  * More's dark theme switch (#23): kept on this device only, in this
  * browser's storage. On, the frame and the screens inside it turn dark
- * before the first paint (see Frame::DARK_SCRIPT); off, the site's own
+ * before the first paint (see Frame::darkScript()); off, the site's own
  * choice applies again, so the page reloads to let it.
  */
 ( function () {
@@ -31,7 +31,9 @@
 			}
 			if ( input.checked ) {
 				root.setAttribute( 'data-site-pwa-scheme', 'dark' );
-				root.classList.add( 'ffc-dark-mode' );
+				classes( input ).forEach( function ( name ) {
+					root.classList.add( name );
+				} );
 				// The phone's status and navigation bars turn dark too; off,
 				// the reload prints the light colour again.
 				var bar = input.getAttribute( 'data-site-pwa-dark-bar' );
@@ -45,6 +47,23 @@
 			}
 			reload();
 		} );
+	}
+
+	/**
+	 * The root classes other plugins name for their dark screens (#48).
+	 *
+	 * @param {HTMLInputElement} input The switch, which carries them as JSON.
+	 * @return {string[]} Class names; none when the list is missing or broken.
+	 */
+	function classes( input ) {
+		try {
+			var list = JSON.parse( input.getAttribute( 'data-site-pwa-dark-classes' ) || '[]' );
+			return Array.isArray( list ) ? list.filter( function ( name ) {
+				return 'string' === typeof name && /^-?[A-Za-z_][A-Za-z0-9_-]*$/.test( name );
+			} ) : [];
+		} catch {
+			return [];
+		}
 	}
 
 	function read( storage ) {
