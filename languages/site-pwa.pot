@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-25 00:10+0000\n"
+"POT-Creation-Date: 2026-11-26 14:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -145,8 +145,8 @@ msgstr ""
 msgid "Public, no login. The banner leads here, and the address can go on a poster, a QR code or an e-mail. It uses the app's name, icon and colours, and shows the install button, the iPhone steps or \"Open the app\" for each browser."
 msgstr ""
 
-#: src/admin/settings-page.php:252 src/app/frame.php:374
-#: templates/screen-home.php:103 templates/screen-more.php:35
+#: src/admin/settings-page.php:252 src/app/frame.php:434
+#: templates/screen-home.php:103 templates/screen-more.php:36
 #: templates/screen-news.php:22
 msgid "News"
 msgstr ""
@@ -281,19 +281,19 @@ msgstr ""
 msgid "The custom icon must be at least %2$d px wide; this image is %1$d px."
 msgstr ""
 
-#: src/app/frame.php:370 templates/screen-account.php:16
+#: src/app/frame.php:430 templates/screen-account.php:16
 msgid "Account"
 msgstr ""
 
-#: src/app/frame.php:372 src/app/navigation.php:51 templates/screen-more.php:47
+#: src/app/frame.php:432 src/app/navigation.php:51 templates/screen-more.php:48
 msgid "More"
 msgstr ""
 
-#: src/app/frame.php:377 src/app/frame.php:380
+#: src/app/frame.php:437 src/app/frame.php:440
 msgid "Not available"
 msgstr ""
 
-#: src/app/frame.php:382 src/app/navigation.php:41 templates/screen-home.php:18
+#: src/app/frame.php:442 src/app/navigation.php:41 templates/screen-home.php:18
 msgid "Home"
 msgstr ""
 
@@ -307,10 +307,6 @@ msgstr ""
 
 #: src/app/home.php:137
 msgid "Good evening,"
-msgstr ""
-
-#: src/app/identity.php:60
-msgid "Free Form Certificate: Public Design"
 msgstr ""
 
 #: src/app/lock.php:90
@@ -341,7 +337,7 @@ msgstr ""
 msgid "The app no longer locks on this phone."
 msgstr ""
 
-#: src/app/lock.php:97 templates/screen-more.php:117
+#: src/app/lock.php:97 templates/screen-more.php:118
 msgid "Required for your account: it cannot be turned off."
 msgstr ""
 
@@ -353,20 +349,16 @@ msgstr ""
 msgid "Keep me signed in on this device"
 msgstr ""
 
-#: src/app/scheme.php:56
+#: src/app/scheme.php:57
 msgid "Follow the device"
 msgstr ""
 
-#: src/app/scheme.php:57
+#: src/app/scheme.php:58
 msgid "Always light"
 msgstr ""
 
-#: src/app/scheme.php:58
+#: src/app/scheme.php:59
 msgid "Always dark"
-msgstr ""
-
-#: src/app/scheme.php:71
-msgid "Free Form Certificate: Dark Mode"
 msgstr ""
 
 #: src/update/github-updater.php:340
@@ -543,7 +535,7 @@ msgstr ""
 msgid "Edit profile"
 msgstr ""
 
-#: templates/screen-account.php:27 templates/screen-more.php:127
+#: templates/screen-account.php:27 templates/screen-more.php:128
 msgid "Sign out"
 msgstr ""
 
@@ -619,43 +611,43 @@ msgstr ""
 msgid "Back to the home screen"
 msgstr ""
 
-#: templates/screen-more.php:43
+#: templates/screen-more.php:44
 msgid "Services"
 msgstr ""
 
-#: templates/screen-more.php:44
+#: templates/screen-more.php:45
 msgid "Operator"
 msgstr ""
 
-#: templates/screen-more.php:49
+#: templates/screen-more.php:50
 msgid "Your account"
 msgstr ""
 
-#: templates/screen-more.php:57
+#: templates/screen-more.php:58
 msgid "My details"
 msgstr ""
 
-#: templates/screen-more.php:89
+#: templates/screen-more.php:90
 msgid "Site pages"
 msgstr ""
 
-#: templates/screen-more.php:104
+#: templates/screen-more.php:105
 msgid "Preferences"
 msgstr ""
 
-#: templates/screen-more.php:108
+#: templates/screen-more.php:109
 msgid "Dark theme"
 msgstr ""
 
-#: templates/screen-more.php:109
+#: templates/screen-more.php:110
 msgid "On this device only. Off follows the site."
 msgstr ""
 
-#: templates/screen-more.php:115
+#: templates/screen-more.php:116
 msgid "Lock with the phone's screen lock"
 msgstr ""
 
-#: templates/screen-more.php:116
+#: templates/screen-more.php:117
 msgid "Fingerprint, face or the phone's PIN when the app opens, and when it comes back after a few seconds away."
 msgstr ""
 

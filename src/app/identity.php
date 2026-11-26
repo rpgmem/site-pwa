@@ -55,12 +55,6 @@ final class Identity {
 	 */
 	public static function sources(): array {
 		$sources = array();
-		if ( class_exists( '\FreeFormCertificate\Core\PublicDesign' ) ) {
-			$sources['ffc'] = array(
-				'label' => __( 'Free Form Certificate: Public Design', 'site-pwa' ),
-				'read'  => array( self::class, 'readFfc' ),
-			);
-		}
 		/**
 		 * The designs the app can take its accent and corners from.
 		 *
@@ -109,32 +103,6 @@ final class Identity {
 			'radius'         => self::corner( $values['radius'] ?? null, $own['radius'] ),
 			'control_radius' => self::corner( $values['control_radius'] ?? null, $own['control_radius'] ),
 			'source'         => $id,
-		);
-	}
-
-	/**
-	 * Free Form Certificate's Public Design, or null while it is off: switched
-	 * off, it stands for FFC's stylesheet defaults, not for a choice.
-	 *
-	 * Read through the public API only (`from_settings()` and the public
-	 * properties), and validated in current() like any other source.
-	 *
-	 * @return array{accent: mixed, radius: mixed, control_radius: mixed}|null
-	 */
-	public static function readFfc(): ?array {
-		$factory = array( '\FreeFormCertificate\Core\PublicDesign', 'from_settings' );
-		if ( ! is_callable( $factory ) ) {
-			return null;
-		}
-		$design = call_user_func( $factory );
-		$values = is_object( $design ) ? get_object_vars( $design ) : array();
-		if ( empty( $values['enabled'] ) ) {
-			return null;
-		}
-		return array(
-			'accent'         => $values['accent'] ?? null,
-			'radius'         => $values['card_radius'] ?? null,
-			'control_radius' => $values['radius'] ?? null,
 		);
 	}
 
