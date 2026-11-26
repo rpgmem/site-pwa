@@ -159,6 +159,27 @@ final class SchemeTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * When the site follows the device, a dark phone turns the app's root
+	 * dark in the head, with the classes other plugins offered, and keeps
+	 * following the phone; a fixed scheme leaves that to the stored choice.
+	 */
+	public function test_auto_follows_a_dark_phone_with_the_plugins_root_classes(): void {
+		add_filter( 'site_pwa_dark_root_classes', static fn(): array => array( 'ffc-dark-mode' ) );
+
+		$this->settings( array( 'color_scheme' => 'auto' ) );
+		$script = Frame::darkScript();
+		self::assertStringContainsString( "else if(true&&window.matchMedia){var q=window.matchMedia('(prefers-color-scheme: dark)');if(q.matches){s(true);}", $script );
+		self::assertStringContainsString( "addEventListener('change',function(e){s(e.matches);})", $script, 'it follows the phone while the app is open' );
+		self::assertStringContainsString( '["ffc-dark-mode"].forEach(function(c){r.classList.toggle(c,d);})', $script );
+
+		foreach ( array( 'light', 'dark' ) as $scheme ) {
+			$this->settings( array( 'color_scheme' => $scheme ) );
+			self::assertStringContainsString( 'else if(false&&window.matchMedia)', Frame::darkScript(), $scheme );
+		}
+		remove_all_filters( 'site_pwa_dark_root_classes' );
+	}
+
+	/**
 	 * Android paints the installed app's navigation bar from the manifest,
 	 * which the page's theme-color meta never reaches: a dark site hands it
 	 * the dark ground, and every other scheme keeps the settings' colours.
