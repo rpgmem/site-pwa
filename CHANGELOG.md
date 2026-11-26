@@ -42,6 +42,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Reloading the lock screen no longer unlocks the app** (#42). Pulling down to refresh recorded the hidden lock screen as a use, so the reloaded page skipped the lock; out of sight while locked now records nothing, and locking forgets the last use.
 - **The phone's status and navigation bars turn dark with the app** (#46): in the dark theme, set on the site or on this device under More, they take the dark ground instead of the light theme's accent, and they return to it when the dark theme is turned off; when the theme follows the device, they follow it too.
 - **The home band and Android's navigation bar turn dark too** (#54): in the dark theme the home band takes the dark surface instead of the light-blue dark accent, and a site whose scheme is dark hands the dark ground to the manifest, where Android reads the navigation bar's colour.
+- **Other plugins' screens turn dark when the site follows a dark phone** (#58): with the scheme on "auto", the app marks `<html>` dark and adds the offered root classes before the first paint, and follows the phone while open, as it already did for the choice made under More.
 
 ### Changed
 

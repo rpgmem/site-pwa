@@ -84,14 +84,21 @@ final class Frame {
 	}
 
 	/**
-	 * Applies the stored choice to the root element before the first paint.
+	 * Applies the dark theme to the root element before the first paint: the
+	 * choice this device stored on More, or, when the site's scheme follows
+	 * the device ("auto"), the device's own dark setting, which it keeps
+	 * following while the app is open. Either way the root carries the app's
+	 * dark mark and the classes other plugins offered, so their screens turn
+	 * dark with the frame. Only the stored choice rewrites the bars' colour:
+	 * under "auto" the theme-color tags already carry a dark one by media.
 	 */
 	public static function darkScript(): string {
 		return sprintf(
-			"try{if(localStorage.getItem('%s')==='1'){var r=document.documentElement;r.setAttribute('data-site-pwa-scheme','dark');%s.forEach(function(c){r.classList.add(c);});document.querySelectorAll('meta[name=theme-color]').forEach(function(m){m.setAttribute('content','%s');m.removeAttribute('media');});}}catch(e){}",
-			self::DARK_KEY,
+			"try{var r=document.documentElement,s=function(d){if(d){r.setAttribute('data-site-pwa-scheme','dark');}else{r.removeAttribute('data-site-pwa-scheme');}%s.forEach(function(c){r.classList.toggle(c,d);});};if(localStorage.getItem('%s')==='1'){s(true);document.querySelectorAll('meta[name=theme-color]').forEach(function(m){m.setAttribute('content','%s');m.removeAttribute('media');});}else if(%s&&window.matchMedia){var q=window.matchMedia('(prefers-color-scheme: dark)');if(q.matches){s(true);}if(q.addEventListener){q.addEventListener('change',function(e){s(e.matches);});}}}catch(e){}",
 			(string) wp_json_encode( self::darkRootClasses() ),
-			self::DARK_BAR
+			self::DARK_KEY,
+			self::DARK_BAR,
+			Scheme::AUTO === Scheme::current() ? 'true' : 'false'
 		);
 	}
 
