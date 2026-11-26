@@ -150,7 +150,7 @@ final class FrameTest extends WP_UnitTestCase {
 		$html = $this->screen( 'home' );
 
 		self::assertStringContainsString( '<link rel="manifest" href="' . esc_url( Routes::url( 'manifest' ) ) . '">', $html );
-		self::assertStringContainsString( '<meta name="theme-color" content="#1d5e8c">', $html );
+		self::assertStringContainsString( '<meta name="theme-color" content="#1d5e8c" media="(prefers-color-scheme: light)">', $html );
 		self::assertStringContainsString( "noindex", $html );
 		self::assertMatchesRegularExpression( '#<script data-sw="' . preg_quote( esc_url( Routes::url( 'sw' ) ), '#' ) . '" data-scope="/"[^>]*register#', $html );
 		self::assertStringContainsString( 'site-pwa-app-css', $html );
@@ -284,14 +284,33 @@ final class FrameTest extends WP_UnitTestCase {
 	public function test_the_dark_theme_this_device_chose_is_applied_in_the_head_before_the_first_paint(): void {
 		$html = $this->screen( 'home' );
 		$head = substr( $html, 0, (int) strpos( $html, '</head>' ) );
-		self::assertStringContainsString( Frame::DARK_SCRIPT, $head );
-		self::assertStringContainsString( "'" . Frame::DARK_KEY . "'", Frame::DARK_SCRIPT, 'the head script reads the key More writes' );
+		self::assertStringContainsString( Frame::darkScript(), $head );
+		self::assertStringContainsString( "'" . Frame::DARK_KEY . "'", Frame::darkScript(), 'the head script reads the key More writes' );
 		self::assertStringContainsString( "'" . Frame::DARK_KEY . "'", (string) file_get_contents( dirname( __DIR__, 2 ) . '/assets/js/more.js' ) );
 		self::assertFalse( wp_script_is( Frame::MORE_HANDLE, 'enqueued' ), 'only More loads the switch' );
 
 		$more = $this->screen( 'more' );
 		self::assertTrue( wp_script_is( Frame::MORE_HANDLE, 'enqueued' ) );
-		self::assertStringContainsString( '<input type="checkbox" role="switch" data-site-pwa-dark>', $more );
+		self::assertStringContainsString( '<input type="checkbox" role="switch" data-site-pwa-dark data-site-pwa-dark-classes="[]" data-site-pwa-dark-bar="' . Frame::DARK_BAR . '">', $more );
+		self::assertStringContainsString( "'" . Frame::DARK_BAR . "'", Frame::darkScript(), 'the head script turns the phone bars dark too' );
+	}
+
+	public function test_the_dark_root_classes_come_from_the_filter_and_only_plain_class_names_pass(): void {
+		self::assertSame( array(), Frame::darkRootClasses(), 'no plugin is named by default' );
+		self::assertStringContainsString( '[].forEach', Frame::darkScript() );
+
+		add_filter(
+			'site_pwa_dark_root_classes',
+			static fn( array $classes ): array => array_merge( $classes, array( 'ffc-dark-mode', 'ffc-dark-mode', 'x"};alert(1);//', 42, '' ) )
+		);
+		self::assertSame( array( 'ffc-dark-mode' ), Frame::darkRootClasses() );
+		self::assertStringContainsString( '["ffc-dark-mode"].forEach', Frame::darkScript() );
+		self::assertStringContainsString( 'data-site-pwa-dark-classes="[&quot;ffc-dark-mode&quot;]"', $this->screen( 'more' ) );
+
+		remove_all_filters( 'site_pwa_dark_root_classes' );
+		add_filter( 'site_pwa_dark_root_classes', '__return_false' );
+		self::assertSame( array(), Frame::darkRootClasses() );
+		remove_all_filters( 'site_pwa_dark_root_classes' );
 	}
 
 	public function test_more_opens_with_the_person_their_initials_and_a_line_other_plugins_supply(): void {

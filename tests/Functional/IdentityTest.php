@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SitePwa\Tests\Functional;
 
-use FreeFormCertificate\Core\PublicDesign;
 use SitePwa\App\Frame;
 use SitePwa\App\Identity;
 use SitePwa\App\Routes;
@@ -15,8 +14,6 @@ use SitePwa\App\ServiceWorker;
 use SitePwa\Settings;
 use WP_UnitTestCase;
 
-require_once __DIR__ . '/Stubs/ffc-public-design.php';
-
 /**
  * The app's look: its own theme colour and corners, or another plugin's
  * design taken as the source, and every place that draws it.
@@ -26,17 +23,42 @@ require_once __DIR__ . '/Stubs/ffc-public-design.php';
  */
 final class IdentityTest extends WP_UnitTestCase {
 
+	/**
+	 * What a consumer's design answers while it is on, in this plugin's shape.
+	 */
 	private const FFC_ON = array(
-		'enabled'     => true,
-		'accent'      => '#B32D2E',
-		'radius'      => 2,
-		'card_radius' => 20,
+		'accent'         => '#B32D2E',
+		'radius'         => 20,
+		'control_radius' => 2,
 	);
+
+	/**
+	 * What the consumer registered as `ffc` answers; null while its design is off.
+	 *
+	 * @var array<string, mixed>|null
+	 */
+	private static ?array $design = null;
+
+	/**
+	 * A consumer offering its design under `ffc`, as Free Form Certificate does (#48).
+	 *
+	 * @param array<string, mixed> $sources Sources by id.
+	 * @return array<string, mixed>
+	 */
+	public static function consumer( array $sources ): array {
+		return $sources + array(
+			'ffc' => array(
+				'label' => 'Free Form Certificate: Public Design',
+				'read'  => static fn(): ?array => self::$design,
+			),
+		);
+	}
 
 	protected function setUp(): void {
 		parent::setUp();
 		$GLOBALS['wp_styles'] = null;
-		PublicDesign::$stored = array( 'enabled' => false, 'accent' => '#2271b1', 'radius' => 4, 'card_radius' => 8 );
+		self::$design = null;
+		add_filter( 'site_pwa_identity_sources', array( self::class, 'consumer' ) );
 	}
 
 	protected function tearDown(): void {
@@ -58,16 +80,16 @@ final class IdentityTest extends WP_UnitTestCase {
 		);
 	}
 
-	public function test_free_form_certificate_is_a_source_when_its_class_is_loaded(): void {
-		$sources = Identity::sources();
+	public function test_a_consumer_is_a_source_only_through_the_filter(): void {
+		self::assertSame( 'Free Form Certificate: Public Design', Identity::sources()['ffc']['label'] );
 
-		self::assertArrayHasKey( 'ffc', $sources );
-		self::assertSame( 'Free Form Certificate: Public Design', $sources['ffc']['label'] );
+		remove_all_filters( 'site_pwa_identity_sources' );
+		self::assertSame( array(), Identity::sources(), 'no plugin is read by name' );
 	}
 
 	public function test_the_public_design_gives_the_accent_and_both_corners_while_it_is_on(): void {
 		$this->settings( array( 'identity_source' => 'ffc' ) );
-		PublicDesign::$stored = self::FFC_ON;
+		self::$design = self::FFC_ON;
 
 		self::assertSame(
 			array( 'accent' => '#b32d2e', 'radius' => 20, 'control_radius' => 2, 'source' => 'ffc' ),
@@ -79,7 +101,6 @@ final class IdentityTest extends WP_UnitTestCase {
 		$this->settings( array( 'identity_source' => 'ffc' ) );
 
 		self::assertSame( 'own', Identity::current()['source'] );
-		self::assertNull( Identity::readFfc() );
 	}
 
 	public function test_a_source_that_is_gone_falls_back_and_stays_stored(): void {
@@ -119,7 +140,7 @@ final class IdentityTest extends WP_UnitTestCase {
 
 	public function test_the_css_carries_the_accent_and_the_corners(): void {
 		$this->settings( array( 'identity_source' => 'ffc' ) );
-		PublicDesign::$stored = self::FFC_ON;
+		self::$design = self::FFC_ON;
 
 		self::assertSame(
 			':root{--site-pwa-radius:20px;--site-pwa-control-radius:2px;--site-pwa-accent:#b32d2e;--site-pwa-on-accent:#ffffff;--site-pwa-accent-text:#b32d2e;--site-pwa-info-bg:#f6e6e6}',
@@ -164,12 +185,12 @@ final class IdentityTest extends WP_UnitTestCase {
 
 	public function test_every_place_that_draws_the_app_takes_the_inherited_accent(): void {
 		$this->settings( array( 'identity_source' => 'ffc' ) );
-		PublicDesign::$stored = self::FFC_ON;
+		self::$design = self::FFC_ON;
 
 		self::assertSame( '#b32d2e', Manifest::data()['theme_color'] );
 
 		$offline = Pages::render();
-		self::assertStringContainsString( '<meta name="theme-color" content="#b32d2e">', $offline );
+		self::assertStringContainsString( '<meta name="theme-color" content="#b32d2e" media="(prefers-color-scheme: light)">', $offline );
 		self::assertStringContainsString( '<style>' . Identity::css() . '</style>', $offline );
 
 		Login::enqueue();
@@ -179,7 +200,7 @@ final class IdentityTest extends WP_UnitTestCase {
 
 	public function test_the_frame_carries_the_look_after_its_stylesheet_and_in_its_theme_colour(): void {
 		$this->settings( array( 'identity_source' => 'ffc' ) );
-		PublicDesign::$stored = self::FFC_ON;
+		self::$design = self::FFC_ON;
 		$GLOBALS['wp_scripts'] = null;
 		wp_set_current_user( self::factory()->user->create() );
 		set_query_var( Routes::QUERY_VAR, 'home' );
@@ -187,7 +208,7 @@ final class IdentityTest extends WP_UnitTestCase {
 		$html = Frame::render( 'home' );
 		set_query_var( Routes::QUERY_VAR, '' );
 
-		self::assertStringContainsString( '<meta name="theme-color" content="#b32d2e">', $html );
+		self::assertStringContainsString( '<meta name="theme-color" content="#b32d2e" media="(prefers-color-scheme: light)">', $html );
 		self::assertMatchesRegularExpression( '#site-pwa-app-css[^>]*>\s*<style id=["\']site-pwa-app-inline-css["\'][^>]*>\s*' . preg_quote( Identity::css(), '#' ) . '#', $html );
 	}
 
@@ -195,7 +216,7 @@ final class IdentityTest extends WP_UnitTestCase {
 		$this->settings( array( 'identity_source' => 'ffc' ) );
 		$before = ServiceWorker::config()['cache'];
 
-		PublicDesign::$stored = self::FFC_ON;
+		self::$design = self::FFC_ON;
 
 		self::assertNotSame( $before, ServiceWorker::config()['cache'] );
 	}

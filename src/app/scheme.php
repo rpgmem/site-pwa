@@ -41,8 +41,9 @@ final class Scheme {
 	public const DARK = 'dark';
 
 	/**
-	 * The setting's value for Free Form Certificate's Dark Mode, and the
-	 * default: on a site without FFC it means `auto`.
+	 * The default choice: the source Free Form Certificate registers under this
+	 * id through `site_pwa_scheme_sources`. It is a stored value, so it stays;
+	 * where no plugin offers it, the choice means `auto`.
 	 */
 	public const FFC = 'ffc';
 
@@ -66,12 +67,6 @@ final class Scheme {
 	 */
 	public static function sources(): array {
 		$sources = array();
-		if ( class_exists( '\FreeFormCertificate\Settings\SettingsReader' ) ) {
-			$sources[ self::FFC ] = array(
-				'label' => __( 'Free Form Certificate: Dark Mode', 'site-pwa' ),
-				'read'  => array( self::class, 'readFfc' ),
-			);
-		}
 		/**
 		 * The plugins the app's light and dark theme can follow.
 		 *
@@ -106,24 +101,6 @@ final class Scheme {
 		}
 		$value = call_user_func( $sources[ $choice ]['read'] );
 		return is_string( $value ) && isset( self::own()[ $value ] ) ? $value : self::AUTO;
-	}
-
-	/**
-	 * Free Form Certificate's Dark Mode, in the app's words: `off` is light,
-	 * `on` is dark, `auto` follows the device in both.
-	 */
-	public static function readFfc(): ?string {
-		$reader = array( '\FreeFormCertificate\Settings\SettingsReader', 'get' );
-		if ( ! is_callable( $reader ) ) {
-			return null;
-		}
-		$mode = call_user_func( $reader, 'dark_mode', 'off' );
-		$map  = array(
-			'off'  => self::LIGHT,
-			'on'   => self::DARK,
-			'auto' => self::AUTO,
-		);
-		return is_string( $mode ) && isset( $map[ $mode ] ) ? $map[ $mode ] : null;
 	}
 
 	/**

@@ -53,9 +53,54 @@ final class Frame {
 	public const DARK_KEY = 'site-pwa-dark';
 
 	/**
+	 * A class name the dark root list accepts: what a stylesheet can select.
+	 */
+	public const ROOT_CLASS_PATTERN = '/^-?[A-Za-z_][A-Za-z0-9_-]*$/';
+
+	/**
+	 * The classes the app adds to `<html>` when the person turns it dark on More.
+	 *
+	 * Another plugin whose screens have their own dark palette names the class
+	 * that switches it on, so those screens turn dark with the frame. A name
+	 * that is not a plain class name is dropped.
+	 *
+	 * @return list<string>
+	 */
+	public static function darkRootClasses(): array {
+		/**
+		 * The root classes that turn another plugin's screens dark inside the app.
+		 *
+		 * @param list<string> $classes Class names.
+		 */
+		$classes = apply_filters( 'site_pwa_dark_root_classes', array() );
+		if ( ! is_array( $classes ) ) {
+			return array();
+		}
+		$valid = array_filter(
+			$classes,
+			static fn( $name ): bool => is_string( $name ) && 1 === preg_match( self::ROOT_CLASS_PATTERN, $name )
+		);
+		return array_values( array_unique( $valid ) );
+	}
+
+	/**
 	 * Applies the stored choice to the root element before the first paint.
 	 */
-	public const DARK_SCRIPT = "try{if(localStorage.getItem('site-pwa-dark')==='1'){var r=document.documentElement;r.setAttribute('data-site-pwa-scheme','dark');r.classList.add('ffc-dark-mode');}}catch(e){}";
+	public static function darkScript(): string {
+		return sprintf(
+			"try{if(localStorage.getItem('%s')==='1'){var r=document.documentElement;r.setAttribute('data-site-pwa-scheme','dark');%s.forEach(function(c){r.classList.add(c);});document.querySelectorAll('meta[name=theme-color]').forEach(function(m){m.setAttribute('content','%s');m.removeAttribute('media');});}}catch(e){}",
+			self::DARK_KEY,
+			(string) wp_json_encode( self::darkRootClasses() ),
+			self::DARK_BAR
+		);
+	}
+
+	/**
+	 * The colour of the phone's status and navigation bars in the dark
+	 * theme: the dark palette's ground (`--site-pwa-bg` in app.css), so the
+	 * bars match the screen instead of keeping the light theme's accent.
+	 */
+	public const DARK_BAR = '#10161d';
 
 	/**
 	 * Wire the hooks that only act on an app screen.
@@ -323,15 +368,34 @@ final class Frame {
 			printf( '<title>%s</title>' . "\n", esc_html( wp_get_document_title() ) );
 		}
 		printf( '<link rel="manifest" href="%s">' . "\n", esc_url( Routes::url( 'manifest' ) ) );
-		printf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( Identity::current()['accent'] ) );
+		echo self::themeColorTags(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Every value is escaped inside themeColorTags().
 		printf( '<link rel="apple-touch-icon" href="%s">' . "\n", esc_url( Manifest::touchIcon() ) );
 		// The dark theme chosen on More, on this device only (#23), applied
-		// before the first paint. `ffc-dark-mode` is FFC's own root class,
-		// so the screens it draws inside the frame turn dark with it.
-		wp_print_inline_script_tag( self::DARK_SCRIPT );
+		// before the first paint, with the root classes other plugins name so
+		// the screens they draw inside the frame turn dark with it (#48).
+		wp_print_inline_script_tag( self::darkScript() );
 		// The app lock (#38), also before the first paint: a locked app
 		// shows nothing until the phone is unlocked.
 		wp_print_inline_script_tag( Lock::headScript( wp_get_current_user() ) );
+	}
+
+	/**
+	 * The phone's status and navigation bars: the accent in the light theme,
+	 * the dark ground in the dark one, and both, by the device's setting,
+	 * when the theme follows the device. The dark theme chosen on More turns
+	 * them dark too (darkScript(), more.js).
+	 */
+	public static function themeColorTags(): string {
+		$accent = Identity::current()['accent'];
+		$scheme = Scheme::current();
+		if ( Scheme::DARK === $scheme ) {
+			return sprintf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( self::DARK_BAR ) );
+		}
+		if ( Scheme::AUTO === $scheme ) {
+			return sprintf( '<meta name="theme-color" content="%s" media="(prefers-color-scheme: light)">' . "\n", esc_attr( $accent ) )
+				. sprintf( '<meta name="theme-color" content="%s" media="(prefers-color-scheme: dark)">' . "\n", esc_attr( self::DARK_BAR ) );
+		}
+		return sprintf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( $accent ) );
 	}
 
 	/**

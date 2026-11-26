@@ -58,7 +58,36 @@ More opens on the person: their initials, their name, a line from the `site_pwa_
 add_filter( 'site_pwa_profile_line', static fn( string $line, WP_User $user ): string => 'RF ***.**1-0 · Teacher', 10, 2 );
 ```
 
-The line is plain text; markup is stripped. The dark theme preference is kept on that device only, in the browser's storage, and turns the frame and the screens inside it dark before the first paint by putting `data-site-pwa-scheme="dark"` and FFC's `ffc-dark-mode` class on `<html>`. Off, the app follows the site's choice again.
+The line is plain text; markup is stripped. The dark theme preference is kept on that device only, in the browser's storage, and turns the frame and the screens inside it dark before the first paint by putting `data-site-pwa-scheme="dark"` on `<html>`, with the classes listed through `site_pwa_dark_root_classes` (see "Offering the app a look" below). Off, the app follows the site's choice again.
+
+## Offering the app a look
+
+A plugin with a design of its own can offer it to the app through three filters, and the app never reads another plugin by name. An administrator picks the source on the settings screen; the choice is stored by the source's id, so keep the id stable.
+
+```php
+add_filter( 'site_pwa_identity_sources', static function ( array $sources ): array {
+	$sources['my-plugin'] = array(
+		'label' => __( 'My Plugin: Design', 'my-plugin' ),
+		'read'  => static fn(): ?array => array( 'accent' => '#1a5276', 'radius' => 14, 'control_radius' => 6 ),
+	);
+	return $sources;
+} );
+
+add_filter( 'site_pwa_scheme_sources', static function ( array $sources ): array {
+	$sources['my-plugin'] = array(
+		'label' => __( 'My Plugin: Dark mode', 'my-plugin' ),
+		'read'  => static fn(): ?string => 'dark',
+	);
+	return $sources;
+} );
+
+add_filter( 'site_pwa_dark_root_classes', static fn( array $classes ): array => array_merge( $classes, array( 'my-plugin-dark' ) ) );
+```
+
+- **An identity source** returns `accent` (`#rrggbb`), `radius` (the cards' corner, px) and `control_radius` (buttons and fields, px), any of them optional, or `null` while its design is switched off, which means "use the app's own look". Every value is validated, and a corner is capped.
+- **A scheme source** returns `light`, `dark` or `auto`, or `null` when it has nothing to say, which means `auto`. The default choice is the source registered as `ffc`, which Free Form Certificate offers; where no plugin offers it, the app follows the device.
+- **A dark root class** is added to `<html>` when the person turns the app dark on More, before the first paint, so a plugin whose screens have their own dark palette turns them dark with the frame. Only plain class names pass.
+- An id the app uses for its own choices (`own`, `auto`, `light`, `dark`) cannot be taken by a source.
 
 ## Feeding the home screen
 

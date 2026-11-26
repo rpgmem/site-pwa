@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-25 00:10+0000\n"
+"POT-Creation-Date: 2026-11-26 14:40+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -144,8 +144,8 @@ msgstr "Página de instalação"
 msgid "Public, no login. The banner leads here, and the address can go on a poster, a QR code or an e-mail. It uses the app's name, icon and colours, and shows the install button, the iPhone steps or \"Open the app\" for each browser."
 msgstr "Pública, sem login. O banner leva para cá, e o endereço pode ir em cartaz, QR code ou e-mail. Usa o nome, o ícone e as cores do app, e mostra o botão de instalar, os passos do iPhone ou \"Abrir o app\" conforme o navegador."
 
-#: src/admin/settings-page.php:252 src/app/frame.php:374
-#: templates/screen-home.php:103 templates/screen-more.php:35
+#: src/admin/settings-page.php:252 src/app/frame.php:461
+#: templates/screen-home.php:103 templates/screen-more.php:36
 #: templates/screen-news.php:22
 msgid "News"
 msgstr "Notícias"
@@ -280,19 +280,19 @@ msgstr "O ícone personalizado precisa ser quadrado; esta imagem tem %1$d × %2$
 msgid "The custom icon must be at least %2$d px wide; this image is %1$d px."
 msgstr "O ícone personalizado precisa ter pelo menos %2$d px de lado; esta imagem tem %1$d px."
 
-#: src/app/frame.php:370 templates/screen-account.php:16
+#: src/app/frame.php:457 templates/screen-account.php:16
 msgid "Account"
 msgstr "Conta"
 
-#: src/app/frame.php:372 src/app/navigation.php:51 templates/screen-more.php:47
+#: src/app/frame.php:459 src/app/navigation.php:51 templates/screen-more.php:48
 msgid "More"
 msgstr "Mais"
 
-#: src/app/frame.php:377 src/app/frame.php:380
+#: src/app/frame.php:464 src/app/frame.php:467
 msgid "Not available"
 msgstr "Indisponível"
 
-#: src/app/frame.php:382 src/app/navigation.php:41 templates/screen-home.php:18
+#: src/app/frame.php:469 src/app/navigation.php:41 templates/screen-home.php:18
 msgid "Home"
 msgstr "Início"
 
@@ -307,10 +307,6 @@ msgstr "Boa tarde,"
 #: src/app/home.php:137
 msgid "Good evening,"
 msgstr "Boa noite,"
-
-#: src/app/identity.php:60
-msgid "Free Form Certificate: Public Design"
-msgstr "Free Form Certificate: Design Público"
 
 #: src/app/lock.php:90
 msgid "Confirm with your phone's screen lock…"
@@ -340,7 +336,7 @@ msgstr "Este celular não tem bloqueio de tela. Isso é altamente inseguro: qual
 msgid "The app no longer locks on this phone."
 msgstr "O app não trava mais neste celular."
 
-#: src/app/lock.php:97 templates/screen-more.php:117
+#: src/app/lock.php:97 templates/screen-more.php:118
 msgid "Required for your account: it cannot be turned off."
 msgstr "Obrigatória para a sua conta: não pode ser desativada."
 
@@ -352,21 +348,17 @@ msgstr "Esqueceu a senha?"
 msgid "Keep me signed in on this device"
 msgstr "Manter conectado neste aparelho"
 
-#: src/app/scheme.php:56
+#: src/app/scheme.php:57
 msgid "Follow the device"
 msgstr "Seguir o aparelho"
 
-#: src/app/scheme.php:57
+#: src/app/scheme.php:58
 msgid "Always light"
 msgstr "Sempre claro"
 
-#: src/app/scheme.php:58
+#: src/app/scheme.php:59
 msgid "Always dark"
 msgstr "Sempre escuro"
-
-#: src/app/scheme.php:71
-msgid "Free Form Certificate: Dark Mode"
-msgstr "Free Form Certificate: Modo Escuro"
 
 #: src/update/github-updater.php:340
 msgid "Update package integrity check (SHA-256) failed. Installation aborted."
@@ -542,7 +534,7 @@ msgstr "E-mail"
 msgid "Edit profile"
 msgstr "Editar perfil"
 
-#: templates/screen-account.php:27 templates/screen-more.php:127
+#: templates/screen-account.php:27 templates/screen-more.php:128
 msgid "Sign out"
 msgstr "Sair"
 
@@ -618,43 +610,43 @@ msgstr "Ela pode ter sido removida, ou você pode não ter acesso a ela."
 msgid "Back to the home screen"
 msgstr "Voltar à tela inicial"
 
-#: templates/screen-more.php:43
+#: templates/screen-more.php:44
 msgid "Services"
 msgstr "Serviços"
 
-#: templates/screen-more.php:44
+#: templates/screen-more.php:45
 msgid "Operator"
 msgstr "Operador"
 
-#: templates/screen-more.php:49
+#: templates/screen-more.php:50
 msgid "Your account"
 msgstr "Sua conta"
 
-#: templates/screen-more.php:57
+#: templates/screen-more.php:58
 msgid "My details"
 msgstr "Meus dados"
 
-#: templates/screen-more.php:89
+#: templates/screen-more.php:90
 msgid "Site pages"
 msgstr "Páginas do site"
 
-#: templates/screen-more.php:104
+#: templates/screen-more.php:105
 msgid "Preferences"
 msgstr "Preferências"
 
-#: templates/screen-more.php:108
+#: templates/screen-more.php:109
 msgid "Dark theme"
 msgstr "Tema escuro"
 
-#: templates/screen-more.php:109
+#: templates/screen-more.php:110
 msgid "On this device only. Off follows the site."
 msgstr "Só neste aparelho. Desligado, segue o site."
 
-#: templates/screen-more.php:115
+#: templates/screen-more.php:116
 msgid "Lock with the phone's screen lock"
 msgstr "Travar com o bloqueio do celular"
 
-#: templates/screen-more.php:116
+#: templates/screen-more.php:117
 msgid "Fingerprint, face or the phone's PIN when the app opens, and when it comes back after a few seconds away."
 msgstr "Digital, rosto ou PIN do celular quando o app abre e quando volta após alguns segundos fora."
 
@@ -707,6 +699,12 @@ msgstr "Instalar"
 #. Plugin header: Description
 msgid "Turns the site into an installable app: a home-screen icon, an app shell for signed-in users and screens other plugins register."
 msgstr "Transforma o site em um app instalável: um ícone na tela inicial, uma estrutura de app para quem está conectado e telas que outros plugins registram."
+
+#~ msgid "Free Form Certificate: Public Design"
+#~ msgstr "Free Form Certificate: Design Público"
+
+#~ msgid "Free Form Certificate: Dark Mode"
+#~ msgstr "Free Form Certificate: Modo Escuro"
 
 #~ msgid "On iPhone no browser installs with a button. In Safari, Share is at the bottom."
 #~ msgstr "No iPhone nenhum navegador instala com um botão. No Safari, o Compartilhar fica embaixo."

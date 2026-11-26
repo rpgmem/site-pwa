@@ -39,4 +39,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **The bell always answers a tap** (#32). With nothing pending it was a plain icon and Home drew no Pending section, so a tap did nothing; it now always leads to Pending, which says "Nothing pending." when empty.
 - **Safari on an iPad gets the Share-at-the-top steps** (#36). The install page told it Share is at the bottom, which is only true on an iPhone.
 - **Reloading the lock screen no longer unlocks the app** (#42). Pulling down to refresh recorded the hidden lock screen as a use, so the reloaded page skipped the lock; out of sight while locked now records nothing, and locking forgets the last use.
+- **The phone's status and navigation bars turn dark with the app** (#46): in the dark theme, set on the site or on this device under More, they take the dark ground instead of the light theme's accent, and they return to it when the dark theme is turned off; when the theme follows the device, they follow it too.
 
+### Changed
+
+- **The app no longer reads Free Form Certificate by name** (#48). The look and the light or dark choice come only from sources other plugins offer through `site_pwa_identity_sources` and `site_pwa_scheme_sources`, and the classes added to `<html>` when the app turns dark from the new `site_pwa_dark_root_classes`; FFC offers all three itself, under the same `ffc` id.
