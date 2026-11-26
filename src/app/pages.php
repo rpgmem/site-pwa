@@ -47,7 +47,6 @@ final class Pages {
 		$vars = array(
 			'lang'        => (string) get_bloginfo( 'language' ),
 			'name'        => $settings['name'],
-			'theme_color' => Identity::current()['accent'],
 			'identity'    => Identity::css(),
 			'manifest'    => Routes::url( 'manifest' ),
 			'touch_icon'  => Manifest::touchIcon(),

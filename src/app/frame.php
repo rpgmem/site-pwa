@@ -55,7 +55,14 @@ final class Frame {
 	/**
 	 * Applies the stored choice to the root element before the first paint.
 	 */
-	public const DARK_SCRIPT = "try{if(localStorage.getItem('site-pwa-dark')==='1'){var r=document.documentElement;r.setAttribute('data-site-pwa-scheme','dark');r.classList.add('ffc-dark-mode');}}catch(e){}";
+	public const DARK_SCRIPT = "try{if(localStorage.getItem('site-pwa-dark')==='1'){var r=document.documentElement;r.setAttribute('data-site-pwa-scheme','dark');r.classList.add('ffc-dark-mode');document.querySelectorAll('meta[name=theme-color]').forEach(function(m){m.setAttribute('content','" . self::DARK_BAR . "');m.removeAttribute('media');});}}catch(e){}";
+
+	/**
+	 * The colour of the phone's status and navigation bars in the dark
+	 * theme: the dark palette's ground (`--site-pwa-bg` in app.css), so the
+	 * bars match the screen instead of keeping the light theme's accent.
+	 */
+	public const DARK_BAR = '#10161d';
 
 	/**
 	 * Wire the hooks that only act on an app screen.
@@ -323,7 +330,7 @@ final class Frame {
 			printf( '<title>%s</title>' . "\n", esc_html( wp_get_document_title() ) );
 		}
 		printf( '<link rel="manifest" href="%s">' . "\n", esc_url( Routes::url( 'manifest' ) ) );
-		printf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( Identity::current()['accent'] ) );
+		echo self::themeColorTags(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Every value is escaped inside themeColorTags().
 		printf( '<link rel="apple-touch-icon" href="%s">' . "\n", esc_url( Manifest::touchIcon() ) );
 		// The dark theme chosen on More, on this device only (#23), applied
 		// before the first paint. `ffc-dark-mode` is FFC's own root class,
@@ -332,6 +339,25 @@ final class Frame {
 		// The app lock (#38), also before the first paint: a locked app
 		// shows nothing until the phone is unlocked.
 		wp_print_inline_script_tag( Lock::headScript( wp_get_current_user() ) );
+	}
+
+	/**
+	 * The phone's status and navigation bars: the accent in the light theme,
+	 * the dark ground in the dark one, and both, by the device's setting,
+	 * when the theme follows the device. The dark theme chosen on More turns
+	 * them dark too (DARK_SCRIPT, more.js).
+	 */
+	public static function themeColorTags(): string {
+		$accent = Identity::current()['accent'];
+		$scheme = Scheme::current();
+		if ( Scheme::DARK === $scheme ) {
+			return sprintf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( self::DARK_BAR ) );
+		}
+		if ( Scheme::AUTO === $scheme ) {
+			return sprintf( '<meta name="theme-color" content="%s" media="(prefers-color-scheme: light)">' . "\n", esc_attr( $accent ) )
+				. sprintf( '<meta name="theme-color" content="%s" media="(prefers-color-scheme: dark)">' . "\n", esc_attr( self::DARK_BAR ) );
+		}
+		return sprintf( '<meta name="theme-color" content="%s">' . "\n", esc_attr( $accent ) );
 	}
 
 	/**

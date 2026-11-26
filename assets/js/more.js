@@ -32,6 +32,15 @@
 			if ( input.checked ) {
 				root.setAttribute( 'data-site-pwa-scheme', 'dark' );
 				root.classList.add( 'ffc-dark-mode' );
+				// The phone's status and navigation bars turn dark too; off,
+				// the reload prints the light colour again.
+				var bar = input.getAttribute( 'data-site-pwa-dark-bar' );
+				if ( bar ) {
+					root.querySelectorAll( 'meta[name=theme-color]' ).forEach( function ( meta ) {
+						meta.setAttribute( 'content', bar );
+						meta.removeAttribute( 'media' );
+					} );
+				}
 				return;
 			}
 			reload();

@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="<?php echo esc_attr( $site_pwa['theme_color'] ); ?>">
+<?php echo \SitePwa\App\Frame::themeColorTags(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Every value is escaped inside themeColorTags(). ?>
 <meta name="robots" content="noindex">
 <link rel="manifest" href="<?php echo esc_url( $site_pwa['manifest'] ); ?>">
 <link rel="apple-touch-icon" href="<?php echo esc_url( $site_pwa['touch_icon'] ); ?>">
