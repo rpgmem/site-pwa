@@ -291,7 +291,12 @@ final class FrameTest extends WP_UnitTestCase {
 
 		$more = $this->screen( 'more' );
 		self::assertTrue( wp_script_is( Frame::MORE_HANDLE, 'enqueued' ) );
-		self::assertStringContainsString( '<input type="checkbox" role="switch" data-site-pwa-dark data-site-pwa-dark-classes="[]" data-site-pwa-dark-bar="' . Frame::DARK_BAR . '">', $more );
+		self::assertStringContainsString( '<fieldset class="site-pwa-theme" data-site-pwa-theme data-site-pwa-theme-default="' . \SitePwa\App\Scheme::current() . '">', $more );
+		foreach ( array( 'auto', 'dark', 'light' ) as $choice ) {
+			self::assertStringContainsString( '<input type="radio" name="site-pwa-theme" value="' . $choice . '">', $more );
+		}
+		self::assertStringContainsString( "'" . Frame::SCHEME_KEY . "'", Frame::darkScript(), 'the head script reads the key More writes' );
+		self::assertStringContainsString( "'" . Frame::SCHEME_KEY . "'", (string) file_get_contents( dirname( __DIR__, 2 ) . '/assets/js/more.js' ) );
 		self::assertStringContainsString( "'" . Frame::DARK_BAR . "'", Frame::darkScript(), 'the head script turns the phone bars dark too' );
 	}
 
@@ -305,7 +310,6 @@ final class FrameTest extends WP_UnitTestCase {
 		);
 		self::assertSame( array( 'ffc-dark-mode' ), Frame::darkRootClasses() );
 		self::assertStringContainsString( '["ffc-dark-mode"].forEach', Frame::darkScript() );
-		self::assertStringContainsString( 'data-site-pwa-dark-classes="[&quot;ffc-dark-mode&quot;]"', $this->screen( 'more' ) );
 
 		remove_all_filters( 'site_pwa_dark_root_classes' );
 		add_filter( 'site_pwa_dark_root_classes', '__return_false' );

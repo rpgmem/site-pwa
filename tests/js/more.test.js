@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { createRequire } from 'node:module';
 
 const require = createRequire( import.meta.url );
-const { init } = require( '../../assets/js/more.js' );
+const { init, read } = require( '../../assets/js/more.js' );
 
 function memory( initial = {} ) {
 	const data = new Map( Object.entries( initial ) );
@@ -14,89 +14,75 @@ function memory( initial = {} ) {
 	};
 }
 
+function checked( group ) {
+	const radio = group.querySelector( 'input:checked' );
+	return radio ? radio.value : null;
+}
+
+function choose( group, value ) {
+	const radio = group.querySelector( `input[value="${ value }"]` );
+	radio.checked = true;
+	radio.dispatchEvent( new Event( 'change' ) );
+}
+
 describe( 'more.js', () => {
-	let input;
-	let root;
+	let group;
 
 	beforeEach( () => {
-		document.body.innerHTML = '<input type="checkbox" data-site-pwa-dark data-site-pwa-dark-classes=\'["ffc-dark-mode"]\'>';
-		input = document.querySelector( 'input' );
-		root = document.createElement( 'html' );
+		document.body.innerHTML = '<fieldset data-site-pwa-theme data-site-pwa-theme-default="light">'
+			+ '<input type="radio" name="t" value="auto"><input type="radio" name="t" value="dark"><input type="radio" name="t" value="light">'
+			+ '</fieldset>';
+		group = document.querySelector( 'fieldset' );
 	} );
 
-	it( 'shows the stored choice', () => {
-		init( input, memory( { 'site-pwa-dark': '1' } ), root, vi.fn() );
-		expect( input.checked ).toBe( true );
-		init( input, memory(), root, vi.fn() );
-		expect( input.checked ).toBe( false );
+	it( 'shows the site\'s scheme until this device chooses one', () => {
+		init( group, memory(), vi.fn() );
+		expect( checked( group ) ).toBe( 'light' );
+
+		init( group, memory( { 'site-pwa-scheme': 'auto' } ), vi.fn() );
+		expect( checked( group ) ).toBe( 'auto' );
 	} );
 
-	it( 'turning it on darkens the page at once and remembers it on this device', () => {
-		const storage = memory();
-		const reload = vi.fn();
-		init( input, storage, root, reload );
-		input.checked = true;
-		input.dispatchEvent( new Event( 'change' ) );
-
-		expect( storage.data.get( 'site-pwa-dark' ) ).toBe( '1' );
-		expect( root.getAttribute( 'data-site-pwa-scheme' ) ).toBe( 'dark' );
-		expect( root.classList.contains( 'ffc-dark-mode' ) ).toBe( true );
-		expect( reload ).not.toHaveBeenCalled();
+	it( 'reads the old dark switch as Dark', () => {
+		expect( read( memory( { 'site-pwa-dark': '1' } ) ) ).toBe( 'dark' );
+		expect( read( memory( { 'site-pwa-scheme': 'light', 'site-pwa-dark': '1' } ) ) ).toBe( 'light' );
+		expect( read( memory( { 'site-pwa-scheme': 'sepia' } ) ) ).toBeNull();
+		expect( read( null ) ).toBeNull();
 	} );
 
-	it( 'adds only the root classes the page lists, and none when the list is missing or broken', () => {
-		for ( const [ attribute, expected ] of [
-			[ null, [] ],
-			[ 'not json', [] ],
-			[ '{"a":1}', [] ],
-			[ '["theme-dark", 3, "bad class"]', [ 'theme-dark' ] ],
-		] ) {
-			document.body.innerHTML = '<input type="checkbox" data-site-pwa-dark>';
-			const switchInput = document.querySelector( 'input' );
-			if ( null !== attribute ) {
-				switchInput.setAttribute( 'data-site-pwa-dark-classes', attribute );
-			}
-			const html = document.createElement( 'html' );
-			init( switchInput, memory(), html, vi.fn() );
-			switchInput.checked = true;
-			switchInput.dispatchEvent( new Event( 'change' ) );
-			expect( [ ...html.classList ] ).toEqual( expected );
-			expect( html.getAttribute( 'data-site-pwa-scheme' ) ).toBe( 'dark' );
-		}
-	} );
-
-	it( 'turning it on turns the phone bars dark too', () => {
-		input.setAttribute( 'data-site-pwa-dark-bar', '#10161d' );
-		root.innerHTML = '<head><meta name="theme-color" content="#841d8c" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#10161d" media="(prefers-color-scheme: dark)"></head>';
-		init( input, memory(), root, vi.fn() );
-		input.checked = true;
-		input.dispatchEvent( new Event( 'change' ) );
-
-		const metas = Array.from( root.querySelectorAll( 'meta[name=theme-color]' ) );
-		expect( metas.map( ( m ) => m.getAttribute( 'content' ) ) ).toEqual( [ '#10161d', '#10161d' ] );
-		expect( metas.some( ( m ) => m.hasAttribute( 'media' ) ) ).toBe( false );
-	} );
-
-	it( 'turning it off forgets it and reloads so the site choice applies', () => {
+	it( 'a choice is kept on this device, the old key forgotten, and the page reloads to apply it', () => {
 		const storage = memory( { 'site-pwa-dark': '1' } );
 		const reload = vi.fn();
-		init( input, storage, root, reload );
-		input.checked = false;
-		input.dispatchEvent( new Event( 'change' ) );
+		init( group, storage, reload );
+		expect( checked( group ) ).toBe( 'dark' );
 
+		choose( group, 'auto' );
+
+		expect( storage.data.get( 'site-pwa-scheme' ) ).toBe( 'auto' );
 		expect( storage.data.has( 'site-pwa-dark' ) ).toBe( false );
 		expect( reload ).toHaveBeenCalledOnce();
 	} );
 
-	it( 'works when storage is missing or refuses', () => {
+	it( 'does not reload when storage refuses, since nothing would survive it', () => {
 		const refusing = { getItem() { throw new Error( 'denied' ); }, setItem() { throw new Error( 'denied' ); }, removeItem() {} };
-		init( input, refusing, root, vi.fn() );
-		expect( input.checked ).toBe( false );
-		input.checked = true;
-		input.dispatchEvent( new Event( 'change' ) );
-		expect( root.getAttribute( 'data-site-pwa-scheme' ) ).toBe( 'dark' );
+		const reload = vi.fn();
+		init( group, refusing, reload );
+		expect( checked( group ) ).toBe( 'light' );
+		choose( group, 'dark' );
+		expect( reload ).not.toHaveBeenCalled();
 
-		init( input, null, root, vi.fn() );
-		expect( input.checked ).toBe( false );
+		init( group, null, reload );
+		choose( group, 'auto' );
+		expect( reload ).not.toHaveBeenCalled();
+	} );
+
+	it( 'ignores a value that is not one of the three', () => {
+		group.insertAdjacentHTML( 'beforeend', '<input type="radio" name="t" value="sepia">' );
+		const storage = memory();
+		const reload = vi.fn();
+		init( group, storage, reload );
+		choose( group, 'sepia' );
+		expect( storage.data.size ).toBe( 0 );
+		expect( reload ).not.toHaveBeenCalled();
 	} );
 } );

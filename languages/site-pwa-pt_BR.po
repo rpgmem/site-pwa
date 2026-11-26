@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-26 14:40+0000\n"
+"POT-Creation-Date: 2026-11-26 17:13+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -144,7 +144,7 @@ msgstr "Página de instalação"
 msgid "Public, no login. The banner leads here, and the address can go on a poster, a QR code or an e-mail. It uses the app's name, icon and colours, and shows the install button, the iPhone steps or \"Open the app\" for each browser."
 msgstr "Pública, sem login. O banner leva para cá, e o endereço pode ir em cartaz, QR code ou e-mail. Usa o nome, o ícone e as cores do app, e mostra o botão de instalar, os passos do iPhone ou \"Abrir o app\" conforme o navegador."
 
-#: src/admin/settings-page.php:252 src/app/frame.php:461
+#: src/admin/settings-page.php:252 src/app/frame.php:500
 #: templates/screen-home.php:103 templates/screen-more.php:36
 #: templates/screen-news.php:22
 msgid "News"
@@ -280,19 +280,19 @@ msgstr "O ícone personalizado precisa ser quadrado; esta imagem tem %1$d × %2$
 msgid "The custom icon must be at least %2$d px wide; this image is %1$d px."
 msgstr "O ícone personalizado precisa ter pelo menos %2$d px de lado; esta imagem tem %1$d px."
 
-#: src/app/frame.php:457 templates/screen-account.php:16
+#: src/app/frame.php:496 templates/screen-account.php:16
 msgid "Account"
 msgstr "Conta"
 
-#: src/app/frame.php:459 src/app/navigation.php:51 templates/screen-more.php:48
+#: src/app/frame.php:498 src/app/navigation.php:51 templates/screen-more.php:48
 msgid "More"
 msgstr "Mais"
 
-#: src/app/frame.php:464 src/app/frame.php:467
+#: src/app/frame.php:503 src/app/frame.php:506
 msgid "Not available"
 msgstr "Indisponível"
 
-#: src/app/frame.php:469 src/app/navigation.php:41 templates/screen-home.php:18
+#: src/app/frame.php:508 src/app/navigation.php:41 templates/screen-home.php:18
 msgid "Home"
 msgstr "Início"
 
@@ -336,7 +336,7 @@ msgstr "Este celular não tem bloqueio de tela. Isso é altamente inseguro: qual
 msgid "The app no longer locks on this phone."
 msgstr "O app não trava mais neste celular."
 
-#: src/app/lock.php:97 templates/screen-more.php:118
+#: src/app/lock.php:97 templates/screen-more.php:130
 msgid "Required for your account: it cannot be turned off."
 msgstr "Obrigatória para a sua conta: não pode ser desativada."
 
@@ -534,7 +534,7 @@ msgstr "E-mail"
 msgid "Edit profile"
 msgstr "Editar perfil"
 
-#: templates/screen-account.php:27 templates/screen-more.php:128
+#: templates/screen-account.php:27 templates/screen-more.php:140
 msgid "Sign out"
 msgstr "Sair"
 
@@ -635,18 +635,30 @@ msgid "Preferences"
 msgstr "Preferências"
 
 #: templates/screen-more.php:109
-msgid "Dark theme"
-msgstr "Tema escuro"
+msgid "Appearance"
+msgstr "Aparência"
 
 #: templates/screen-more.php:110
-msgid "On this device only. Off follows the site."
-msgstr "Só neste aparelho. Desligado, segue o site."
+msgid "On this device only. Automatic follows the phone."
+msgstr "Só neste aparelho. Automático segue o celular."
 
 #: templates/screen-more.php:116
+msgid "Automatic"
+msgstr "Automático"
+
+#: templates/screen-more.php:117
+msgid "Dark"
+msgstr "Escuro"
+
+#: templates/screen-more.php:118
+msgid "Light"
+msgstr "Claro"
+
+#: templates/screen-more.php:128
 msgid "Lock with the phone's screen lock"
 msgstr "Travar com o bloqueio do celular"
 
-#: templates/screen-more.php:117
+#: templates/screen-more.php:129
 msgid "Fingerprint, face or the phone's PIN when the app opens, and when it comes back after a few seconds away."
 msgstr "Digital, rosto ou PIN do celular quando o app abre e quando volta após alguns segundos fora."
 
@@ -700,55 +712,23 @@ msgstr "Instalar"
 msgid "Turns the site into an installable app: a home-screen icon, an app shell for signed-in users and screens other plugins register."
 msgstr "Transforma o site em um app instalável: um ícone na tela inicial, uma estrutura de app para quem está conectado e telas que outros plugins registram."
 
-#~ msgid "Free Form Certificate: Public Design"
-#~ msgstr "Free Form Certificate: Design Público"
 
-#~ msgid "Free Form Certificate: Dark Mode"
-#~ msgstr "Free Form Certificate: Modo Escuro"
 
-#~ msgid "On iPhone no browser installs with a button. In Safari, Share is at the bottom."
-#~ msgstr "No iPhone nenhum navegador instala com um botão. No Safari, o Compartilhar fica embaixo."
 
-#~ msgid "Shown under the icon on a home screen."
-#~ msgstr "Aparece sob o ícone na tela inicial."
 
-#~ msgid "Show a \"Use the app\" banner on the site's pages"
-#~ msgstr "Mostrar a faixa \"Use o app\" nas páginas do site"
 
-#~ msgid "Only on phones and tablets, and never inside the installed app. A visitor who is not signed in goes to the login first, then into the app. A visitor who closes the banner does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
-#~ msgstr "Só em celulares e tablets, e nunca dentro do app instalado. Um visitante não conectado passa primeiro pelo login e depois entra no app. Quem fecha a faixa não a vê de novo naquele aparelho por 30 dias. A tela inicial do app convida para instalá-lo da mesma forma."
 
-#~ msgid "Use the app"
-#~ msgstr "Use o app"
 
-#~ msgid "The app uses the site icon from Settings → General; without one, it uses the plugin's icon."
-#~ msgstr "O app usa o ícone do site, de Configurações → Geral; sem ele, usa o ícone do plugin."
+
+
 
 #, php-format
-#~ msgid "Hello, %s"
-#~ msgstr "Olá, %s"
 
-#~ msgid "Your screens"
-#~ msgstr "Suas telas"
 
-#~ msgid "Nothing here yet. The screens other plugins add to the app appear here."
-#~ msgstr "Nada aqui ainda. As telas que outros plugins acrescentam ao app aparecem aqui."
 
-#~ msgid "Latest news"
-#~ msgstr "Últimas notícias"
 
-#~ msgid "See all news"
-#~ msgstr "Ver todas as notícias"
 
-#~ msgid "Only on phones and tablets, only to signed-in visitors, and never inside the installed app. A visitor who closes it does not see it again on that device for 30 days. The app's home screen invites to install it the same way."
-#~ msgstr "Só em celulares e tablets, só para visitantes conectados, e nunca dentro do app instalado. Quem fecha a faixa não a vê de novo naquele aparelho por 30 dias. A tela inicial do app convida para instalá-lo da mesma forma."
 
 #, php-format
-#~ msgid "Signed in as %s."
-#~ msgstr "Conectado como %s."
 
-#~ msgid "Sign in to use the app."
-#~ msgstr "Entre para usar o app."
 
-#~ msgid "Sign in"
-#~ msgstr "Entrar"

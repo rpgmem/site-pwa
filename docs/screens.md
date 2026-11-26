@@ -64,7 +64,7 @@ The link to their details opens the app's own account screen, unless a plugin na
 add_filter( 'site_pwa_details_screen', static fn( string $id, WP_User $user ): string => 'profile', 10, 2 );
 ```
 
-The line is plain text; markup is stripped. The dark theme preference is kept on that device only, in the browser's storage, and turns the frame and the screens inside it dark before the first paint by putting `data-site-pwa-scheme="dark"` on `<html>`, with the classes listed through `site_pwa_dark_root_classes` (see "Offering the app a look" below). Off, the app follows the site's choice again. When that choice is "auto" and the phone is dark, the app puts the same mark and classes on `<html>` before the first paint, and keeps following the phone while it is open.
+The line is plain text; markup is stripped. Under Preferences, More offers the appearance: Automatic (follow the phone), Dark or Light, kept on that device only, in the browser's storage; until the person picks one, the site's choice applies. Before the first paint the app puts `data-site-pwa-scheme` (`dark` or `light`) on `<html>`, and when dark adds the classes listed through `site_pwa_dark_root_classes` (see "Offering the app a look" below). Automatic, and the site's own "auto", keep following the phone while the app is open. A plugin with its own dark mode script should treat `data-site-pwa-scheme="light"` as off and `"dark"` as on, so a choice made in the app wins over its setting.
 
 ## Offering the app a look
 
@@ -92,7 +92,7 @@ add_filter( 'site_pwa_dark_root_classes', static fn( array $classes ): array => 
 
 - **An identity source** returns `accent` (`#rrggbb`), `radius` (the cards' corner, px) and `control_radius` (buttons and fields, px), any of them optional, or `null` while its design is switched off, which means "use the app's own look". Every value is validated, and a corner is capped.
 - **A scheme source** returns `light`, `dark` or `auto`, or `null` when it has nothing to say, which means `auto`. The default choice is the source registered as `ffc`, which Free Form Certificate offers; where no plugin offers it, the app follows the device.
-- **A dark root class** is added to `<html>` when the person turns the app dark on More, or when the site follows the device and the phone is dark, before the first paint, so a plugin whose screens have their own dark palette turns them dark with the frame. Only plain class names pass.
+- **A dark root class** is added to `<html>` whenever the app is dark (the choice on More, the site's scheme, or the phone under Automatic), before the first paint, and removed when it is light, so a plugin whose screens have their own dark palette turns them dark with the frame. Only plain class names pass.
 - An id the app uses for its own choices (`own`, `auto`, `light`, `dark`) cannot be taken by a source.
 
 ## Feeding the home screen
