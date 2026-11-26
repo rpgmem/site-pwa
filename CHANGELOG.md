@@ -29,6 +29,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **A public install page** (#34) at `/app/install/`, in the app's look, with no login: one tap on Android (the browser's own dialog), the Share steps on iPhone in Safari, Chrome, Edge or Firefox, "Open the app" once installed, and Copy address elsewhere. The site banner now says Install and leads there; its sentence and the page's are settings.
 - **The app locks with the phone's screen lock** (#38). On opening and after 10 s away (not after the app's own exits), unlocked offline by fingerprint, face or PIN through a passkey. `site_pwa_lock_required` makes it mandatory; others are invited, and a phone without a lock is warned.
 - **The back arrow returns to the screen the person came from** (#44). A post, page, the account or News opened from an app screen goes back to it; arriving from outside the app, it leads to Home instead of a fixed screen.
+- **A plugin can send More's "My details" to its own screen** (#56) through `site_pwa_details_screen`, which names a registered screen; the app falls back to its account screen when the person may not open it.
 
 ### Fixed
 

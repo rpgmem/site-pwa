@@ -58,6 +58,12 @@ More opens on the person: their initials, their name, a line from the `site_pwa_
 add_filter( 'site_pwa_profile_line', static fn( string $line, WP_User $user ): string => 'RF ***.**1-0 · Teacher', 10, 2 );
 ```
 
+The link to their details opens the app's own account screen, unless a plugin names one of its screens through `site_pwa_details_screen`; the app uses it only when that person may open it, and falls back to its own otherwise.
+
+```php
+add_filter( 'site_pwa_details_screen', static fn( string $id, WP_User $user ): string => 'profile', 10, 2 );
+```
+
 The line is plain text; markup is stripped. The dark theme preference is kept on that device only, in the browser's storage, and turns the frame and the screens inside it dark before the first paint by putting `data-site-pwa-scheme="dark"` on `<html>`, with the classes listed through `site_pwa_dark_root_classes` (see "Offering the app a look" below). Off, the app follows the site's choice again.
 
 ## Offering the app a look

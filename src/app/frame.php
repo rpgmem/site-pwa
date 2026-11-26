@@ -151,7 +151,7 @@ final class Frame {
 				'pages'           => in_array( $route, array( 'home', 'more' ), true ) ? AppPages::items() : array(),
 				'more'            => Screens::split()['more'],
 				'profile'         => 'more' === $route ? self::profile( $user ) : null,
-				'account_url'     => Routes::url( 'account' ),
+				'account_url'     => self::detailsUrl( $user ),
 				'screen'          => $screen,
 				'screen_html'     => null === $screen ? '' : self::screenHtml( $screen ),
 				'user'            => $user,
@@ -181,6 +181,25 @@ final class Frame {
 				'lock'       => Lock::config( $user ),
 			)
 		);
+	}
+
+	/**
+	 * Where More's "My details" leads: the screen a plugin names through the
+	 * `site_pwa_details_screen` filter, when this user may open it, or the
+	 * app's own account screen.
+	 *
+	 * @param \WP_User $user The person.
+	 */
+	public static function detailsUrl( \WP_User $user ): string {
+		/**
+		 * The id of a registered screen that holds the person's details.
+		 *
+		 * @param string   $id   A screen id, or '' for the app's own account screen.
+		 * @param \WP_User $user The person.
+		 */
+		$id     = apply_filters( 'site_pwa_details_screen', '', $user );
+		$screen = is_string( $id ) && '' !== $id ? Screens::find( $id ) : null;
+		return null === $screen ? Routes::url( 'account' ) : Screens::link( $screen );
 	}
 
 	/**
