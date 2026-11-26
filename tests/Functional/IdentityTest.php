@@ -184,10 +184,11 @@ final class IdentityTest extends WP_UnitTestCase {
 	}
 
 	public function test_every_place_that_draws_the_app_takes_the_inherited_accent(): void {
-		$this->settings( array( 'identity_source' => 'ffc' ) );
 		self::$design = self::FFC_ON;
+		$this->settings( array( 'identity_source' => 'ffc', 'color_scheme' => 'light' ) );
+		self::assertSame( '#b32d2e', Manifest::data()['theme_color'], 'a light site sends the accent; "auto" sends none (SchemeTest)' );
 
-		self::assertSame( '#b32d2e', Manifest::data()['theme_color'] );
+		$this->settings( array( 'identity_source' => 'ffc' ) );
 
 		$offline = Pages::render();
 		self::assertStringContainsString( '<meta name="theme-color" content="#b32d2e" media="(prefers-color-scheme: light)">', $offline );

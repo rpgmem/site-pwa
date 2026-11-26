@@ -24,13 +24,15 @@ final class Manifest {
 	public static function data(): array {
 		$settings = Settings::get();
 		$home     = Routes::url( 'home' );
-		// Android paints the installed app's navigation bar from these two
-		// colours, fixed when the app is installed or refreshed; the page's
-		// theme-color meta only reaches the status bar. So a site whose
-		// scheme is dark hands the dark ground here too.
-		$dark = Scheme::DARK === Scheme::current();
-
-		return array(
+		// Android paints the installed app's navigation bar from the manifest,
+		// fixed when the app is installed or refreshed; the page's theme-color
+		// meta only reaches the status bar. A dark site hands the dark ground
+		// here. A site that follows the device sends no theme_color, because one
+		// manifest serves both phone themes: Chrome then leaves the bar to the
+		// phone's own theme.
+		$scheme   = Scheme::current();
+		$dark     = Scheme::DARK === $scheme;
+		$manifest = array(
 			'id'                   => $home,
 			'name'                 => $settings['name'],
 			'short_name'           => $settings['short_name'],
@@ -38,7 +40,6 @@ final class Manifest {
 			'scope'                => $home,
 			'display'              => 'standalone',
 			'background_color'     => $dark ? Frame::DARK_BAR : $settings['background_color'],
-			'theme_color'          => $dark ? Frame::DARK_BAR : Identity::current()['accent'],
 			'lang'                 => (string) get_bloginfo( 'language' ),
 			'dir'                  => is_rtl() ? 'rtl' : 'ltr',
 			'icons'                => self::icons(),
@@ -52,6 +53,10 @@ final class Manifest {
 				),
 			),
 		);
+		if ( Scheme::AUTO !== $scheme ) {
+			$manifest['theme_color'] = $dark ? Frame::DARK_BAR : Identity::current()['accent'];
+		}
+		return $manifest;
 	}
 
 	/**

@@ -182,7 +182,8 @@ final class SchemeTest extends WP_UnitTestCase {
 	/**
 	 * Android paints the installed app's navigation bar from the manifest,
 	 * which the page's theme-color meta never reaches: a dark site hands it
-	 * the dark ground, and every other scheme keeps the settings' colours.
+	 * the dark ground, a light one the accent, and a site that follows the
+	 * device no theme_color at all, leaving the bar to the phone.
 	 */
 	public function test_the_manifest_hands_a_dark_site_the_dark_ground(): void {
 		$this->settings( array( 'color_scheme' => 'dark', 'background_color' => '#ffffff' ) );
@@ -190,12 +191,15 @@ final class SchemeTest extends WP_UnitTestCase {
 		self::assertSame( Frame::DARK_BAR, $manifest['theme_color'] );
 		self::assertSame( Frame::DARK_BAR, $manifest['background_color'] );
 
-		foreach ( array( 'light', 'auto' ) as $scheme ) {
-			$this->settings( array( 'color_scheme' => $scheme, 'background_color' => '#ffffff' ) );
-			$manifest = \SitePwa\App\Manifest::data();
-			self::assertSame( '#1d5e8c', $manifest['theme_color'], $scheme );
-			self::assertSame( '#ffffff', $manifest['background_color'], $scheme );
-		}
+		$this->settings( array( 'color_scheme' => 'light', 'background_color' => '#ffffff' ) );
+		$manifest = \SitePwa\App\Manifest::data();
+		self::assertSame( '#1d5e8c', $manifest['theme_color'] );
+		self::assertSame( '#ffffff', $manifest['background_color'] );
+
+		$this->settings( array( 'color_scheme' => 'auto', 'background_color' => '#ffffff' ) );
+		$manifest = \SitePwa\App\Manifest::data();
+		self::assertArrayNotHasKey( 'theme_color', $manifest, 'one manifest serves both phone themes, so the bar is left to the phone' );
+		self::assertSame( '#ffffff', $manifest['background_color'] );
 	}
 
 	/**
