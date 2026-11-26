@@ -1,0 +1,119 @@
+name: Free Form Certificate integration
+
+# This plugin and its first consumer in one WordPress (rpgmem/ffcertificate#2875).
+#
+# The contract with a consumer is defensive on both sides, so a break is
+# silent: a consumer refuses an `$api` it does not know and registers nothing,
+# and a look source that is gone makes the app fall back to its own look. No
+# test in this repository can see that, because none loads a consumer. This
+# job installs a throwaway WordPress, activates this checkout beside Free Form
+# Certificate's `develop`, and runs that repository's
+# `.github/scripts/site-pwa-integration-check.php`. The check belongs to the
+# consumer, which knows what it registers; Free Form Certificate's
+# `site-pwa-integration.yml` runs the same file against this repository's
+# `develop`.
+#
+# It is not a required check: a red run can be Free Form Certificate's
+# `develop`, which no pull request here can fix. It runs on pull requests so
+# the author sees what a change does to the consumer, on `develop`, and daily.
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop]
+  schedule:
+    # 06:53 UTC: off the hour, and after Free Form Certificate's own run.
+    - cron: '53 6 * * *'
+  workflow_dispatch:
+    inputs:
+      ffc_ref:
+        description: Free Form Certificate branch, tag or commit to check against
+        required: false
+        default: develop
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  integration:
+    name: Free Form Certificate integration (PHP 8.3)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      mariadb:
+        image: mariadb:11.8
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: site-pwa
+      - uses: actions/checkout@v7
+        with:
+          repository: rpgmem/ffcertificate
+          ref: ${{ github.event.inputs.ffc_ref || 'develop' }}
+          path: ffcertificate
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mysqli, zip, gd
+          coverage: none
+      - name: Install WP-CLI
+        run: |
+          for attempt in 1 2 3; do
+            if curl -fsSL --connect-timeout 20 -o wp-cli.phar \
+              https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar; then
+              break
+            fi
+            if [ "$attempt" = 3 ]; then
+              echo "::error::could not download the wp-cli phar after 3 attempts"
+              exit 1
+            fi
+            echo "::warning::wp-cli download attempt $attempt failed; retrying in 10s"
+            sleep 10
+          done
+          chmod +x wp-cli.phar
+          sudo mv wp-cli.phar /usr/local/bin/wp
+      - name: Install a throwaway WordPress
+        run: |
+          for attempt in 1 2 3; do
+            rm -rf "$HOME/wp"
+            if wp core download --path="$HOME/wp"; then
+              break
+            fi
+            if [ "$attempt" = 3 ]; then
+              echo "::error::could not download WordPress core after 3 attempts"
+              exit 1
+            fi
+            echo "::warning::WordPress download attempt $attempt failed; retrying in 10s"
+            sleep 10
+          done
+          wp config create --path="$HOME/wp" \
+            --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1
+          wp core install --path="$HOME/wp" \
+            --url=http://localhost --title="Free Form Certificate integration" \
+            --admin_user=admin --admin_password=admin \
+            --admin_email=ci@example.invalid --skip-email
+      - name: Activate both plugins
+        run: |
+          for plugin in ffcertificate site-pwa; do
+            mkdir -p "$HOME/wp/wp-content/plugins/$plugin"
+            rsync -a --exclude '.git' "$plugin/" "$HOME/wp/wp-content/plugins/$plugin/"
+          done
+          wp plugin activate ffcertificate site-pwa --path="$HOME/wp"
+          echo "Free Form Certificate at $(git -C ffcertificate rev-parse --short HEAD)"
+      - name: Check the contract with Free Form Certificate's script
+        run: php ffcertificate/.github/scripts/site-pwa-integration-check.php "$HOME/wp" --write
