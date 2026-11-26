@@ -385,4 +385,29 @@ final class ScreensTest extends WP_UnitTestCase {
 		set_query_var( Routes::QUERY_VAR, 'more' );
 		self::assertStringNotContainsString( 'site-pwa-more-operator', \SitePwa\App\Frame::render( 'more' ) );
 	}
+
+	public function test_my_details_opens_the_screen_a_plugin_names_when_the_person_may_open_it(): void {
+		$this->signIn();
+		$this->register(
+			array(
+				'profile' => array( 'label' => 'Profile', 'render' => static fn(): string => '<p>Profile</p>' ),
+				'locked'  => array( 'label' => 'Locked', 'render' => static fn(): string => '', 'capability' => 'manage_options' ),
+			)
+		);
+		$user = wp_get_current_user();
+
+		self::assertSame( Routes::url( 'account' ), \SitePwa\App\Frame::detailsUrl( $user ), 'nobody named a screen' );
+
+		add_filter( 'site_pwa_details_screen', static fn(): string => 'profile' );
+		self::assertSame( home_url( '/app/s/profile/' ), \SitePwa\App\Frame::detailsUrl( $user ) );
+		remove_all_filters( 'site_pwa_details_screen' );
+
+		add_filter( 'site_pwa_details_screen', static fn(): string => 'locked' );
+		self::assertSame( Routes::url( 'account' ), \SitePwa\App\Frame::detailsUrl( $user ), 'a screen this person may not open' );
+		remove_all_filters( 'site_pwa_details_screen' );
+
+		add_filter( 'site_pwa_details_screen', static fn() => array( 'profile' ) );
+		self::assertSame( Routes::url( 'account' ), \SitePwa\App\Frame::detailsUrl( $user ), 'not an id' );
+		remove_all_filters( 'site_pwa_details_screen' );
+	}
 }
