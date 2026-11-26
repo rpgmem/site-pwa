@@ -152,6 +152,26 @@
 	color: var(--site-pwa-on-accent);
 }
 
+/*
+ * In the dark theme the band takes the raised surface, not the accent: the
+ * dark accent is a light blue, which painted a bright band under a dark
+ * status bar.
+ */
+.site-pwa-scheme-dark .site-pwa-header-home,
+[data-site-pwa-scheme="dark"] .site-pwa-header-home {
+	background: var(--site-pwa-surface);
+	color: var(--site-pwa-text);
+	border-bottom: 1px solid var(--site-pwa-border);
+}
+
+@media (prefers-color-scheme: dark) {
+	.site-pwa-scheme-auto .site-pwa-header-home {
+		background: var(--site-pwa-surface);
+		color: var(--site-pwa-text);
+		border-bottom: 1px solid var(--site-pwa-border);
+	}
+}
+
 .site-pwa-logo {
 	display: flex;
 	flex: 0 0 auto;

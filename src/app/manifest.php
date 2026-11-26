@@ -24,6 +24,11 @@ final class Manifest {
 	public static function data(): array {
 		$settings = Settings::get();
 		$home     = Routes::url( 'home' );
+		// Android paints the installed app's navigation bar from these two
+		// colours, fixed when the app is installed or refreshed; the page's
+		// theme-color meta only reaches the status bar. So a site whose
+		// scheme is dark hands the dark ground here too.
+		$dark = Scheme::DARK === Scheme::current();
 
 		return array(
 			'id'                   => $home,
@@ -32,8 +37,8 @@ final class Manifest {
 			'start_url'            => $home,
 			'scope'                => $home,
 			'display'              => 'standalone',
-			'background_color'     => $settings['background_color'],
-			'theme_color'          => Identity::current()['accent'],
+			'background_color'     => $dark ? Frame::DARK_BAR : $settings['background_color'],
+			'theme_color'          => $dark ? Frame::DARK_BAR : Identity::current()['accent'],
 			'lang'                 => (string) get_bloginfo( 'language' ),
 			'dir'                  => is_rtl() ? 'rtl' : 'ltr',
 			'icons'                => self::icons(),
