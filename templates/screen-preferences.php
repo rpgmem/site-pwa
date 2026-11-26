@@ -1,10 +1,12 @@
 <?php
 /**
  * Preferences, reached from More: the appearance on this device and the
- * screen lock. Both are kept on the device; the scripts that save them are
- * more.js and lock.js.
+ * screen lock, kept on the device by more.js and lock.js, then the sections
+ * other plugins add through `site_pwa_preference_sections`.
  *
  * @package SitePwa
+ *
+ * @var array{pref_sections: list<array{id: string, label: string, html: string}>} $site_pwa Values built by Frame::render().
  */
 
 use SitePwa\App\Scheme;
@@ -48,4 +50,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</section>
 
+	<?php foreach ( $site_pwa['pref_sections'] as $site_pwa_section ) : ?>
+		<section class="site-pwa-section" aria-labelledby="site-pwa-pref-<?php echo esc_attr( $site_pwa_section['id'] ); ?>">
+			<div class="site-pwa-section-head"><h2 id="site-pwa-pref-<?php echo esc_attr( $site_pwa_section['id'] ); ?>"><?php echo esc_html( $site_pwa_section['label'] ); ?></h2></div>
+			<div class="site-pwa-panel site-pwa-preferences site-pwa-pref-section">
+				<?php echo $site_pwa_section['html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a registered plugin's own markup, as a screen's render. ?>
+			</div>
+		</section>
+	<?php endforeach; ?>
 </div>

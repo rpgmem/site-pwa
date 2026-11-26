@@ -173,6 +173,7 @@ final class Frame {
 				'profile'         => 'more' === $route ? self::profile( $user ) : null,
 				'account_url'     => self::detailsUrl( $user ),
 				'preferences_url' => Routes::url( 'preferences' ),
+				'pref_sections'   => 'preferences' === $route ? self::preferenceSections( $user ) : array(),
 				'screen'          => $screen,
 				'screen_html'     => null === $screen ? '' : self::screenHtml( $screen ),
 				'user'            => $user,
@@ -518,6 +519,54 @@ final class Frame {
 	 * escaping it is the consumer's job, as with a shortcode.
 	 *
 	 * @param array{render: callable|null} $screen The screen.
+	 */
+	/**
+	 * The sections other plugins add to Preferences, through the
+	 * `site_pwa_preference_sections` filter: by id, a `label` and a `render`
+	 * callable that prints or returns the section's markup. An entry without
+	 * a label or a callable, or under an id that is not a slug, is dropped.
+	 *
+	 * @param \WP_User $user The person.
+	 * @return list<array{id: string, label: string, html: string}>
+	 */
+	public static function preferenceSections( \WP_User $user ): array {
+		/**
+		 * Sections a plugin adds to the app's Preferences screen.
+		 *
+		 * @param array<string, array{label: string, render: callable}> $sections By id.
+		 * @param \WP_User                                              $user     The person.
+		 */
+		$sections = apply_filters( 'site_pwa_preference_sections', array(), $user );
+		if ( ! is_array( $sections ) ) {
+			return array();
+		}
+		$out = array();
+		foreach ( $sections as $id => $section ) {
+			if ( ! is_string( $id ) || 1 !== preg_match( '/^[a-z0-9-]+$/', $id ) || ! is_array( $section ) ) {
+				continue;
+			}
+			$label  = isset( $section['label'] ) && is_string( $section['label'] ) ? trim( wp_strip_all_tags( $section['label'] ) ) : '';
+			$render = $section['render'] ?? null;
+			if ( '' === $label || ! is_callable( $render ) ) {
+				continue;
+			}
+			$html = self::screenHtml( array( 'render' => $render ) );
+			if ( '' === trim( $html ) ) {
+				continue;
+			}
+			$out[] = array(
+				'id'    => $id,
+				'label' => $label,
+				'html'  => $html,
+			);
+		}
+		return $out;
+	}
+
+	/**
+	 * Print or return what a render callable draws.
+	 *
+	 * @param array{render: callable|null} $screen The screen, or any array carrying a render callable.
 	 */
 	private static function screenHtml( array $screen ): string {
 		if ( null === $screen['render'] ) {

@@ -153,6 +153,54 @@ final class FrameTest extends WP_UnitTestCase {
 		self::assertStringContainsString( 'data-site-pwa-theme', $html );
 	}
 
+	/**
+	 * Another plugin can add a section to Preferences; one without a label,
+	 * a callable or a slug id, or that draws nothing, is dropped.
+	 */
+	public function test_plugins_add_sections_to_preferences(): void {
+		add_filter(
+			'site_pwa_preference_sections',
+			static function ( array $sections ): array {
+				$sections['messages']  = array(
+					'label'  => 'Messages',
+					'render' => static function (): void {
+						echo '<p class="probe">E-mail toggles</p>';
+					},
+				);
+				$sections['returned']  = array(
+					'label'  => 'Returned',
+					'render' => static fn(): string => '<p>returned</p>',
+				);
+				$sections['no-label']  = array( 'render' => static fn(): string => 'x' );
+				$sections['no-render'] = array( 'label' => 'Nothing' );
+				$sections['empty']     = array(
+					'label'  => 'Empty',
+					'render' => static fn(): string => '  ',
+				);
+				$sections['Bad Id']    = array(
+					'label'  => 'Bad',
+					'render' => static fn(): string => 'x',
+				);
+				return $sections;
+			}
+		);
+
+		$user     = wp_get_current_user();
+		$sections = Frame::preferenceSections( $user );
+		self::assertSame( array( 'messages', 'returned' ), array_column( $sections, 'id' ) );
+
+		$html = $this->screen( 'preferences' );
+		self::assertStringContainsString( '<h2 id="site-pwa-pref-messages">Messages</h2>', $html );
+		self::assertStringContainsString( '<p class="probe">E-mail toggles</p>', $html );
+		self::assertLessThan( strpos( $html, 'probe' ), strpos( $html, 'data-site-pwa-theme' ), 'the app\'s own preferences come first' );
+		self::assertStringNotContainsString( 'probe', $this->screen( 'more' ), 'only Preferences draws them' );
+
+		remove_all_filters( 'site_pwa_preference_sections' );
+		add_filter( 'site_pwa_preference_sections', '__return_false' );
+		self::assertSame( array(), Frame::preferenceSections( $user ) );
+		remove_all_filters( 'site_pwa_preference_sections' );
+	}
+
 	public function test_the_account_screen_shows_the_users_own_details_and_the_way_out(): void {
 		$html = $this->screen( 'account' );
 
