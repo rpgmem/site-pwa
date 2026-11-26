@@ -97,8 +97,9 @@ final class LockTest extends WP_UnitTestCase {
 		self::assertLessThan( strpos( $html, '<main' ), strpos( $html, 'data-site-pwa-lock="overlay"' ), 'drawn before the content' );
 	}
 
-	public function test_more_has_the_switch_and_home_the_invitation(): void {
-		self::assertStringContainsString( 'data-site-pwa-lock-switch', $this->screen( 'more' ) );
+	public function test_preferences_has_the_switch_and_home_the_invitation(): void {
+		self::assertStringContainsString( 'data-site-pwa-lock-switch', $this->screen( 'preferences' ) );
+		self::assertStringNotContainsString( 'data-site-pwa-lock-switch', $this->screen( 'more' ), 'More only links to it' );
 		$home = $this->screen( 'home' );
 		self::assertStringContainsString( 'data-site-pwa-lock-nudge', $home );
 		self::assertMatchesRegularExpression( '/data-site-pwa-lock-nudge[^>]*hidden/', $home, 'the script decides whether it shows' );

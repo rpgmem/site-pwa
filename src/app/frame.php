@@ -168,10 +168,11 @@ final class Frame {
 				'news_category'   => 'news' === $route ? News::requestedCategory() : null,
 				'news_page'       => News::requested(),
 				'news_url'        => News::url(),
-				'pages'           => in_array( $route, array( 'home', 'more' ), true ) ? AppPages::items() : array(),
+				'pages'           => 'home' === $route ? AppPages::items() : array(),
 				'more'            => Screens::split()['more'],
 				'profile'         => 'more' === $route ? self::profile( $user ) : null,
 				'account_url'     => self::detailsUrl( $user ),
+				'preferences_url' => Routes::url( 'preferences' ),
 				'screen'          => $screen,
 				'screen_html'     => null === $screen ? '' : self::screenHtml( $screen ),
 				'user'            => $user,
@@ -271,7 +272,7 @@ final class Frame {
 	 * @param string $route The route being drawn.
 	 */
 	public static function back( string $route ): string {
-		if ( ! in_array( $route, array( 'post', 'account', 'news' ), true ) ) {
+		if ( ! in_array( $route, array( 'post', 'account', 'preferences', 'news' ), true ) ) {
 			return '';
 		}
 		$previous = self::previous();
@@ -364,7 +365,7 @@ final class Frame {
 				)
 			);
 		}
-		if ( 'more' === Routes::current() ) {
+		if ( 'preferences' === Routes::current() ) {
 			$more = Plugin::asset( 'assets/js/more.js' );
 			wp_enqueue_script(
 				self::MORE_HANDLE,
@@ -496,6 +497,8 @@ final class Frame {
 				return __( 'Account', 'site-pwa' );
 			case 'more':
 				return __( 'More', 'site-pwa' );
+			case 'preferences':
+				return __( 'Preferences', 'site-pwa' );
 			case 'news':
 				return __( 'News', 'site-pwa' );
 			case 'post':

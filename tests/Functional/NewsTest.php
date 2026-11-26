@@ -174,7 +174,7 @@ final class NewsTest extends WP_UnitTestCase {
 		self::assertStringNotContainsString( 'Hidden', $home );
 	}
 
-	public function test_more_lists_news_then_pages_then_the_account(): void {
+	public function test_more_lists_the_account_preferences_news_and_sign_out_but_not_the_pages(): void {
 		$outside = self::factory()->post->create( array( 'post_type' => 'page', 'post_title' => 'Shop' ) );
 		$this->settings( array( 'app_pages' => array( $outside => true ) ) );
 		$this->signIn();
@@ -182,16 +182,20 @@ final class NewsTest extends WP_UnitTestCase {
 
 		$more = Frame::render( 'more' );
 
-		$account = strpos( $more, esc_url( Routes::url( 'account' ) ) );
-		$news    = strpos( $more, esc_url( Routes::url( 'news' ) ) );
-		$page    = strpos( $more, esc_url( (string) get_permalink( $outside ) ) );
-		$out     = strpos( $more, 'site-pwa-signout' );
+		$account     = strpos( $more, esc_url( Routes::url( 'account' ) ) );
+		$preferences = strpos( $more, esc_url( Routes::url( 'preferences' ) ) );
+		$news        = strpos( $more, esc_url( Routes::url( 'news' ) ) );
+		$out         = strpos( $more, 'site-pwa-signout' );
 		self::assertNotFalse( $account );
-		self::assertLessThan( $news, $account, 'the profile card comes first' );
-		self::assertLessThan( $page, $news );
-		self::assertLessThan( $out, $page, 'sign out comes last' );
-		// An external page ends in the "open" drawing, not the chevron.
-		self::assertMatchesRegularExpression( '#<strong>Shop</strong></span>\s*' . preg_quote( Icons::svg( 'open' ), '#' ) . '#', $more );
+		self::assertLessThan( $preferences, $account, 'the profile card comes first' );
+		self::assertLessThan( $news, $preferences, 'Preferences sits after the screens, before News' );
+		self::assertLessThan( $out, $news, 'sign out comes last' );
+		self::assertStringContainsString( Icons::svg( 'sliders' ), $more );
+		self::assertStringNotContainsString( esc_url( (string) get_permalink( $outside ) ), $more, 'the site pages are on Home, not here' );
+
+		set_query_var( Routes::QUERY_VAR, 'home' );
+		self::assertStringContainsString( esc_url( (string) get_permalink( $outside ) ), Frame::render( 'home' ) );
+		set_query_var( Routes::QUERY_VAR, 'more' );
 	}
 
 	public function test_the_settings_keep_positive_ids_and_the_two_page_forms(): void {

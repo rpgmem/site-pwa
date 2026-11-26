@@ -41,7 +41,7 @@ final class Routes {
 	 * Bumped whenever the rules change, so an install that updated without
 	 * an activation still gets them: a GitHub update runs no activation hook.
 	 */
-	public const REVISION = 5;
+	public const REVISION = 6;
 
 	/**
 	 * Option holding the rules revision last flushed. Deleted by uninstall.php.
@@ -51,14 +51,14 @@ final class Routes {
 	/**
 	 * The routes and the path each one answers under the prefix.
 	 */
-	public const ROUTES = array( 'home', 'account', 'more', 'news', 'screen', 'post', 'offline', 'install', 'manifest' );
+	public const ROUTES = array( 'home', 'account', 'more', 'preferences', 'news', 'screen', 'post', 'offline', 'install', 'manifest' );
 
 	/**
 	 * The routes drawn inside the app frame; they need a signed-in user.
 	 * `post` is the home URL with `?p=ID` (see Content::request()); `screen`
 	 * is one registered by another plugin (see Screens).
 	 */
-	public const SCREENS = array( 'home', 'account', 'more', 'news', 'screen', 'post' );
+	public const SCREENS = array( 'home', 'account', 'more', 'preferences', 'news', 'screen', 'post' );
 
 	/**
 	 * Wire the rules and the handler.
@@ -96,6 +96,7 @@ final class Routes {
 		add_rewrite_rule( '^' . $prefix . '/install/?$', 'index.php?' . self::QUERY_VAR . '=install', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/account/?$', 'index.php?' . self::QUERY_VAR . '=account', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/more/?$', 'index.php?' . self::QUERY_VAR . '=more', 'top' );
+		add_rewrite_rule( '^' . $prefix . '/preferences/?$', 'index.php?' . self::QUERY_VAR . '=preferences', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/news/?$', 'index.php?' . self::QUERY_VAR . '=news', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/s/([a-z0-9-]+)/?$', 'index.php?' . self::QUERY_VAR . '=screen&' . self::SCREEN_VAR . '=$matches[1]', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/?$', 'index.php?' . self::QUERY_VAR . '=home', 'top' );
@@ -128,20 +129,21 @@ final class Routes {
 	/**
 	 * The URL of a route.
 	 *
-	 * @param string $route `home`, `account`, `more`, `news`, `offline`, `install`, `manifest` or `sw`.
+	 * @param string $route `home`, `account`, `more`, `preferences`, `news`, `offline`, `install`, `manifest` or `sw`.
 	 */
 	public static function url( string $route ): string {
 		if ( 'sw' === $route ) {
 			return home_url( '/' . self::SW_FILE );
 		}
 		$path = array(
-			'home'     => '/',
-			'account'  => '/account/',
-			'more'     => '/more/',
-			'news'     => '/news/',
-			'offline'  => '/offline/',
-			'install'  => '/install/',
-			'manifest' => '/manifest.webmanifest',
+			'home'        => '/',
+			'account'     => '/account/',
+			'more'        => '/more/',
+			'preferences' => '/preferences/',
+			'news'        => '/news/',
+			'offline'     => '/offline/',
+			'install'     => '/install/',
+			'manifest'    => '/manifest.webmanifest',
 		);
 		return home_url( '/' . self::prefix() . ( $path[ $route ] ?? '/' ) );
 	}

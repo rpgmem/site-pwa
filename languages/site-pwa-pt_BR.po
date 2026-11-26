@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-26 17:13+0000\n"
+"POT-Creation-Date: 2026-11-26 17:34+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -144,8 +144,8 @@ msgstr "Página de instalação"
 msgid "Public, no login. The banner leads here, and the address can go on a poster, a QR code or an e-mail. It uses the app's name, icon and colours, and shows the install button, the iPhone steps or \"Open the app\" for each browser."
 msgstr "Pública, sem login. O banner leva para cá, e o endereço pode ir em cartaz, QR code ou e-mail. Usa o nome, o ícone e as cores do app, e mostra o botão de instalar, os passos do iPhone ou \"Abrir o app\" conforme o navegador."
 
-#: src/admin/settings-page.php:252 src/app/frame.php:500
-#: templates/screen-home.php:103 templates/screen-more.php:36
+#: src/admin/settings-page.php:252 src/app/frame.php:503
+#: templates/screen-home.php:103 templates/screen-more.php:43
 #: templates/screen-news.php:22
 msgid "News"
 msgstr "Notícias"
@@ -280,19 +280,24 @@ msgstr "O ícone personalizado precisa ser quadrado; esta imagem tem %1$d × %2$
 msgid "The custom icon must be at least %2$d px wide; this image is %1$d px."
 msgstr "O ícone personalizado precisa ter pelo menos %2$d px de lado; esta imagem tem %1$d px."
 
-#: src/app/frame.php:496 templates/screen-account.php:16
+#: src/app/frame.php:497 templates/screen-account.php:16
 msgid "Account"
 msgstr "Conta"
 
-#: src/app/frame.php:498 src/app/navigation.php:51 templates/screen-more.php:48
+#: src/app/frame.php:499 src/app/navigation.php:51 templates/screen-more.php:55
 msgid "More"
 msgstr "Mais"
 
-#: src/app/frame.php:503 src/app/frame.php:506
+#: src/app/frame.php:501 templates/screen-more.php:36
+#: templates/screen-preferences.php:16 templates/screen-preferences.php:18
+msgid "Preferences"
+msgstr "Preferências"
+
+#: src/app/frame.php:506 src/app/frame.php:509
 msgid "Not available"
 msgstr "Indisponível"
 
-#: src/app/frame.php:508 src/app/navigation.php:41 templates/screen-home.php:18
+#: src/app/frame.php:511 src/app/navigation.php:41 templates/screen-home.php:18
 msgid "Home"
 msgstr "Início"
 
@@ -336,7 +341,7 @@ msgstr "Este celular não tem bloqueio de tela. Isso é altamente inseguro: qual
 msgid "The app no longer locks on this phone."
 msgstr "O app não trava mais neste celular."
 
-#: src/app/lock.php:97 templates/screen-more.php:130
+#: src/app/lock.php:97 templates/screen-preferences.php:43
 msgid "Required for your account: it cannot be turned off."
 msgstr "Obrigatória para a sua conta: não pode ser desativada."
 
@@ -534,7 +539,7 @@ msgstr "E-mail"
 msgid "Edit profile"
 msgstr "Editar perfil"
 
-#: templates/screen-account.php:27 templates/screen-more.php:140
+#: templates/screen-account.php:27 templates/screen-more.php:97
 msgid "Sign out"
 msgstr "Sair"
 
@@ -610,57 +615,25 @@ msgstr "Ela pode ter sido removida, ou você pode não ter acesso a ela."
 msgid "Back to the home screen"
 msgstr "Voltar à tela inicial"
 
-#: templates/screen-more.php:44
+#: templates/screen-more.php:39
+msgid "Appearance and screen lock"
+msgstr "Aparência e bloqueio de tela"
+
+#: templates/screen-more.php:51
 msgid "Services"
 msgstr "Serviços"
 
-#: templates/screen-more.php:45
+#: templates/screen-more.php:52
 msgid "Operator"
 msgstr "Operador"
 
-#: templates/screen-more.php:50
+#: templates/screen-more.php:57
 msgid "Your account"
 msgstr "Sua conta"
 
-#: templates/screen-more.php:58
+#: templates/screen-more.php:65
 msgid "My details"
 msgstr "Meus dados"
-
-#: templates/screen-more.php:90
-msgid "Site pages"
-msgstr "Páginas do site"
-
-#: templates/screen-more.php:105
-msgid "Preferences"
-msgstr "Preferências"
-
-#: templates/screen-more.php:109
-msgid "Appearance"
-msgstr "Aparência"
-
-#: templates/screen-more.php:110
-msgid "On this device only. Automatic follows the phone."
-msgstr "Só neste aparelho. Automático segue o celular."
-
-#: templates/screen-more.php:116
-msgid "Automatic"
-msgstr "Automático"
-
-#: templates/screen-more.php:117
-msgid "Dark"
-msgstr "Escuro"
-
-#: templates/screen-more.php:118
-msgid "Light"
-msgstr "Claro"
-
-#: templates/screen-more.php:128
-msgid "Lock with the phone's screen lock"
-msgstr "Travar com o bloqueio do celular"
-
-#: templates/screen-more.php:129
-msgid "Fingerprint, face or the phone's PIN when the app opens, and when it comes back after a few seconds away."
-msgstr "Digital, rosto ou PIN do celular quando o app abre e quando volta após alguns segundos fora."
 
 #: templates/screen-news.php:24
 msgid "News categories"
@@ -704,6 +677,34 @@ msgstr "Compartilhar"
 msgid "Copy link"
 msgstr "Copiar link"
 
+#: templates/screen-preferences.php:22
+msgid "Appearance"
+msgstr "Aparência"
+
+#: templates/screen-preferences.php:23
+msgid "On this device only. Automatic follows the phone."
+msgstr "Só neste aparelho. Automático segue o celular."
+
+#: templates/screen-preferences.php:29
+msgid "Automatic"
+msgstr "Automático"
+
+#: templates/screen-preferences.php:30
+msgid "Dark"
+msgstr "Escuro"
+
+#: templates/screen-preferences.php:31
+msgid "Light"
+msgstr "Claro"
+
+#: templates/screen-preferences.php:41
+msgid "Lock with the phone's screen lock"
+msgstr "Travar com o bloqueio do celular"
+
+#: templates/screen-preferences.php:42
+msgid "Fingerprint, face or the phone's PIN when the app opens, and when it comes back after a few seconds away."
+msgstr "Digital, rosto ou PIN do celular quando o app abre e quando volta após alguns segundos fora."
+
 #: templates/site-banner.php:23
 msgid "Install"
 msgstr "Instalar"
@@ -711,24 +712,4 @@ msgstr "Instalar"
 #. Plugin header: Description
 msgid "Turns the site into an installable app: a home-screen icon, an app shell for signed-in users and screens other plugins register."
 msgstr "Transforma o site em um app instalável: um ícone na tela inicial, uma estrutura de app para quem está conectado e telas que outros plugins registram."
-
-
-
-
-
-
-
-
-
-
-
-#, php-format
-
-
-
-
-
-
-#, php-format
-
 

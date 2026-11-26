@@ -97,6 +97,6 @@ final class Navigation {
 			$in_bar = in_array( $screen, $bar, true );
 			return $in_bar ? 'screen:' . $screen : 'more';
 		}
-		return in_array( $route, array( 'more', 'account', 'news' ), true ) ? 'more' : '';
+		return in_array( $route, array( 'more', 'preferences', 'account', 'news' ), true ) ? 'more' : '';
 	}
 }
