@@ -42,6 +42,7 @@ final class Icons {
 		'back'     => array( 'M15 6l-6 6 6 6' ),
 		'award'    => array( 'M12 14a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11z', 'M15 13l1.5 8L12 18.5 7.5 21 9 13' ),
 		'lock'     => array( 'M6 11h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1z', 'M8 11V7a4 4 0 0 1 8 0v4', 'M12 15v2' ),
+		'sliders'  => array( 'M4 7h9', 'M17 7h3', 'M15 5v4', 'M4 17h3', 'M11 17h9', 'M9 15v4' ),
 		'warning'  => array( 'M12 3 2 20h20L12 3z', 'M12 10v4', 'M12 17h.01' ),
 	);
 

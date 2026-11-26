@@ -49,3 +49,4 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - **The app no longer reads Free Form Certificate by name** (#48). The look and the light or dark choice come only from sources other plugins offer through `site_pwa_identity_sources` and `site_pwa_scheme_sources`, and the classes added to `<html>` when the app turns dark from the new `site_pwa_dark_root_classes`; FFC offers all three itself, under the same `ffc` id.
+- **Preferences moves to its own screen, and More stops repeating the site's pages** (#64): a Preferences row with an icon sits after the screens other plugins add, before News, and opens `/app/preferences/` with the appearance and the screen lock; the pages chosen in the settings stay on Home.

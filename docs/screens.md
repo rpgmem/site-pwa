@@ -52,7 +52,7 @@ The bottom navigation holds at most five items:
 
 A `nav` screen that asks for the `center` slot takes one of the three and sits raised in the middle of them, with Home and one screen on its left and one screen and More on its right. One screen holds the slot: the first by position. A second one stays an ordinary `nav` screen.
 
-More opens on the person: their initials, their name, a line from the `site_pwa_profile_line` filter and a link to their details. Then the `more` screens and the `nav` screens that did not fit, in two groups by `section` (an empty group is not drawn), with News at the end of Services; the site's pages; the preferences; and Sign out.
+More opens on the person: their initials, their name, a line from the `site_pwa_profile_line` filter and a link to their details. Then the `more` screens and the `nav` screens that did not fit, in two groups by `section` (an empty group is not drawn), with Preferences and then News at the end of Services; and Sign out. The site's pages are on Home only. Preferences (`/app/preferences/`, reserved) holds the appearance and the screen lock.
 
 ```php
 add_filter( 'site_pwa_profile_line', static fn( string $line, WP_User $user ): string => 'RF ***.**1-0 · Teacher', 10, 2 );
@@ -64,7 +64,7 @@ The link to their details opens the app's own account screen, unless a plugin na
 add_filter( 'site_pwa_details_screen', static fn( string $id, WP_User $user ): string => 'profile', 10, 2 );
 ```
 
-The line is plain text; markup is stripped. Under Preferences, More offers the appearance: Automatic (follow the phone), Dark or Light, kept on that device only, in the browser's storage; until the person picks one, the site's choice applies. Before the first paint the app puts `data-site-pwa-scheme` (`dark` or `light`) on `<html>`, and when dark adds the classes listed through `site_pwa_dark_root_classes` (see "Offering the app a look" below). Automatic, and the site's own "auto", keep following the phone while the app is open. A plugin with its own dark mode script should treat `data-site-pwa-scheme="light"` as off and `"dark"` as on, so a choice made in the app wins over its setting.
+The line is plain text; markup is stripped. Preferences, reached from More, offers the appearance: Automatic (follow the phone), Dark or Light, kept on that device only, in the browser's storage; until the person picks one, the site's choice applies. Before the first paint the app puts `data-site-pwa-scheme` (`dark` or `light`) on `<html>`, and when dark adds the classes listed through `site_pwa_dark_root_classes` (see "Offering the app a look" below). Automatic, and the site's own "auto", keep following the phone while the app is open. A plugin with its own dark mode script should treat `data-site-pwa-scheme="light"` as off and `"dark"` as on, so a choice made in the app wins over its setting.
 
 ## Offering the app a look
 

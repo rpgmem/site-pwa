@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-26 17:13+0000\n"
+"POT-Creation-Date: 2026-11-26 17:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -145,8 +145,8 @@ msgstr ""
 msgid "Public, no login. The banner leads here, and the address can go on a poster, a QR code or an e-mail. It uses the app's name, icon and colours, and shows the install button, the iPhone steps or \"Open the app\" for each browser."
 msgstr ""
 
-#: src/admin/settings-page.php:252 src/app/frame.php:500
-#: templates/screen-home.php:103 templates/screen-more.php:36
+#: src/admin/settings-page.php:252 src/app/frame.php:503
+#: templates/screen-home.php:103 templates/screen-more.php:43
 #: templates/screen-news.php:22
 msgid "News"
 msgstr ""
@@ -281,19 +281,24 @@ msgstr ""
 msgid "The custom icon must be at least %2$d px wide; this image is %1$d px."
 msgstr ""
 
-#: src/app/frame.php:496 templates/screen-account.php:16
+#: src/app/frame.php:497 templates/screen-account.php:16
 msgid "Account"
 msgstr ""
 
-#: src/app/frame.php:498 src/app/navigation.php:51 templates/screen-more.php:48
+#: src/app/frame.php:499 src/app/navigation.php:51 templates/screen-more.php:55
 msgid "More"
 msgstr ""
 
-#: src/app/frame.php:503 src/app/frame.php:506
+#: src/app/frame.php:501 templates/screen-more.php:36
+#: templates/screen-preferences.php:16 templates/screen-preferences.php:18
+msgid "Preferences"
+msgstr ""
+
+#: src/app/frame.php:506 src/app/frame.php:509
 msgid "Not available"
 msgstr ""
 
-#: src/app/frame.php:508 src/app/navigation.php:41 templates/screen-home.php:18
+#: src/app/frame.php:511 src/app/navigation.php:41 templates/screen-home.php:18
 msgid "Home"
 msgstr ""
 
@@ -337,7 +342,7 @@ msgstr ""
 msgid "The app no longer locks on this phone."
 msgstr ""
 
-#: src/app/lock.php:97 templates/screen-more.php:130
+#: src/app/lock.php:97 templates/screen-preferences.php:43
 msgid "Required for your account: it cannot be turned off."
 msgstr ""
 
@@ -535,7 +540,7 @@ msgstr ""
 msgid "Edit profile"
 msgstr ""
 
-#: templates/screen-account.php:27 templates/screen-more.php:140
+#: templates/screen-account.php:27 templates/screen-more.php:97
 msgid "Sign out"
 msgstr ""
 
@@ -611,56 +616,24 @@ msgstr ""
 msgid "Back to the home screen"
 msgstr ""
 
-#: templates/screen-more.php:44
+#: templates/screen-more.php:39
+msgid "Appearance and screen lock"
+msgstr ""
+
+#: templates/screen-more.php:51
 msgid "Services"
 msgstr ""
 
-#: templates/screen-more.php:45
+#: templates/screen-more.php:52
 msgid "Operator"
 msgstr ""
 
-#: templates/screen-more.php:50
+#: templates/screen-more.php:57
 msgid "Your account"
 msgstr ""
 
-#: templates/screen-more.php:58
+#: templates/screen-more.php:65
 msgid "My details"
-msgstr ""
-
-#: templates/screen-more.php:90
-msgid "Site pages"
-msgstr ""
-
-#: templates/screen-more.php:105
-msgid "Preferences"
-msgstr ""
-
-#: templates/screen-more.php:109
-msgid "Appearance"
-msgstr ""
-
-#: templates/screen-more.php:110
-msgid "On this device only. Automatic follows the phone."
-msgstr ""
-
-#: templates/screen-more.php:116
-msgid "Automatic"
-msgstr ""
-
-#: templates/screen-more.php:117
-msgid "Dark"
-msgstr ""
-
-#: templates/screen-more.php:118
-msgid "Light"
-msgstr ""
-
-#: templates/screen-more.php:128
-msgid "Lock with the phone's screen lock"
-msgstr ""
-
-#: templates/screen-more.php:129
-msgid "Fingerprint, face or the phone's PIN when the app opens, and when it comes back after a few seconds away."
 msgstr ""
 
 #: templates/screen-news.php:24
@@ -703,6 +676,34 @@ msgstr ""
 
 #: templates/screen-post.php:39
 msgid "Copy link"
+msgstr ""
+
+#: templates/screen-preferences.php:22
+msgid "Appearance"
+msgstr ""
+
+#: templates/screen-preferences.php:23
+msgid "On this device only. Automatic follows the phone."
+msgstr ""
+
+#: templates/screen-preferences.php:29
+msgid "Automatic"
+msgstr ""
+
+#: templates/screen-preferences.php:30
+msgid "Dark"
+msgstr ""
+
+#: templates/screen-preferences.php:31
+msgid "Light"
+msgstr ""
+
+#: templates/screen-preferences.php:41
+msgid "Lock with the phone's screen lock"
+msgstr ""
+
+#: templates/screen-preferences.php:42
+msgid "Fingerprint, face or the phone's PIN when the app opens, and when it comes back after a few seconds away."
 msgstr ""
 
 #: templates/site-banner.php:23

@@ -137,6 +137,22 @@ final class FrameTest extends WP_UnitTestCase {
 		unset( $_SERVER['HTTP_REFERER'] );
 	}
 
+	/**
+	 * Preferences is a screen of its own, reached from More: it has a back
+	 * arrow, its own title, More lit in the bar, and its own address.
+	 */
+	public function test_preferences_is_a_screen_reached_from_more(): void {
+		self::assertSame( home_url( '/app/preferences/' ), Routes::url( 'preferences' ) );
+		self::assertSame( 'more', \SitePwa\App\Navigation::key( 'preferences' ) );
+		self::assertNotSame( '', Frame::back( 'preferences' ) );
+		self::assertContains( 'preferences', \SitePwa\App\Screens::RESERVED, 'no plugin screen can take its id' );
+
+		$html = $this->screen( 'preferences' );
+		self::assertStringContainsString( '<h1 class="site-pwa-title">Preferences</h1>', $html );
+		self::assertStringContainsString( '<title>Preferences', $html );
+		self::assertStringContainsString( 'data-site-pwa-theme', $html );
+	}
+
 	public function test_the_account_screen_shows_the_users_own_details_and_the_way_out(): void {
 		$html = $this->screen( 'account' );
 
@@ -287,9 +303,9 @@ final class FrameTest extends WP_UnitTestCase {
 		self::assertStringContainsString( Frame::darkScript(), $head );
 		self::assertStringContainsString( "'" . Frame::DARK_KEY . "'", Frame::darkScript(), 'the head script reads the key More writes' );
 		self::assertStringContainsString( "'" . Frame::DARK_KEY . "'", (string) file_get_contents( dirname( __DIR__, 2 ) . '/assets/js/more.js' ) );
-		self::assertFalse( wp_script_is( Frame::MORE_HANDLE, 'enqueued' ), 'only More loads the switch' );
+		self::assertFalse( wp_script_is( Frame::MORE_HANDLE, 'enqueued' ), 'only Preferences loads the choice' );
 
-		$more = $this->screen( 'more' );
+		$more = $this->screen( 'preferences' );
 		self::assertTrue( wp_script_is( Frame::MORE_HANDLE, 'enqueued' ) );
 		self::assertStringContainsString( '<fieldset class="site-pwa-theme" data-site-pwa-theme data-site-pwa-theme-default="' . \SitePwa\App\Scheme::current() . '">', $more );
 		foreach ( array( 'auto', 'dark', 'light' ) as $choice ) {

@@ -1,15 +1,15 @@
 <?php
 /**
- * More: the person, then what they use, what they do as an operator, the
- * site's pages, the preferences and the way out.
+ * More: the person, then what they use (Preferences right after the
+ * screens other plugins add, then News), what they do as an operator, and
+ * the way out. The site's pages are on Home, so they are not repeated here.
  *
  * @package SitePwa
  *
- * @var array{more: list<array{id: string, label: string, icon: string, section: string, subtitle: string, badge: callable|string, render: callable|null, url: string}>, profile: array{initials: string, name: string, line: string}, account_url: string, logout_url: string, news_url: string, pages: list<array{id: int, label: string, url: string, external: bool}>} $site_pwa Values built by Frame::render().
+ * @var array{more: list<array{id: string, label: string, icon: string, section: string, subtitle: string, badge: callable|string, render: callable|null, url: string}>, profile: array{initials: string, name: string, line: string}, account_url: string, preferences_url: string, logout_url: string, news_url: string} $site_pwa Values built by Frame::render().
  */
 
 use SitePwa\App\Icons;
-use SitePwa\App\Scheme;
 use SitePwa\App\Screens;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -32,6 +32,13 @@ foreach ( $site_pwa['more'] as $site_pwa_screen ) {
 		$site_pwa_services[] = $site_pwa_row;
 	}
 }
+$site_pwa_services[] = array(
+	'label'    => __( 'Preferences', 'site-pwa' ),
+	'icon'     => 'sliders',
+	'url'      => $site_pwa['preferences_url'],
+	'subtitle' => __( 'Appearance and screen lock', 'site-pwa' ),
+	'badge'    => '',
+);
 $site_pwa_services[] = array(
 	'label'    => __( 'News', 'site-pwa' ),
 	'icon'     => 'news',
@@ -84,56 +91,6 @@ $site_pwa_groups = array(
 			</section>
 		<?php endif; ?>
 	<?php endforeach; ?>
-
-	<?php if ( array() !== $site_pwa['pages'] ) : ?>
-		<section class="site-pwa-section" aria-labelledby="site-pwa-more-pages">
-			<div class="site-pwa-section-head"><h2 id="site-pwa-more-pages"><?php esc_html_e( 'Site pages', 'site-pwa' ); ?></h2></div>
-			<ul class="site-pwa-panel site-pwa-pending site-pwa-more-list">
-				<?php foreach ( $site_pwa['pages'] as $site_pwa_page ) : ?>
-					<li>
-						<a href="<?php echo esc_url( $site_pwa_page['url'] ); ?>">
-							<span class="site-pwa-pending-text"><strong><?php echo esc_html( $site_pwa_page['label'] ); ?></strong></span>
-							<?php echo Icons::svg( $site_pwa_page['external'] ? 'open' : 'chevron' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a fixed drawing from Icons::PATHS. ?>
-						</a>
-					</li>
-				<?php endforeach; ?>
-			</ul>
-		</section>
-	<?php endif; ?>
-
-	<section class="site-pwa-section" aria-labelledby="site-pwa-more-preferences">
-		<div class="site-pwa-section-head"><h2 id="site-pwa-more-preferences"><?php esc_html_e( 'Preferences', 'site-pwa' ); ?></h2></div>
-		<div class="site-pwa-panel site-pwa-preferences">
-			<fieldset class="site-pwa-theme" data-site-pwa-theme data-site-pwa-theme-default="<?php echo esc_attr( Scheme::current() ); ?>">
-				<legend>
-					<strong><?php esc_html_e( 'Appearance', 'site-pwa' ); ?></strong>
-					<span><?php esc_html_e( 'On this device only. Automatic follows the phone.', 'site-pwa' ); ?></span>
-				</legend>
-				<div class="site-pwa-segmented">
-					<?php
-					foreach (
-						array(
-							'auto'  => __( 'Automatic', 'site-pwa' ),
-							'dark'  => __( 'Dark', 'site-pwa' ),
-							'light' => __( 'Light', 'site-pwa' ),
-						) as $site_pwa_value => $site_pwa_label
-					) :
-						?>
-						<label><input type="radio" name="site-pwa-theme" value="<?php echo esc_attr( $site_pwa_value ); ?>"><span><?php echo esc_html( $site_pwa_label ); ?></span></label>
-					<?php endforeach; ?>
-				</div>
-			</fieldset>
-			<label class="site-pwa-switch">
-				<span>
-					<strong><?php esc_html_e( 'Lock with the phone\'s screen lock', 'site-pwa' ); ?></strong>
-					<span><?php esc_html_e( 'Fingerprint, face or the phone\'s PIN when the app opens, and when it comes back after a few seconds away.', 'site-pwa' ); ?></span>
-					<span data-site-pwa-lock="required-note" hidden><?php esc_html_e( 'Required for your account: it cannot be turned off.', 'site-pwa' ); ?></span>
-				</span>
-				<input type="checkbox" role="switch" data-site-pwa-lock-switch>
-			</label>
-			<p class="site-pwa-lock-status" role="status" aria-live="polite" data-site-pwa-lock="status"></p>
-		</div>
-	</section>
 
 	<a class="site-pwa-panel site-pwa-signout" href="<?php echo esc_url( $site_pwa['logout_url'] ); ?>">
 		<?php echo Icons::svg( 'logout' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a fixed drawing from Icons::PATHS. ?>
