@@ -291,7 +291,8 @@ final class FrameTest extends WP_UnitTestCase {
 
 		$more = $this->screen( 'more' );
 		self::assertTrue( wp_script_is( Frame::MORE_HANDLE, 'enqueued' ) );
-		self::assertStringContainsString( '<input type="checkbox" role="switch" data-site-pwa-dark>', $more );
+		self::assertStringContainsString( '<input type="checkbox" role="switch" data-site-pwa-dark data-site-pwa-dark-bar="' . Frame::DARK_BAR . '">', $more );
+		self::assertStringContainsString( "'" . Frame::DARK_BAR . "'", Frame::DARK_SCRIPT, 'the head script turns the phone bars dark too' );
 	}
 
 	public function test_more_opens_with_the_person_their_initials_and_a_line_other_plugins_supply(): void {

@@ -135,4 +135,26 @@ final class SchemeTest extends WP_UnitTestCase {
 
 		self::assertNotSame( $before, ServiceWorker::config()['cache'] );
 	}
+
+	/**
+	 * The phone's status and navigation bars follow the theme: the accent in
+	 * the light one, the dark ground in the dark one, and both by the
+	 * device's setting when the theme follows the device.
+	 */
+	public function test_the_phone_bars_follow_the_theme(): void {
+		$this->settings( array( 'color_scheme' => 'light' ) );
+		self::assertSame( '<meta name="theme-color" content="#1d5e8c">' . "\n", \SitePwa\App\Frame::themeColorTags() );
+
+		$this->settings( array( 'color_scheme' => 'dark' ) );
+		self::assertSame( '<meta name="theme-color" content="' . \SitePwa\App\Frame::DARK_BAR . '">' . "\n", \SitePwa\App\Frame::themeColorTags() );
+
+		$this->settings( array( 'color_scheme' => 'auto' ) );
+		$tags = \SitePwa\App\Frame::themeColorTags();
+		self::assertStringContainsString( '<meta name="theme-color" content="#1d5e8c" media="(prefers-color-scheme: light)">', $tags );
+		self::assertStringContainsString( '<meta name="theme-color" content="' . \SitePwa\App\Frame::DARK_BAR . '" media="(prefers-color-scheme: dark)">', $tags );
+
+		$css  = (string) file_get_contents( dirname( __DIR__, 2 ) . '/assets/css/app.css' );
+		$dark = substr( $css, (int) strpos( $css, '.site-pwa-scheme-dark,' ) );
+		self::assertStringContainsString( '--site-pwa-bg: ' . \SitePwa\App\Frame::DARK_BAR . ';', substr( $dark, 0, 200 ), 'the bars take the dark ground the stylesheet paints' );
+	}
 }

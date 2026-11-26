@@ -108,7 +108,7 @@ $site_pwa_groups = array(
 					<strong><?php esc_html_e( 'Dark theme', 'site-pwa' ); ?></strong>
 					<span><?php esc_html_e( 'On this device only. Off follows the site.', 'site-pwa' ); ?></span>
 				</span>
-				<input type="checkbox" role="switch" data-site-pwa-dark>
+				<input type="checkbox" role="switch" data-site-pwa-dark data-site-pwa-dark-bar="<?php echo esc_attr( \SitePwa\App\Frame::DARK_BAR ); ?>">
 			</label>
 			<label class="site-pwa-switch">
 				<span>
