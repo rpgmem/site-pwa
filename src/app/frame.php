@@ -48,9 +48,15 @@ final class Frame {
 	public const MORE_HANDLE = 'site-pwa-more';
 
 	/**
-	 * Where this device keeps the dark theme chosen on More.
+	 * Where a device kept the dark theme before the three choices (#62): `1` reads as `dark`.
 	 */
 	public const DARK_KEY = 'site-pwa-dark';
+
+	/**
+	 * Where this device keeps its theme choice made under More: `auto`
+	 * (follow the phone), `dark` or `light`. Absent, the site's scheme applies.
+	 */
+	public const SCHEME_KEY = 'site-pwa-scheme';
 
 	/**
 	 * A class name the dark root list accepts: what a stylesheet can select.
@@ -84,21 +90,28 @@ final class Frame {
 	}
 
 	/**
-	 * Applies the dark theme to the root element before the first paint: the
-	 * choice this device stored on More, or, when the site's scheme follows
-	 * the device ("auto"), the device's own dark setting, which it keeps
-	 * following while the app is open. Either way the root carries the app's
-	 * dark mark and the classes other plugins offered, so their screens turn
-	 * dark with the frame. Only the stored choice rewrites the bars' colour:
-	 * under "auto" the theme-color tags already carry a dark one by media.
+	 * Applies the theme to the root element before the first paint.
+	 *
+	 * The choice this device stored under More (`auto`, `dark` or `light`)
+	 * wins; without one, the site's scheme applies. "auto" follows the
+	 * phone's own setting and keeps following it while the app is open.
+	 * The root then carries `data-site-pwa-scheme` (`dark` or `light`) and,
+	 * when dark, the classes other plugins offered, so their screens turn
+	 * dark with the frame. A stored choice also rewrites the phone's status
+	 * bar colour, since the tags the server printed follow the site.
+	 *
+	 * A device that turned the app dark before the three choices existed
+	 * kept `1` under {@see self::DARK_KEY}; it reads as `dark`.
 	 */
 	public static function darkScript(): string {
 		return sprintf(
-			"try{var r=document.documentElement,s=function(d){if(d){r.setAttribute('data-site-pwa-scheme','dark');}else{r.removeAttribute('data-site-pwa-scheme');}%s.forEach(function(c){r.classList.toggle(c,d);});};if(localStorage.getItem('%s')==='1'){s(true);document.querySelectorAll('meta[name=theme-color]').forEach(function(m){m.setAttribute('content','%s');m.removeAttribute('media');});}else if(%s&&window.matchMedia){var q=window.matchMedia('(prefers-color-scheme: dark)');if(q.matches){s(true);}if(q.addEventListener){q.addEventListener('change',function(e){s(e.matches);});}}}catch(e){}",
-			(string) wp_json_encode( self::darkRootClasses() ),
+			"try{var r=document.documentElement,v=null;try{v=localStorage.getItem('%1\$s');if(!v&&localStorage.getItem('%2\$s')==='1'){v='dark';}}catch(e){}if(v!=='auto'&&v!=='dark'&&v!=='light'){v=null;}var m=v||'%3\$s',q=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null,s=function(d){r.setAttribute('data-site-pwa-scheme',d?'dark':'light');%4\$s.forEach(function(c){r.classList.toggle(c,d);});if(v){document.querySelectorAll('meta[name=theme-color]').forEach(function(t){t.setAttribute('content',d?'%5\$s':'%6\$s');t.removeAttribute('media');});}};if(m==='auto'){if(q){s(q.matches);if(q.addEventListener){q.addEventListener('change',function(e){s(e.matches);});}}}else{s(m==='dark');}}catch(e){}",
+			self::SCHEME_KEY,
 			self::DARK_KEY,
+			Scheme::current(),
+			(string) wp_json_encode( self::darkRootClasses() ),
 			self::DARK_BAR,
-			Scheme::AUTO === Scheme::current() ? 'true' : 'false'
+			Identity::current()['accent']
 		);
 	}
 

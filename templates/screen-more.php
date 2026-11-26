@@ -8,8 +8,8 @@
  * @var array{more: list<array{id: string, label: string, icon: string, section: string, subtitle: string, badge: callable|string, render: callable|null, url: string}>, profile: array{initials: string, name: string, line: string}, account_url: string, logout_url: string, news_url: string, pages: list<array{id: int, label: string, url: string, external: bool}>} $site_pwa Values built by Frame::render().
  */
 
-use SitePwa\App\Frame;
 use SitePwa\App\Icons;
+use SitePwa\App\Scheme;
 use SitePwa\App\Screens;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -104,13 +104,25 @@ $site_pwa_groups = array(
 	<section class="site-pwa-section" aria-labelledby="site-pwa-more-preferences">
 		<div class="site-pwa-section-head"><h2 id="site-pwa-more-preferences"><?php esc_html_e( 'Preferences', 'site-pwa' ); ?></h2></div>
 		<div class="site-pwa-panel site-pwa-preferences">
-			<label class="site-pwa-switch">
-				<span>
-					<strong><?php esc_html_e( 'Dark theme', 'site-pwa' ); ?></strong>
-					<span><?php esc_html_e( 'On this device only. Off follows the site.', 'site-pwa' ); ?></span>
-				</span>
-				<input type="checkbox" role="switch" data-site-pwa-dark data-site-pwa-dark-classes="<?php echo esc_attr( (string) wp_json_encode( Frame::darkRootClasses() ) ); ?>" data-site-pwa-dark-bar="<?php echo esc_attr( Frame::DARK_BAR ); ?>">
-			</label>
+			<fieldset class="site-pwa-theme" data-site-pwa-theme data-site-pwa-theme-default="<?php echo esc_attr( Scheme::current() ); ?>">
+				<legend>
+					<strong><?php esc_html_e( 'Appearance', 'site-pwa' ); ?></strong>
+					<span><?php esc_html_e( 'On this device only. Automatic follows the phone.', 'site-pwa' ); ?></span>
+				</legend>
+				<div class="site-pwa-segmented">
+					<?php
+					foreach (
+						array(
+							'auto'  => __( 'Automatic', 'site-pwa' ),
+							'dark'  => __( 'Dark', 'site-pwa' ),
+							'light' => __( 'Light', 'site-pwa' ),
+						) as $site_pwa_value => $site_pwa_label
+					) :
+						?>
+						<label><input type="radio" name="site-pwa-theme" value="<?php echo esc_attr( $site_pwa_value ); ?>"><span><?php echo esc_html( $site_pwa_label ); ?></span></label>
+					<?php endforeach; ?>
+				</div>
+			</fieldset>
 			<label class="site-pwa-switch">
 				<span>
 					<strong><?php esc_html_e( 'Lock with the phone\'s screen lock', 'site-pwa' ); ?></strong>

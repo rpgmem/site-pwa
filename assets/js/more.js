@@ -1,86 +1,89 @@
 /**
- * More's dark theme switch (#23): kept on this device only, in this
- * browser's storage. On, the frame and the screens inside it turn dark
- * before the first paint (see Frame::darkScript()); off, the site's own
- * choice applies again, so the page reloads to let it.
+ * More's appearance choice (#23, #62): Automatic, Dark or Light, kept on this
+ * device only, in this browser's storage. Without a stored choice the site's
+ * scheme applies, and the choice shows as the site's. The head script
+ * (Frame::darkScript()) applies the stored choice before the first paint, so
+ * a change saves and reloads. When storage refuses, the choice cannot be kept,
+ * so nothing reloads and the page stays as it is.
  */
 ( function () {
 	'use strict';
 
-	var KEY = 'site-pwa-dark';
+	var KEY = 'site-pwa-scheme';
+	var LEGACY_KEY = 'site-pwa-dark';
+	var CHOICES = [ 'auto', 'dark', 'light' ];
 
 	/**
-	 * Wire the switch.
+	 * Wire the choice.
 	 *
-	 * @param {HTMLInputElement} input   The switch.
-	 * @param {Storage|null}     storage Where the choice is kept.
-	 * @param {Element}          root    The document's root element.
-	 * @param {Function}         reload  Reloads the page.
+	 * @param {Element}      group   The fieldset holding the radios.
+	 * @param {Storage|null} storage Where the choice is kept.
+	 * @param {Function}     reload  Reloads the page.
 	 */
-	function init( input, storage, root, reload ) {
-		input.checked = read( storage );
-		input.addEventListener( 'change', function () {
-			try {
-				if ( input.checked ) {
-					storage.setItem( KEY, '1' );
-				} else {
-					storage.removeItem( KEY );
+	function init( group, storage, reload ) {
+		var radios = Array.prototype.slice.call( group.querySelectorAll( 'input[type=radio]' ) );
+		var current = read( storage ) || group.getAttribute( 'data-site-pwa-theme-default' ) || 'auto';
+		radios.forEach( function ( radio ) {
+			radio.checked = radio.value === current;
+			radio.addEventListener( 'change', function () {
+				if ( ! radio.checked || -1 === CHOICES.indexOf( radio.value ) ) {
+					return;
 				}
-			} catch {
-				// Storage refused: the choice lasts until the next page.
-			}
-			if ( input.checked ) {
-				root.setAttribute( 'data-site-pwa-scheme', 'dark' );
-				classes( input ).forEach( function ( name ) {
-					root.classList.add( name );
-				} );
-				// The phone's status and navigation bars turn dark too; off,
-				// the reload prints the light colour again.
-				var bar = input.getAttribute( 'data-site-pwa-dark-bar' );
-				if ( bar ) {
-					root.querySelectorAll( 'meta[name=theme-color]' ).forEach( function ( meta ) {
-						meta.setAttribute( 'content', bar );
-						meta.removeAttribute( 'media' );
-					} );
+				if ( save( storage, radio.value ) ) {
+					reload();
 				}
-				return;
-			}
-			reload();
+			} );
 		} );
 	}
 
 	/**
-	 * The root classes other plugins name for their dark screens (#48).
+	 * The stored choice, the legacy dark switch read as "dark", or null.
 	 *
-	 * @param {HTMLInputElement} input The switch, which carries them as JSON.
-	 * @return {string[]} Class names; none when the list is missing or broken.
+	 * @param {Storage|null} storage Where the choice is kept.
+	 * @return {string|null} A choice.
 	 */
-	function classes( input ) {
+	function read( storage ) {
 		try {
-			var list = JSON.parse( input.getAttribute( 'data-site-pwa-dark-classes' ) || '[]' );
-			return Array.isArray( list ) ? list.filter( function ( name ) {
-				return 'string' === typeof name && /^-?[A-Za-z_][A-Za-z0-9_-]*$/.test( name );
-			} ) : [];
+			if ( ! storage ) {
+				return null;
+			}
+			var value = storage.getItem( KEY );
+			if ( -1 !== CHOICES.indexOf( value ) ) {
+				return value;
+			}
+			return '1' === storage.getItem( LEGACY_KEY ) ? 'dark' : null;
 		} catch {
-			return [];
+			return null;
 		}
 	}
 
-	function read( storage ) {
+	/**
+	 * Keep the choice and forget the legacy key.
+	 *
+	 * @param {Storage|null} storage Where the choice is kept.
+	 * @param {string}       value   The choice.
+	 * @return {boolean} Whether it was kept.
+	 */
+	function save( storage, value ) {
 		try {
-			return !! storage && '1' === storage.getItem( KEY );
+			if ( ! storage ) {
+				return false;
+			}
+			storage.setItem( KEY, value );
+			storage.removeItem( LEGACY_KEY );
+			return true;
 		} catch {
 			return false;
 		}
 	}
 
 	if ( typeof module !== 'undefined' && module.exports ) {
-		module.exports = { init: init };
+		module.exports = { init: init, read: read };
 		return;
 	}
 
-	var input = document.querySelector( '[data-site-pwa-dark]' );
-	if ( ! input ) {
+	var group = document.querySelector( '[data-site-pwa-theme]' );
+	if ( ! group ) {
 		return;
 	}
 	var storage = null;
@@ -89,7 +92,7 @@
 	} catch {
 		storage = null;
 	}
-	init( input, storage, document.documentElement, function () {
+	init( group, storage, function () {
 		window.location.reload();
 	} );
 }() );

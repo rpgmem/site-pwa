@@ -159,23 +159,27 @@ final class SchemeTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * When the site follows the device, a dark phone turns the app's root
-	 * dark in the head, with the classes other plugins offered, and keeps
-	 * following the phone; a fixed scheme leaves that to the stored choice.
+	 * The head script applies this device's choice first and the site's
+	 * scheme without one; "auto" follows the phone, and every path carries
+	 * the dark mark with the plugins' root classes, or the light mark
+	 * without them.
 	 */
-	public function test_auto_follows_a_dark_phone_with_the_plugins_root_classes(): void {
+	public function test_the_head_script_applies_the_device_choice_then_the_site_scheme(): void {
 		add_filter( 'site_pwa_dark_root_classes', static fn(): array => array( 'ffc-dark-mode' ) );
 
-		$this->settings( array( 'color_scheme' => 'auto' ) );
-		$script = Frame::darkScript();
-		self::assertStringContainsString( "else if(true&&window.matchMedia){var q=window.matchMedia('(prefers-color-scheme: dark)');if(q.matches){s(true);}", $script );
-		self::assertStringContainsString( "addEventListener('change',function(e){s(e.matches);})", $script, 'it follows the phone while the app is open' );
-		self::assertStringContainsString( '["ffc-dark-mode"].forEach(function(c){r.classList.toggle(c,d);})', $script );
-
-		foreach ( array( 'light', 'dark' ) as $scheme ) {
+		foreach ( array( 'auto', 'dark', 'light' ) as $scheme ) {
 			$this->settings( array( 'color_scheme' => $scheme ) );
-			self::assertStringContainsString( 'else if(false&&window.matchMedia)', Frame::darkScript(), $scheme );
+			$script = Frame::darkScript();
+			self::assertStringContainsString( "var m=v||'" . $scheme . "'", $script, 'without a stored choice the site decides' );
 		}
+		self::assertStringContainsString( "localStorage.getItem('" . Frame::SCHEME_KEY . "')", $script );
+		self::assertStringContainsString( "localStorage.getItem('" . Frame::DARK_KEY . "')==='1'){v='dark';}", $script, 'the old dark switch reads as Dark' );
+		self::assertStringContainsString( "if(v!=='auto'&&v!=='dark'&&v!=='light'){v=null;}", $script, 'an unknown value falls back to the site' );
+		self::assertStringContainsString( "if(m==='auto'){if(q){s(q.matches);if(q.addEventListener){q.addEventListener('change',function(e){s(e.matches);});}}}else{s(m==='dark');}", $script );
+		self::assertStringContainsString( "r.setAttribute('data-site-pwa-scheme',d?'dark':'light');[\"ffc-dark-mode\"].forEach(function(c){r.classList.toggle(c,d);});", $script );
+		self::assertStringContainsString( "t.setAttribute('content',d?'" . Frame::DARK_BAR . "':'#1d5e8c')", $script, 'a stored choice rewrites the status bar colour' );
+		self::assertStringContainsString( 'html:not([data-site-pwa-scheme="light"]) .site-pwa-scheme-dark', (string) file_get_contents( dirname( __DIR__, 2 ) . '/assets/css/app.css' ), 'a device that chose light turns the site\'s dark palette off' );
+
 		remove_all_filters( 'site_pwa_dark_root_classes' );
 	}
 
