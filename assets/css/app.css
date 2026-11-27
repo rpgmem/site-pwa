@@ -1458,3 +1458,77 @@ html:not([data-site-pwa-scheme="light"]) .site-pwa-scheme-dark .site-pwa-header-
 	outline: 2px solid var(--site-pwa-accent-text);
 	outline-offset: 2px;
 }
+
+/* The app's own sign-in, /app/login/ (#74): the install page's band, then
+   one card with the fields, the tick, the button and the lost-password link,
+   as in the approved mockup. */
+.site-pwa-login-form {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	padding: 20px;
+}
+
+.site-pwa-login-form p {
+	margin: 0;
+}
+
+.site-pwa-login-field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.site-pwa-login-field label {
+	font-size: 14px;
+	font-weight: 500;
+}
+
+.site-pwa-login-field input {
+	min-height: 44px;
+	box-sizing: border-box;
+	padding: 0 12px;
+	border: 1px solid var(--site-pwa-border);
+	border-radius: var(--site-pwa-control-radius);
+	background: var(--site-pwa-surface);
+	color: var(--site-pwa-text);
+	font: inherit;
+	font-size: 16px;
+}
+
+.site-pwa-login-field input:focus-visible {
+	outline: 2px solid var(--site-pwa-accent-text);
+	outline-offset: 1px;
+}
+
+.site-pwa-login-remember {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	min-height: 32px;
+	font-size: 14px;
+}
+
+.site-pwa-login-remember input {
+	width: 18px;
+	height: 18px;
+	margin: 0;
+	accent-color: var(--site-pwa-accent);
+}
+
+.site-pwa-login-error {
+	color: var(--site-pwa-danger-text);
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.site-pwa-login-lost,
+.site-pwa-login-site {
+	text-align: center;
+	font-size: 14px;
+}
+
+.site-pwa-login-lost a,
+.site-pwa-login-site a {
+	color: var(--site-pwa-accent-text);
+}

@@ -167,6 +167,12 @@ A login reached from the app starts with "Keep me signed in on this device" tick
 add_filter( 'site_pwa_session_days', static fn( int $days, int $user_id ): int => 30, 10, 2 );
 ```
 
+The app signs people in on its own screen, `/app/login/`, inside the app's scope, so signing in never opens WordPress's login under the browser's bar. It signs in through `wp_signon()`, so the `authenticate` filters, `wp_login_failed` and `wp_login` run as on WordPress's login, and the lost-password flow stays WordPress's. A site whose login form another plugin extends (a hook on `login_form`, such as a captcha or a second factor, or the Two Factor plugin) keeps WordPress's login instead, because a field the app does not draw would refuse every attempt. `site_pwa_app_login` decides either way:
+
+```php
+add_filter( 'site_pwa_app_login', '__return_false' );
+```
+
 ## Requiring the app lock
 
 The app locks with the phone's own screen lock (fingerprint, face or the phone's PIN) when it opens and when it comes back after ten seconds out of sight; it is optional, and More and Home invite the person to turn it on. A consumer makes it mandatory for an account with the `site_pwa_lock_required` filter: the app then shows nothing but the lock screen until it is turned on.
@@ -180,7 +186,7 @@ Only a real `true` counts. The lock lives on the phone, through a platform crede
 ## What the app does and does not do
 
 - **It checks the capability.** A user without it sees the screen nowhere. Its URL answers with the same "not available" page as an unknown id, so the app never confirms the screen exists.
-- **It requires a signed-in user,** as every app screen does. A signed-out visitor goes to the login and comes back to the screen.
+- **It requires a signed-in user,** as every app screen does. A signed-out visitor goes to the app's sign-in, or WordPress's login where the app keeps it, and comes back to the screen.
 - **It does not escape your markup.** What `render` produces is drawn as you wrote it, like a shortcode's output, so escaping is your job.
 - **It never caches a screen.** Screens answer with `Cache-Control: private, no-store`, and the service worker does not store them.
 - **It knows nothing about your plugin.** Everything it draws comes from the arguments above.

@@ -36,12 +36,13 @@ final class Pages {
 	}
 
 	/**
-	 * Render the offline page or the install page.
+	 * Render the offline page, the install page or the sign-in screen.
 	 *
-	 * @param string $template `offline` or `install`.
+	 * @param string               $template `offline`, `install` or `login`.
+	 * @param array<string, mixed> $extra    Values only this page reads.
 	 */
-	public static function render( string $template = 'offline' ): string {
-		$template = 'install' === $template ? 'install' : 'offline';
+	public static function render( string $template = 'offline', array $extra = array() ): string {
+		$template = in_array( $template, array( 'install', 'login' ), true ) ? $template : 'offline';
 		$settings = Settings::get();
 
 		$vars = array(
@@ -59,7 +60,7 @@ final class Pages {
 			'short_name'  => $settings['short_name'],
 			'pitch'       => Settings::installText(),
 			'install_js'  => self::assetUrl( 'assets/js/install.js' ),
-		);
+		) + $extra;
 
 		ob_start();
 		( static function ( string $site_pwa_file, array $site_pwa ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- the included template reads $site_pwa.
