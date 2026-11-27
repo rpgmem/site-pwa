@@ -8,7 +8,7 @@
  *
  * @package SitePwa
  *
- * @var array{permalink: string, post_title: string} $site_pwa Values built by Frame::render().
+ * @var array{permalink: string, post_title: string, post_actions: bool} $site_pwa Values built by Frame::render().
  */
 
 use SitePwa\App\Icons;
@@ -28,6 +28,9 @@ while ( have_posts() ) :
 	</article>
 	<?php
 endwhile;
+if ( ! $site_pwa['post_actions'] ) {
+	return;
+}
 ?>
 <div class="site-pwa-share site-pwa-actions" data-url="<?php echo esc_url( $site_pwa['permalink'] ); ?>" data-title="<?php echo esc_attr( $site_pwa['post_title'] ); ?>" data-copied="<?php esc_attr_e( 'Link copied.', 'site-pwa' ); ?>" data-copy-failed="<?php esc_attr_e( 'Copy this link:', 'site-pwa' ); ?>">
 	<button type="button" class="site-pwa-button" data-share hidden>

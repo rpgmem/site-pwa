@@ -32,6 +32,7 @@ final class ContentTest extends WP_UnitTestCase {
 	protected function tearDown(): void {
 		remove_shortcode( 'site_pwa_probe' );
 		remove_all_filters( 'site_pwa_opens_in_app' );
+		remove_all_filters( 'site_pwa_post_actions' );
 		delete_option( Settings::OPTION );
 		parent::tearDown();
 	}
@@ -138,6 +139,22 @@ final class ContentTest extends WP_UnitTestCase {
 		self::assertTrue( wp_script_is( Frame::SHARE_HANDLE, 'enqueued' ) );
 		self::assertSame( 'Reunião de pais – Escola Viva', Frame::title( 'x' ) );
 		self::assertFalse( Frame::adminBar( true ) );
+	}
+
+	public function test_a_filter_turns_the_post_actions_off_for_one_post(): void {
+		$this->signIn();
+		$hidden = $this->post();
+		$shown  = $this->post();
+		add_filter( 'site_pwa_post_actions', static fn( bool $show, \WP_Post $post ): bool => $show && $hidden !== $post->ID, 10, 2 );
+
+		$body = $this->open( $hidden )['body'];
+		self::assertStringContainsString( 'Quinta às 19h.', $body );
+		self::assertStringNotContainsString( 'site-pwa-share', $body );
+		self::assertStringNotContainsString( 'data-copy', $body );
+		Frame::enqueue();
+		self::assertFalse( wp_script_is( Frame::SHARE_HANDLE, 'enqueued' ) );
+
+		self::assertStringContainsString( 'site-pwa-share', $this->open( $shown )['body'] );
 	}
 
 	public function test_the_share_script_stays_off_the_other_screens(): void {
