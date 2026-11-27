@@ -32,6 +32,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **A plugin can send More's "My details" to its own screen** (#56) through `site_pwa_details_screen`, which names a registered screen; the app falls back to its account screen when the person may not open it.
 - **More → Appearance: Automatic, Dark or Light on this device** (#62), replacing the dark-theme switch. Until the person picks one the site's scheme applies; Automatic follows the phone; Light now turns the site's dark theme off too. A device that had the old switch on keeps Dark.
 - **Plugins can add sections to Preferences** (#66) through `site_pwa_preference_sections`: each a label and a render callable, drawn under its own heading after the app's appearance and screen lock.
+- **A screen in the bottom bar shows its badge** (#68). The `badge` More already drew now also sits over the corner of the screen's icon in the bar, read once after its label, so a consumer can show a count such as new certificates.
 
 ### Fixed
 

@@ -634,6 +634,37 @@ html:not([data-site-pwa-scheme="light"]) .site-pwa-scheme-dark .site-pwa-header-
 	font-weight: 600;
 }
 
+/* A screen's short status (its `badge`) over the corner of its icon. */
+.site-pwa-nav a {
+	position: relative;
+}
+
+.site-pwa-nav-badge {
+	position: absolute;
+	top: 6px;
+	left: calc(50% + 6px);
+	box-sizing: border-box;
+	min-width: 18px;
+	max-width: calc(50% - 8px);
+	height: 18px;
+	padding: 0 5px;
+	overflow: hidden;
+	border-radius: 9px;
+	background: #ffb020;
+	color: #1d2433;
+	font-size: 11px;
+	font-weight: 700;
+	line-height: 18px;
+	text-align: center;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.site-pwa-nav-raised .site-pwa-nav-badge {
+	top: -18px;
+	left: calc(50% + 14px);
+}
+
 /* The screen that holds the centre slot: its icon lifted on an accent tile. */
 .site-pwa-nav-raised a {
 	justify-content: flex-end;
@@ -869,6 +900,10 @@ html:not([data-site-pwa-scheme="light"]) .site-pwa-scheme-dark .site-pwa-header-
 @media (forced-colors: active) {
 	.site-pwa-nav a[aria-current="page"] {
 		text-decoration: underline;
+	}
+
+	.site-pwa-nav-badge {
+		border: 1px solid CanvasText;
 	}
 }
 

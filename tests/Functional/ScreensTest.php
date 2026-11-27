@@ -291,6 +291,32 @@ final class ScreensTest extends WP_UnitTestCase {
 		self::assertMatchesRegularExpression( '#<li class="site-pwa-nav-raised">\s*<a href="[^"]*/presence/">\s*<span class="site-pwa-nav-lift"><svg#', $html );
 	}
 
+	public function test_a_screen_in_the_bar_shows_its_badge_over_its_icon_and_keeps_it_in_more(): void {
+		$this->signIn();
+		$this->register(
+			array(
+				'certs'  => array( 'label' => 'Certificates', 'place' => 'nav', 'position' => 1, 'badge' => static fn(): string => '<b>2</b>', 'url' => '/certs/' ),
+				'agenda' => array( 'label' => 'Agenda', 'place' => 'nav', 'position' => 2, 'badge' => static fn(): string => '', 'url' => '/agenda/' ),
+				'broken' => array(
+					'label'    => 'Broken',
+					'place'    => 'nav',
+					'position' => 3,
+					'url'      => '/broken/',
+					'badge'    => static function (): string {
+						throw new \RuntimeException( 'down' );
+					},
+				),
+			)
+		);
+
+		self::assertSame( array( '', '2', '', '', '' ), array_column( Navigation::items( 'home' ), 'badge' ) );
+
+		set_query_var( Routes::QUERY_VAR, 'home' );
+		$html = \SitePwa\App\Frame::render( 'home' );
+		self::assertSame( 1, substr_count( $html, 'class="site-pwa-nav-badge"' ), 'an empty or failing badge draws nothing' );
+		self::assertMatchesRegularExpression( '#<span>Certificates</span>\s*<span class="site-pwa-nav-badge" aria-hidden="true">2</span>\s*<span class="site-pwa-visually-hidden">2</span>#', $html );
+	}
+
 	public function test_a_lone_centre_screen_still_sits_between_home_and_more(): void {
 		$this->signIn();
 		$this->register( array( 'presence' => array( 'label' => 'Presence', 'place' => 'nav', 'slot' => 'center', 'url' => '/presence/' ) ) );
