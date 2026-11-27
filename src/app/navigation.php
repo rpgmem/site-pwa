@@ -17,7 +17,7 @@ namespace SitePwa\App;
  * fit, and the account, so the bar holds at most five items whatever is
  * registered.
  *
- * @phpstan-type Item array{id: string, label: string, url: string, icon: string, raised: bool, current: bool}
+ * @phpstan-type Item array{id: string, label: string, url: string, icon: string, raised: bool, badge: string, current: bool}
  */
 final class Navigation {
 
@@ -42,6 +42,7 @@ final class Navigation {
 					'url'    => Routes::url( 'home' ),
 					'icon'   => 'home',
 					'raised' => false,
+					'badge'  => '',
 				),
 			),
 			$screens,
@@ -52,6 +53,7 @@ final class Navigation {
 					'url'    => Routes::url( 'more' ),
 					'icon'   => 'more',
 					'raised' => false,
+					'badge'  => '',
 				),
 			)
 		);
@@ -63,11 +65,12 @@ final class Navigation {
 	}
 
 	/**
-	 * A screen as a bar item.
+	 * A screen as a bar item. Its badge is the one More shows, so a screen
+	 * that moves between the bar and More keeps it.
 	 *
-	 * @param array{id: string, label: string, icon: string, render: callable|null, url: string} $screen The screen.
-	 * @param bool                                                                               $raised Whether it holds the centre slot.
-	 * @return array{id: string, label: string, url: string, icon: string, raised: bool}
+	 * @param array{id: string, label: string, icon: string, badge: callable|string, render: callable|null, url: string} $screen The screen.
+	 * @param bool                                                                                                       $raised Whether it holds the centre slot.
+	 * @return array{id: string, label: string, url: string, icon: string, raised: bool, badge: string}
 	 */
 	private static function screen( array $screen, bool $raised = false ): array {
 		return array(
@@ -76,6 +79,7 @@ final class Navigation {
 			'url'    => Screens::link( $screen ),
 			'icon'   => $screen['icon'],
 			'raised' => $raised,
+			'badge'  => Screens::badge( $screen ),
 		);
 	}
 

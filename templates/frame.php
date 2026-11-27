@@ -4,7 +4,7 @@
  *
  * @package SitePwa
  *
- * @var array{name: string, icon: string, home: string, route: string, greeting: string, user_name: string, pending: int, back: string, navigation: list<array{id: string, label: string, url: string, icon: string, raised: bool, current: bool}>, content: string, lock: array{logout: string}} $site_pwa Values built by Frame::render().
+ * @var array{name: string, icon: string, home: string, route: string, greeting: string, user_name: string, pending: int, back: string, navigation: list<array{id: string, label: string, url: string, icon: string, raised: bool, badge: string, current: bool}>, content: string, lock: array{logout: string}} $site_pwa Values built by Frame::render().
  */
 
 use SitePwa\App\Icons;
@@ -72,6 +72,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php echo Icons::svg( $site_pwa_item['icon'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a fixed drawing from Icons::PATHS, escaped there. ?>
 					<?php endif; ?>
 					<span><?php echo esc_html( $site_pwa_item['label'] ); ?></span>
+					<?php if ( '' !== $site_pwa_item['badge'] ) : ?>
+						<span class="site-pwa-nav-badge" aria-hidden="true"><?php echo esc_html( $site_pwa_item['badge'] ); ?></span>
+						<span class="site-pwa-visually-hidden"><?php echo esc_html( $site_pwa_item['badge'] ); ?></span>
+					<?php endif; ?>
 				</a>
 			</li>
 		<?php endforeach; ?>

@@ -35,7 +35,7 @@ add_action( 'site_pwa_register_screens', static function ( $screens, int $api ):
 | `slot` | no | | `center` raises a `nav` screen in the middle of the bar, as the app's main action. Refused on a `more` screen. |
 | `section` | no | `services` | More's group: `services` for what a person uses, `operator` for what they do for others. Anything else is refused. |
 | `subtitle` | no | | A line under the name in More. Markup is stripped. |
-| `badge` | no | | A short status beside the name in More: a string, or a callable that returns one when More is drawn (`"2 active · 1 offline"`). Markup is stripped; a callable that throws or returns anything else shows nothing. |
+| `badge` | no | | A short status beside the name in More: a string, or a callable that returns one when the screen is drawn (`"2 active · 1 offline"`). A screen in the bottom bar shows it too, over the corner of its icon, where a count or a word of a few letters fits and anything longer is cut; the callable runs on every app page then, so keep it cheap. Markup is stripped; a callable that throws or returns anything else shows nothing. |
 | `capability` | no | `read` | Who sees the screen. The app checks it everywhere the screen appears: navigation, home, More and its own URL. |
 | `position` | no | `10` | Order, lowest first; screens with the same position sort by label. |
 
