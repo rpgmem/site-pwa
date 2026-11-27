@@ -155,6 +155,12 @@ $url = apply_filters( 'site_pwa_app_url', get_permalink( $page_id ) );
 
 Inside a post or page the app draws, its links to other such pages are converted the same way, so following one keeps the app's frame. Its back arrow returns to the app screen the person came from, or to Home when they arrived from outside the app. A link to another site goes the other way: on any app screen it opens in the phone's own browser, in a new tab, instead of a browser tab inside the app.
 
+A post or page drawn in the app ends with Share, Copy link and Open on the site, all carrying its permalink. For a page whose address means nothing to someone else, such as one that reads a personal token from the fragment, return false from `site_pwa_post_actions` and the three are not drawn.
+
+```php
+add_filter( 'site_pwa_post_actions', static fn( bool $show, WP_Post $post ): bool => $show && $post->ID !== $my_page_id, 10, 2 );
+```
+
 ## Requiring the app lock
 
 The app locks with the phone's own screen lock (fingerprint, face or the phone's PIN) when it opens and when it comes back after ten seconds out of sight; it is optional, and More and Home invite the person to turn it on. A consumer makes it mandatory for an account with the `site_pwa_lock_required` filter: the app then shows nothing but the lock screen until it is turned on.

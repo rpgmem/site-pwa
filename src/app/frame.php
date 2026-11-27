@@ -184,6 +184,7 @@ final class Frame {
 				'home'            => Routes::url( 'home' ),
 				'permalink'       => null === $post ? '' : (string) get_permalink( $post ),
 				'post_title'      => null === $post ? '' : wp_strip_all_tags( get_the_title( $post ) ),
+				'post_actions'    => null !== $post && self::postActions( $post ),
 			)
 		);
 
@@ -203,6 +204,24 @@ final class Frame {
 				'lock'       => Lock::config( $user ),
 			)
 		);
+	}
+
+	/**
+	 * Whether a post drawn in the app ends with Share, Copy link and Open on
+	 * the site. A plugin turns them off through the `site_pwa_post_actions`
+	 * filter for a page whose address means nothing to someone else, such as
+	 * one that reads a personal token from the fragment.
+	 *
+	 * @param \WP_Post $post The post drawn.
+	 */
+	public static function postActions( \WP_Post $post ): bool {
+		/**
+		 * Whether the post's Share, Copy link and Open on the site are shown.
+		 *
+		 * @param bool     $show True to show them.
+		 * @param \WP_Post $post The post drawn.
+		 */
+		return (bool) apply_filters( 'site_pwa_post_actions', true, $post );
 	}
 
 	/**
@@ -379,7 +398,8 @@ final class Frame {
 				)
 			);
 		}
-		if ( 'post' === Routes::current() ) {
+		$current = 'post' === Routes::current() ? Content::current() : null;
+		if ( null !== $current && self::postActions( $current ) ) {
 			$share = Plugin::asset( 'assets/js/share.js' );
 			wp_enqueue_script(
 				self::SHARE_HANDLE,
