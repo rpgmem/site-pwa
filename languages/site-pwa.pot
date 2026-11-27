@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-27 23:33+0000\n"
+"POT-Creation-Date: 2026-11-27 23:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -281,16 +281,20 @@ msgstr ""
 msgid "The custom icon must be at least %2$d px wide; this image is %1$d px."
 msgstr ""
 
-#: src/app/app-login.php:146
+#: src/app/app-login.php:157
 msgid "This page expired. Try again."
 msgstr ""
 
-#: src/app/app-login.php:151
+#: src/app/app-login.php:162
 msgid "Type your username or email and your password."
 msgstr ""
 
-#: src/app/app-login.php:164
+#: src/app/app-login.php:179
 msgid "The username or password is incorrect."
+msgstr ""
+
+#: src/app/app-login.php:213
+msgid "Username or email"
 msgstr ""
 
 #: src/app/frame.php:518 templates/screen-account.php:16
@@ -500,10 +504,6 @@ msgstr ""
 #: templates/login.php:25
 #, php-format
 msgid "Sign in to %s"
-msgstr ""
-
-#: templates/login.php:45
-msgid "Username or email"
 msgstr ""
 
 #: templates/login.php:49

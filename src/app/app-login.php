@@ -35,6 +35,15 @@ final class AppLogin {
 	public const NONCE = 'site_pwa_app_login';
 
 	/**
+	 * WordPress's own refusals of a username or a password. Their messages
+	 * say whether the account exists, so the screen answers them with one
+	 * sentence of its own; any other refusal, from a plugin on the login
+	 * (a lockout, an identifier shared by two accounts), says what the
+	 * person can do and is shown as it is (#78).
+	 */
+	private const CREDENTIAL_ERRORS = array( 'invalid_username', 'invalid_email', 'incorrect_password', 'empty_username', 'empty_password', 'authentication_failed' );
+
+	/**
 	 * Whether the app signs people in on its own screen.
 	 */
 	public static function enabled(): bool {
@@ -136,7 +145,9 @@ final class AppLogin {
 
 	/**
 	 * Sign the person in through WordPress, with a message they can act on
-	 * when it fails. The message never says whether the account exists.
+	 * when it fails. WordPress's own credential errors become one sentence
+	 * that never says whether the account exists; a plugin's refusal is
+	 * shown as its text (#78).
 	 *
 	 * @return WP_User|WP_Error
 	 */
@@ -161,6 +172,10 @@ final class AppLogin {
 		if ( $user instanceof WP_User ) {
 			return $user;
 		}
+		$message = trim( wp_strip_all_tags( $user->get_error_message() ) );
+		if ( '' !== $message && ! in_array( $user->get_error_code(), self::CREDENTIAL_ERRORS, true ) ) {
+			return new WP_Error( (string) $user->get_error_code(), $message );
+		}
 		return new WP_Error( 'site_pwa_refused', __( 'The username or password is incorrect.', 'site-pwa' ) );
 	}
 
@@ -184,9 +199,25 @@ final class AppLogin {
 				'nonce'      => wp_create_nonce( self::NONCE ),
 				'lost'       => wp_lostpassword_url( $back ),
 				'site_login' => wp_login_url( $back ),
+				'user_label' => self::usernameLabel(),
 				'tagline'    => trim( wp_strip_all_tags( (string) get_bloginfo( 'description' ) ) ),
 			)
 		);
+	}
+
+	/**
+	 * The username field's label. A plugin that lets people sign in with
+	 * another identifier names it here (#78).
+	 */
+	private static function usernameLabel(): string {
+		$default = __( 'Username or email', 'site-pwa' );
+		/**
+		 * The label of the username field on the app's sign-in screen.
+		 *
+		 * @param string $label "Username or email" by default.
+		 */
+		$label = trim( wp_strip_all_tags( (string) apply_filters( 'site_pwa_login_username_label', $default ) ) );
+		return '' === $label ? $default : $label;
 	}
 
 	/**

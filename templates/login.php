@@ -42,7 +42,7 @@ echo esc_html( sprintf( __( 'Sign in to %s', 'site-pwa' ), (string) $site_pwa['n
 				<p class="site-pwa-login-error" role="alert"><?php echo esc_html( (string) $site_pwa['error'] ); ?></p>
 			<?php endif; ?>
 			<p class="site-pwa-login-field">
-				<label for="site-pwa-login-user"><?php esc_html_e( 'Username or email', 'site-pwa' ); ?></label>
+				<label for="site-pwa-login-user"><?php echo esc_html( (string) $site_pwa['user_label'] ); ?></label>
 				<input type="text" id="site-pwa-login-user" name="log" value="<?php echo esc_attr( (string) $site_pwa['login'] ); ?>" autocomplete="username" autocapitalize="none" spellcheck="false" required>
 			</p>
 			<p class="site-pwa-login-field">

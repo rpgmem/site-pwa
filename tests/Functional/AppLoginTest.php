@@ -151,6 +151,36 @@ final class AppLoginTest extends WP_UnitTestCase {
 		self::assertStringContainsString( 'The username or password is incorrect.', $unknown['body'], 'an unknown account reads the same' );
 	}
 
+	// A plugin's own refusal says what the person can do, and is shown as
+	// it is; WordPress's credential errors keep the screen's one sentence (#78).
+	public function test_a_plugin_s_refusal_is_shown_as_it_is(): void {
+		$refuse = static fn() => new \WP_Error( 'ffc_identifier_ambiguous', 'This CPF or RF belongs to more than one account. <b>Ask</b> an administrator.' );
+		add_filter( 'authenticate', $refuse, 30 );
+
+		$response = $this->post(
+			array(
+				'log' => '52998224725',
+				'pwd' => 'fake-password-maria',
+			)
+		);
+
+		remove_filter( 'authenticate', $refuse, 30 );
+		self::assertStringContainsString( '<p class="site-pwa-login-error" role="alert">This CPF or RF belongs to more than one account. Ask an administrator.</p>', $response['body'], 'shown as text' );
+	}
+
+	public function test_a_plugin_names_the_identifiers_the_username_field_takes(): void {
+		self::assertStringContainsString( '>Username or email</label>', Routes::response( 'login' )['body'] );
+
+		$label = static fn() => 'Username, e-mail, CPF or RF';
+		add_filter( 'site_pwa_login_username_label', $label );
+		self::assertStringContainsString( '>Username, e-mail, CPF or RF</label>', Routes::response( 'login' )['body'] );
+		remove_filter( 'site_pwa_login_username_label', $label );
+
+		add_filter( 'site_pwa_login_username_label', '__return_empty_string' );
+		self::assertStringContainsString( '>Username or email</label>', Routes::response( 'login' )['body'], 'an empty label falls back' );
+		remove_filter( 'site_pwa_login_username_label', '__return_empty_string' );
+	}
+
 	public function test_an_expired_page_or_an_empty_field_is_refused_before_any_sign_in(): void {
 		$expired = $this->post(
 			array(

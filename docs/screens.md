@@ -173,6 +173,12 @@ The app signs people in on its own screen, `/app/login/`, inside the app's scope
 add_filter( 'site_pwa_app_login', '__return_false' );
 ```
 
+A wrong username or password reads one sentence that never says whether the account exists. A refusal from a plugin on `authenticate`, such as a lockout, is shown as its own message, as text. A plugin that lets people sign in with another identifier names it in the username field's label:
+
+```php
+add_filter( 'site_pwa_login_username_label', static fn( string $label ): string => __( 'Username, e-mail or employee number', 'my-plugin' ) );
+```
+
 ## Requiring the app lock
 
 The app locks with the phone's own screen lock (fingerprint, face or the phone's PIN) when it opens and when it comes back after ten seconds out of sight; it is optional, and More and Home invite the person to turn it on. The first screen after signing in from the app offers it before anything else, with Not now, and then shows the screen the person was going to, Home by default. A consumer makes it mandatory for an account with the `site_pwa_lock_required` filter: the app then shows nothing but the lock screen until it is turned on.
