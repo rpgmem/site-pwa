@@ -345,6 +345,47 @@ final class FrameTest extends WP_UnitTestCase {
 		self::assertSame( 'Remember Me', Login::rememberLabel( 'Remember Me', 'Remember Me', 'default' ) );
 	}
 
+	// The login from the app keeps the person signed in for SESSION_DAYS when
+	// the box is ticked, ticks it by default, and drops the site visitor's
+	// language switcher and privacy link (#72).
+	public function test_the_login_from_the_app_keeps_the_person_signed_in_and_drops_the_site_tools(): void {
+		$day = DAY_IN_SECONDS;
+		self::assertSame( 14 * $day, Login::sessionLength( 14 * $day, 1, true ), 'a login from the site keeps WordPress\'s length' );
+		self::assertTrue( Login::languageDropdown( true ) );
+		self::assertSame( '<a>Privacy</a>', Login::privacyLink( '<a>Privacy</a>' ) );
+		ob_start();
+		Login::rememberByDefault();
+		self::assertSame( '', ob_get_clean() );
+
+		$_REQUEST['redirect_to'] = Routes::url( 'home' );
+
+		self::assertSame( Login::SESSION_DAYS * $day, Login::sessionLength( 14 * $day, 1, true ) );
+		self::assertSame( 2 * $day, Login::sessionLength( 2 * $day, 1, false ), 'without the tick the session ends with the browser\'s' );
+		add_filter( 'site_pwa_session_days', static fn(): int => 30 );
+		self::assertSame( 30 * $day, Login::sessionLength( 14 * $day, 1, true ) );
+		remove_all_filters( 'site_pwa_session_days' );
+		self::assertFalse( Login::languageDropdown( true ) );
+		self::assertSame( '<a>Privacy</a>', Login::privacyLink( '<a>Privacy</a>' ), 'the site\'s pages keep the link' );
+		// The login screen, counted as WordPress counts it, without running
+		// its handlers (one sends headers).
+		$GLOBALS['wp_actions']['login_init'] = 1;
+		self::assertSame( '', Login::privacyLink( '<a>Privacy</a>' ) );
+		unset( $GLOBALS['wp_actions']['login_init'] );
+
+		ob_start();
+		Login::rememberByDefault();
+		self::assertStringContainsString( 'getElementById("rememberme")', (string) ob_get_clean() );
+		$_POST['log'] = 'maria';
+		ob_start();
+		Login::rememberByDefault();
+		self::assertSame( '', ob_get_clean(), 'a failed attempt keeps the person\'s own choice' );
+		unset( $_POST['log'], $_REQUEST['redirect_to'] );
+
+		foreach ( array( 'login_footer' => 'rememberByDefault', 'login_display_language_dropdown' => 'languageDropdown', 'the_privacy_policy_link' => 'privacyLink', 'auth_cookie_expiration' => 'sessionLength' ) as $hook => $method ) {
+			self::assertSame( 10, has_filter( $hook, array( Login::class, $method ) ), $hook );
+		}
+	}
+
 	public function test_the_dark_theme_this_device_chose_is_applied_in_the_head_before_the_first_paint(): void {
 		$html = $this->screen( 'home' );
 		$head = substr( $html, 0, (int) strpos( $html, '</head>' ) );

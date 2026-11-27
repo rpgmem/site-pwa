@@ -28,6 +28,13 @@ final class Login {
 	public const HANDLE = 'site-pwa-login';
 
 	/**
+	 * How many days a login from the app keeps the person signed in when
+	 * "Keep me signed in on this device" is ticked (#72), before the
+	 * `site_pwa_session_days` filter.
+	 */
+	public const SESSION_DAYS = 90;
+
+	/**
 	 * Wire the login hooks.
 	 */
 	public static function register(): void {
@@ -36,6 +43,10 @@ final class Login {
 		add_filter( 'login_headertext', array( self::class, 'headerText' ) );
 		add_filter( 'login_message', array( self::class, 'message' ) );
 		add_action( 'login_form', array( self::class, 'lostPasswordLink' ) );
+		add_action( 'login_footer', array( self::class, 'rememberByDefault' ) );
+		add_filter( 'login_display_language_dropdown', array( self::class, 'languageDropdown' ) );
+		add_filter( 'the_privacy_policy_link', array( self::class, 'privacyLink' ) );
+		add_filter( 'auth_cookie_expiration', array( self::class, 'sessionLength' ), 10, 3 );
 		// Only on the login screen: gettext runs for every string of the site.
 		add_action( 'login_init', array( self::class, 'relabel' ) );
 	}
@@ -148,5 +159,63 @@ final class Login {
 			return $translation;
 		}
 		return __( 'Keep me signed in on this device', 'site-pwa' );
+	}
+
+	/**
+	 * "Keep me signed in on this device" starts ticked on a login from the
+	 * app (#72): a phone is personal, and the app's screen lock guards the
+	 * long session. A login that failed keeps the person's own choice.
+	 */
+	public static function rememberByDefault(): void {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- read only to tell a first view from a failed attempt.
+		if ( ! self::fromApp() || isset( $_POST['log'] ) ) {
+			return;
+		}
+		wp_print_inline_script_tag( 'var r=document.getElementById("rememberme");if(r){r.checked=true;}' );
+	}
+
+	/**
+	 * No language switcher under the login from the app (#72): the app
+	 * speaks the site's language, and the switcher is a site visitor's tool.
+	 *
+	 * @param bool $show Whether WordPress would show it.
+	 */
+	public static function languageDropdown( bool $show ): bool {
+		return $show && ! self::fromApp();
+	}
+
+	/**
+	 * No privacy-policy link under the login from the app (#72); the site
+	 * keeps it everywhere else.
+	 *
+	 * @param string $link The link WordPress would print.
+	 */
+	public static function privacyLink( string $link ): string {
+		return did_action( 'login_init' ) && self::fromApp() ? '' : $link;
+	}
+
+	/**
+	 * A login from the app with "Keep me signed in" ticked lasts
+	 * SESSION_DAYS (#72) instead of WordPress's 14 days, so the app does
+	 * not ask for the password every two weeks. The session is still
+	 * WordPress's own cookie: signing out or changing the password ends it.
+	 * Without the tick, or from the site, WordPress's length stands.
+	 *
+	 * @param int  $length   Seconds WordPress would give the cookie.
+	 * @param int  $user_id  The person.
+	 * @param bool $remember Whether "Keep me signed in" was ticked.
+	 */
+	public static function sessionLength( $length, $user_id = 0, $remember = false ): int {
+		if ( ! $remember || ! self::fromApp() ) {
+			return (int) $length;
+		}
+		/**
+		 * Days a login from the app keeps the person signed in.
+		 *
+		 * @param int $days    Days; SESSION_DAYS by default.
+		 * @param int $user_id The person.
+		 */
+		$days = (int) apply_filters( 'site_pwa_session_days', self::SESSION_DAYS, (int) $user_id );
+		return $days > 0 ? $days * DAY_IN_SECONDS : (int) $length;
 	}
 }

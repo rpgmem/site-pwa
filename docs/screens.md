@@ -161,6 +161,12 @@ A post or page drawn in the app ends with Share, Copy link and Open on the site,
 add_filter( 'site_pwa_post_actions', static fn( bool $show, WP_Post $post ): bool => $show && $post->ID !== $my_page_id, 10, 2 );
 ```
 
+A login reached from the app starts with "Keep me signed in on this device" ticked, and a ticked login from the app lasts 90 days instead of WordPress's 14; unticked, or from the site, WordPress's length stands. The session is WordPress's own cookie, so signing out or changing the password still ends it. A consumer changes the length with `site_pwa_session_days`:
+
+```php
+add_filter( 'site_pwa_session_days', static fn( int $days, int $user_id ): int => 30, 10, 2 );
+```
+
 ## Requiring the app lock
 
 The app locks with the phone's own screen lock (fingerprint, face or the phone's PIN) when it opens and when it comes back after ten seconds out of sight; it is optional, and More and Home invite the person to turn it on. A consumer makes it mandatory for an account with the `site_pwa_lock_required` filter: the app then shows nothing but the lock screen until it is turned on.

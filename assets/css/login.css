@@ -25,10 +25,36 @@
 		background-size: cover;
 	}
 
+	/* The card of the approved mockup (#72): the fields, the tick, the
+	   button, then the lost-password link centred under it. */
 	.login form {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		padding: 20px;
 		border: 0;
-		border-radius: var(--site-pwa-radius, 12px);
-		box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+		border-radius: var(--site-pwa-radius, 16px);
+		box-shadow: 0 1px 2px rgb(20 30 50 / 8%);
+	}
+
+	.login form > * {
+		margin: 0;
+	}
+
+	.login label {
+		font-size: 14px;
+		font-weight: 500;
+	}
+
+	.login input[type="checkbox"] {
+		width: 18px;
+		height: 18px;
+	}
+
+	/* Site visitors' tools, out of place inside the app. */
+	.login .language-switcher,
+	.login .privacy-policy-page-link {
+		display: none;
 	}
 
 	.login form .input,
@@ -40,7 +66,8 @@
 	}
 
 	.login .button-primary {
-		min-height: 44px;
+		min-height: 48px;
+		font-weight: 600;
 		padding: 0 20px;
 		border: 0;
 		border-radius: var(--site-pwa-control-radius, 8px);
@@ -85,17 +112,14 @@
 		float: none;
 	}
 
-	.login .forgetmenot {
-		margin-bottom: 16px;
-	}
 
 	.login .button-primary {
 		width: 100%;
 	}
 
 	.site-pwa-login-lost {
-		margin: 0 0 16px;
-		text-align: right;
+		order: 1;
+		text-align: center;
 	}
 
 	.site-pwa-login-lost a {
