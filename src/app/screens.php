@@ -32,7 +32,13 @@ use WP_Error;
  * to whoever holds its capability: in the navigation, on the home screen and
  * at its URL alike.
  *
- * @phpstan-type Screen array{id: string, label: string, icon: string, place: string, slot: string, section: string, subtitle: string, badge: callable|string, capability: string, render: callable|null, url: string, position: int}
+ * A screen can be required (#80): its `required` callable answers whether a
+ * person still has to complete it, and while it answers true every other
+ * screen leads there, without the navigation, then on to where the person
+ * was going. Any plugin can classify a screen this way; the app knows only
+ * the answer.
+ *
+ * @phpstan-type Screen array{id: string, label: string, icon: string, place: string, slot: string, section: string, subtitle: string, badge: callable|string, capability: string, render: callable|null, url: string, position: int, required: callable|null}
  */
 final class Screens {
 
@@ -82,6 +88,12 @@ final class Screens {
 	public const DEFAULT_ICON = 'grid';
 
 	/**
+	 * Query argument carrying where a person was going when a required
+	 * screen stopped them (#80).
+	 */
+	public const NEXT = 'site_pwa_next';
+
+	/**
 	 * Registered screens by id, or null before the action has fired.
 	 *
 	 * @var array<string, Screen>|null
@@ -94,6 +106,14 @@ final class Screens {
 	 * @var array<string, Screen>
 	 */
 	private array $collected = array();
+
+	/**
+	 * The required screen each user still has to complete, by user id, read
+	 * once per request.
+	 *
+	 * @var array<int, Screen|null>
+	 */
+	private static array $pending = array();
 
 	/**
 	 * Every registered screen, by id. The action fires once, the first time
@@ -220,6 +240,60 @@ final class Screens {
 	 */
 	public static function reset(): void {
 		self::$registered = null;
+		self::$pending    = array();
+	}
+
+	/**
+	 * The first screen, by position, that the person may open and still has
+	 * to complete, or null. Only a real `true` from the screen's `required`
+	 * callable counts; one that throws leaves the app open, so a broken
+	 * consumer cannot lock everyone out.
+	 *
+	 * @param \WP_User $user The signed-in user.
+	 * @return Screen|null
+	 */
+	public static function pending( \WP_User $user ): ?array {
+		if ( $user->ID <= 0 ) {
+			return null;
+		}
+		if ( ! array_key_exists( $user->ID, self::$pending ) ) {
+			self::$pending[ $user->ID ] = null;
+			foreach ( self::visible() as $screen ) {
+				if ( null !== $screen['required'] && self::stillRequired( $screen, $user ) ) {
+					self::$pending[ $user->ID ] = $screen;
+					break;
+				}
+			}
+		}
+		return self::$pending[ $user->ID ];
+	}
+
+	/**
+	 * Whether a required screen still asks this person to complete it.
+	 *
+	 * @param array{required: callable|null} $screen The screen.
+	 * @param \WP_User                       $user   The signed-in user.
+	 */
+	public static function stillRequired( array $screen, \WP_User $user ): bool {
+		if ( null === $screen['required'] ) {
+			return false;
+		}
+		try {
+			return true === call_user_func( $screen['required'], $user );
+		} catch ( \Throwable $error ) {
+			return false;
+		}
+	}
+
+	/**
+	 * The address of a required screen, carrying where the person was going.
+	 *
+	 * @param array{id: string, render: callable|null, url: string} $screen The screen.
+	 * @param string                                                $next   An app address, or ''.
+	 */
+	public static function requiredUrl( array $screen, string $next ): string {
+		$link = self::link( $screen );
+		return '' === $next ? $link : add_query_arg( self::NEXT, rawurlencode( $next ), $link );
 	}
 
 	/**
@@ -232,9 +306,11 @@ final class Screens {
 	 *                                   `operator`, More's group), `subtitle`, `badge` (a string, or a
 	 *                                   callable returning one, shown beside the name in More),
 	 *                                   `capability` (default `read`), `position`
-	 *                                   (default 10), and exactly one of `render` (a callable that
-	 *                                   returns or prints the screen's HTML) or `url` (a page on
-	 *                                   this site).
+	 *                                   (default 10), `required` (a callable taking the WP_User and
+	 *                                   returning true while that person must complete the screen
+	 *                                   before using the app; `render` screens only), and exactly
+	 *                                   one of `render` (a callable that returns or prints the
+	 *                                   screen's HTML) or `url` (a page on this site).
 	 * @return true|WP_Error
 	 */
 	public function add( string $id, array $args ) {
@@ -309,6 +385,14 @@ final class Screens {
 			}
 		}
 
+		$required = $args['required'] ?? null;
+		if ( null !== $required && ! is_callable( $required ) ) {
+			return new WP_Error( 'site_pwa_screen_required', sprintf( 'Screen "%s": required is not callable.', $id ) );
+		}
+		if ( null !== $required && null === $render ) {
+			return new WP_Error( 'site_pwa_screen_required', sprintf( 'Screen "%s": only a screen drawn by the app (render) can be required.', $id ) );
+		}
+
 		$icon = is_string( $args['icon'] ?? null ) && isset( Icons::PATHS[ $args['icon'] ] ) ? $args['icon'] : self::DEFAULT_ICON;
 		$cap  = is_string( $args['capability'] ?? null ) && '' !== $args['capability'] ? $args['capability'] : 'read';
 
@@ -325,6 +409,7 @@ final class Screens {
 			'render'     => null === $render ? null : $render,
 			'url'        => $link,
 			'position'   => is_numeric( $args['position'] ?? null ) ? (int) $args['position'] : 10,
+			'required'   => $required,
 		);
 	}
 

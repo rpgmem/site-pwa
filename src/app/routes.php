@@ -229,17 +229,37 @@ final class Routes {
 		);
 
 		if ( in_array( $route, self::SCREENS, true ) && ! is_user_logged_in() ) {
-			$back = self::url( $route );
-			if ( 'post' === $route ) {
-				$back = Content::url( Content::requested() );
-			} elseif ( 'screen' === $route ) {
-				$back = home_url( '/' . self::prefix() . '/s/' . sanitize_key( self::screen() ) . '/' );
-			}
+			$back = self::requested( $route );
 			return array(
 				'status'  => 302,
 				'headers' => $headers + array( 'Location' => AppLogin::enabled() ? AppLogin::url( $back ) : wp_login_url( $back ) ),
 				'body'    => '',
 			);
+		}
+
+		// A required screen still to complete comes first (#80): every other
+		// screen leads to it, carrying where the person was going; once
+		// complete, it sends them on.
+		if ( in_array( $route, self::SCREENS, true ) ) {
+			$user    = wp_get_current_user();
+			$pending = Screens::pending( $user );
+			$here    = 'screen' === $route ? Screens::page( self::screen() ) : null;
+			if ( null !== $pending && ( null === $here || $here['id'] !== $pending['id'] ) ) {
+				return array(
+					'status'  => 302,
+					'headers' => $headers + array( 'Location' => Screens::requiredUrl( $pending, self::requested( $route ) ) ),
+					'body'    => '',
+				);
+			}
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- an address to go on to, kept inside the app by AppLogin::target().
+			$next = isset( $_GET[ Screens::NEXT ] ) ? esc_url_raw( wp_unslash( (string) $_GET[ Screens::NEXT ] ) ) : '';
+			if ( null === $pending && null !== $here && null !== $here['required'] && '' !== $next ) {
+				return array(
+					'status'  => 302,
+					'headers' => $headers + array( 'Location' => AppLogin::target( $next ) ),
+					'body'    => '',
+				);
+			}
 		}
 
 		// An unknown screen, one the user may not open, and a URL screen
@@ -277,6 +297,22 @@ final class Routes {
 			'headers' => $headers,
 			'body'    => in_array( $route, self::SCREENS, true ) ? Frame::render( $route ) : Pages::render(),
 		);
+	}
+
+	/**
+	 * The address of an app screen request, to come back to after a sign-in
+	 * or a required screen: the screen, the post or the route.
+	 *
+	 * @param string $route The route.
+	 */
+	private static function requested( string $route ): string {
+		if ( 'post' === $route ) {
+			return Content::url( Content::requested() );
+		}
+		if ( 'screen' === $route ) {
+			return home_url( '/' . self::prefix() . '/s/' . sanitize_key( self::screen() ) . '/' );
+		}
+		return self::url( $route );
 	}
 
 	/**

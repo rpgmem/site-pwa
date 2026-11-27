@@ -61,6 +61,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <main id="site-pwa-main" class="site-pwa-main" tabindex="-1">
 	<?php echo $site_pwa['content']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- a screen template, built escaped. ?>
 </main>
+<?php if ( array() !== $site_pwa['navigation'] ) : ?>
 <nav class="site-pwa-nav" aria-label="<?php esc_attr_e( 'App', 'site-pwa' ); ?>">
 	<ul>
 		<?php foreach ( $site_pwa['navigation'] as $site_pwa_item ) : ?>
@@ -81,6 +82,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php endforeach; ?>
 	</ul>
 </nav>
+<?php endif; ?>
 <?php wp_footer(); ?>
 </body>
 </html>

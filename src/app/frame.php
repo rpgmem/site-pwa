@@ -156,6 +156,7 @@ final class Frame {
 		$user     = wp_get_current_user();
 		$post     = 'post' === $route ? Content::current() : null;
 		$screen   = 'screen' === $route ? Screens::page( Routes::screen() ) : null;
+		$gated    = null !== $screen && null !== Screens::pending( $user ) && Screens::pending( $user )['id'] === $screen['id'];
 		$home     = 'home' === $route ? Home::items( $user ) : null;
 		$name     = '' !== (string) $user->display_name ? (string) $user->display_name : (string) $user->user_login;
 
@@ -176,6 +177,7 @@ final class Frame {
 				'pref_sections'   => 'preferences' === $route ? self::preferenceSections( $user ) : array(),
 				'screen'          => $screen,
 				'screen_html'     => null === $screen ? '' : self::screenHtml( $screen ),
+				'gated'           => $gated,
 				'user'            => $user,
 				'first_name'      => '' !== (string) $user->first_name ? (string) $user->first_name : (string) $user->display_name,
 				'home_items'      => $home,
@@ -199,7 +201,7 @@ final class Frame {
 				'user_name'  => $name,
 				'pending'    => null === $home ? 0 : count( $home['pending'] ),
 				'back'       => self::back( $route ),
-				'navigation' => Navigation::items( Navigation::key( $route, Routes::screen() ) ),
+				'navigation' => $gated ? array() : Navigation::items( Navigation::key( $route, Routes::screen() ) ),
 				'content'    => $content,
 				'lock'       => Lock::config( $user ),
 			)
