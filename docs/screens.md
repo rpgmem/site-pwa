@@ -38,7 +38,7 @@ add_action( 'site_pwa_register_screens', static function ( $screens, int $api ):
 | `badge` | no | | A short status beside the name in More: a string, or a callable that returns one when the screen is drawn (`"2 active · 1 offline"`). A screen in the bottom bar shows it too, over the corner of its icon, where a count or a word of a few letters fits and anything longer is cut; the callable runs on every app page then, so keep it cheap. Markup is stripped; a callable that throws or returns anything else shows nothing. |
 | `capability` | no | `read` | Who sees the screen. The app checks it everywhere the screen appears: navigation, home, More and its own URL. |
 | `position` | no | `10` | Order, lowest first; screens with the same position sort by label. |
-| `required` | no | | A callable taking the `WP_User` and returning `true` while that person must complete the screen before using the app. `render` screens only. See "Requiring a screen". |
+| `required` | no | | A callable taking the `WP_User` and returning `true` while that person must complete the screen before using the app. `render` screens only, and never listed in the navigation or More. See "Requiring a screen". |
 
 The id is part of the URL: lowercase letters, digits and hyphens. `home`, `account`, `more`, `news`, `post`, `offline`, `manifest`, `sw` and `s` belong to the app.
 
@@ -192,7 +192,7 @@ $screens->add( 'complete-details', array(
 ) );
 ```
 
-While it returns `true`, every other app screen leads to it, with `site_pwa_next` naming where the person was going; it is drawn without the bottom navigation, with a line asking to complete the step and Sign out. Once the person has completed it, reload the screen keeping its query (`location.reload()` after a save, or a redirect to the same address): the app sees it is no longer required and sends them on, to an app address only, Home by default. Opened from More, it is an ordinary screen.
+While it returns `true`, every other app screen leads to it, with `site_pwa_next` naming where the person was going; it is drawn without the bottom navigation, with a line asking to complete the step and Sign out. Once the person has completed it, reload the screen keeping its query (`location.reload()` after a save, or a redirect to the same address): the app sees it is no longer required and sends them on, to an app address only, Home by default. A required screen is a step, not a destination: the navigation and More never list it, and it opens at its own address (`/app/s/<id>/`), from a link of yours, as an ordinary screen once complete.
 
 The first required screen by position comes first. A screen the person may not open never stops them, only a real `true` counts, and a callable that throws leaves the app open, so a broken check cannot lock everyone out. The app lock, offered right after signing in, still comes before it. `required` is refused on a `url` screen, which leaves the app.
 
