@@ -34,6 +34,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Plugins can add sections to Preferences** (#66) through `site_pwa_preference_sections`: each a label and a render callable, drawn under its own heading after the app's appearance and screen lock.
 - **A screen in the bottom bar shows its badge** (#68). The `badge` More already drew now also sits over the corner of the screen's icon in the bar, read once after its label, so a consumer can show a count such as new certificates.
 - **A plugin can drop a post's Share, Copy link and Open on the site** (#70) through `site_pwa_post_actions`, for a page whose address means nothing to someone else, such as Free Form Certificate's verification page, which reads a personal token from the fragment.
+- **The app keeps people signed in** (#72). On a login from the app, "Keep me signed in on this device" starts ticked, and a ticked login lasts 90 days (`site_pwa_session_days`) instead of 14. That login also drops the language switcher and the privacy link, and its card follows the mockup.
 
 ### Fixed
 
