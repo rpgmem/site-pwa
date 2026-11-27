@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-27 23:40+0000\n"
+"POT-Creation-Date: 2026-11-27 23:55+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -55,7 +55,7 @@ msgstr "Ligar o app o substitui. Confirme a substituição abaixo para continuar
 msgid "The app is on at"
 msgstr "O app está ligado em"
 
-#: src/admin/settings-page.php:180 templates/frame.php:64
+#: src/admin/settings-page.php:180 templates/frame.php:65
 #: templates/site-banner.php:17
 msgid "App"
 msgstr "App"
@@ -144,7 +144,7 @@ msgstr "Página de instalação"
 msgid "Public, no login. The banner leads here, and the address can go on a poster, a QR code or an e-mail. It uses the app's name, icon and colours, and shows the install button, the iPhone steps or \"Open the app\" for each browser."
 msgstr "Pública, sem login. O banner leva para cá, e o endereço pode ir em cartaz, QR code ou e-mail. Usa o nome, o ícone e as cores do app, e mostra o botão de instalar, os passos do iPhone ou \"Abrir o app\" conforme o navegador."
 
-#: src/admin/settings-page.php:252 src/app/frame.php:524
+#: src/admin/settings-page.php:252 src/app/frame.php:526
 #: templates/screen-home.php:103 templates/screen-more.php:43
 #: templates/screen-news.php:22
 msgid "News"
@@ -296,24 +296,24 @@ msgstr "Usuário ou senha incorretos."
 msgid "Username or email"
 msgstr "Usuário ou e-mail"
 
-#: src/app/frame.php:518 templates/screen-account.php:16
+#: src/app/frame.php:520 templates/screen-account.php:16
 msgid "Account"
 msgstr "Conta"
 
-#: src/app/frame.php:520 src/app/navigation.php:52 templates/screen-more.php:55
+#: src/app/frame.php:522 src/app/navigation.php:52 templates/screen-more.php:55
 msgid "More"
 msgstr "Mais"
 
-#: src/app/frame.php:522 templates/screen-more.php:36
+#: src/app/frame.php:524 templates/screen-more.php:36
 #: templates/screen-preferences.php:18 templates/screen-preferences.php:20
 msgid "Preferences"
 msgstr "Preferências"
 
-#: src/app/frame.php:527 src/app/frame.php:530
+#: src/app/frame.php:529 src/app/frame.php:532
 msgid "Not available"
 msgstr "Indisponível"
 
-#: src/app/frame.php:532 src/app/navigation.php:41 templates/screen-home.php:18
+#: src/app/frame.php:534 src/app/navigation.php:41 templates/screen-home.php:18
 msgid "Home"
 msgstr "Início"
 
@@ -583,6 +583,7 @@ msgid "Edit profile"
 msgstr "Editar perfil"
 
 #: templates/screen-account.php:27 templates/screen-more.php:97
+#: templates/screen-screen.php:23
 msgid "Sign out"
 msgstr "Sair"
 
@@ -743,6 +744,10 @@ msgstr "Travar com o bloqueio do celular"
 #: templates/screen-preferences.php:44
 msgid "Fingerprint, face or the phone's PIN when the app opens, and when it comes back after a few seconds away."
 msgstr "Digital, rosto ou PIN do celular quando o app abre e quando volta após alguns segundos fora."
+
+#: templates/screen-screen.php:17
+msgid "Complete this step to go on using the app."
+msgstr "Conclua esta etapa para continuar usando o app."
 
 #: templates/site-banner.php:23
 msgid "Install"

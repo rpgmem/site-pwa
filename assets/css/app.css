@@ -279,6 +279,22 @@ html:not([data-site-pwa-scheme="light"]) .site-pwa-scheme-dark .site-pwa-header-
 	color: var(--site-pwa-muted);
 }
 
+/* A required screen still to complete (#80): a line under its title, and
+   the way out, since the navigation is not drawn. */
+.site-pwa-required-note {
+	margin: -8px 0 16px;
+	color: var(--site-pwa-muted);
+}
+
+.site-pwa-required-signout {
+	margin: 24px 0 0;
+	text-align: center;
+}
+
+.site-pwa-required-signout a {
+	color: var(--site-pwa-accent-text);
+}
+
 .site-pwa-facts {
 	display: grid;
 	grid-template-columns: max-content minmax(0, 1fr);

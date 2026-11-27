@@ -38,6 +38,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Signing in stays inside the app** (#74). A signed-out person goes to `/app/login/`, the app's own sign-in in the install page's look, instead of WordPress's login, which opens under the browser's bar outside the app's scope. It signs in through `wp_signon()`; a site whose login another plugin extends keeps WordPress's (`site_pwa_app_login`).
 - **The first screen after signing in offers the app lock** (#76). Signing in from the app, on its own screen or WordPress's, opens on the lock: Turn the lock on, or Not now, then Home or the screen the person was sent to. A phone that already has the lock, or an account that requires it, sees the lock as before.
 - **The app's sign-in shows a plugin's refusal** (#78), such as a lockout or an identifier shared by two accounts, as its own text; a wrong username or password still reads one sentence. `site_pwa_login_username_label` names the identifiers the username field takes.
+- **Screens a person must complete first** (#80). A screen's `required` callable says whether the person still has to complete it; while it does, every other app screen leads there, without the navigation, then on to where they were going. Any plugin can mark a screen this way.
 
 ### Fixed
 
