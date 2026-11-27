@@ -121,7 +121,8 @@ final class AppLogin {
 
 		$result = self::signIn();
 		if ( $result instanceof WP_User ) {
-			return self::redirect( $back, $headers );
+			// The first screen after signing in offers the lock (#76).
+			return self::redirect( add_query_arg( Lock::WELCOME, '1', $back ), $headers );
 		}
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- checked in signIn(); read again only to refill the field.
 		$login    = isset( $_POST['log'] ) ? sanitize_user( wp_unslash( (string) $_POST['log'] ) ) : '';

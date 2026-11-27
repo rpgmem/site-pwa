@@ -3,7 +3,8 @@
  * The lock screen (#38): drawn hidden on every app screen, shown by the
  * head check before the first paint and by `assets/js/lock.js`. Its mode
  * decides what it asks for: unlock, turn the lock on (required), or the
- * warning for a phone without a screen lock.
+ * warning for a phone without a screen lock. Right after signing in it
+ * offers the lock with Not now (#76), marked `data-optional`.
  *
  * @package SitePwa
  *
@@ -26,11 +27,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<span class="site-pwa-lock-for-nolock"><?php esc_html_e( 'This phone has no screen lock', 'site-pwa' ); ?></span>
 		</h1>
 		<p class="site-pwa-lock-for-unlock"><?php esc_html_e( 'Unlock with your fingerprint, face or the phone\'s PIN.', 'site-pwa' ); ?></p>
-		<p class="site-pwa-lock-for-setup"><?php esc_html_e( 'Required for your account. The phone asks for its own screen lock once, then every time the app opens or comes back after a few seconds away. No new password.', 'site-pwa' ); ?></p>
+		<p class="site-pwa-lock-for-setup site-pwa-lock-for-required"><?php esc_html_e( 'Required for your account. The phone asks for its own screen lock once, then every time the app opens or comes back after a few seconds away. No new password.', 'site-pwa' ); ?></p>
+		<p class="site-pwa-lock-for-setup site-pwa-lock-for-optional"><?php esc_html_e( 'Your phone asks for its own screen lock once, then every time the app opens or comes back after a few seconds away, so no one else holding the phone opens it. No new password.', 'site-pwa' ); ?></p>
 		<p class="site-pwa-lock-status" role="status" aria-live="polite" data-site-pwa-lock="status"></p>
 		<button type="button" class="site-pwa-button site-pwa-lock-for-unlock" data-site-pwa-lock="unlock"><?php esc_html_e( 'Unlock', 'site-pwa' ); ?></button>
 		<button type="button" class="site-pwa-button site-pwa-lock-for-setup" data-site-pwa-lock="setup"><?php esc_html_e( 'Turn the lock on', 'site-pwa' ); ?></button>
 		<button type="button" class="site-pwa-button site-pwa-lock-for-nolock" data-site-pwa-lock="setup"><?php esc_html_e( 'Try again', 'site-pwa' ); ?></button>
+		<button type="button" class="site-pwa-link-button site-pwa-lock-for-optional" data-site-pwa-lock="later"><?php esc_html_e( 'Not now', 'site-pwa' ); ?></button>
 		<a class="site-pwa-lock-signout" href="<?php echo esc_url( $site_pwa['lock']['logout'] ); ?>" data-site-pwa-lock="signout"><?php esc_html_e( 'Sign out and in again', 'site-pwa' ); ?></a>
 	</div>
 </div>

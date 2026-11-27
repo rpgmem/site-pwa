@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-27 22:48+0000\n"
+"POT-Creation-Date: 2026-11-27 23:33+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -280,15 +280,15 @@ msgstr "O ícone personalizado precisa ser quadrado; esta imagem tem %1$d × %2$
 msgid "The custom icon must be at least %2$d px wide; this image is %1$d px."
 msgstr "O ícone personalizado precisa ter pelo menos %2$d px de lado; esta imagem tem %1$d px."
 
-#: src/app/app-login.php:145
+#: src/app/app-login.php:146
 msgid "This page expired. Try again."
 msgstr "Esta página expirou. Tente de novo."
 
-#: src/app/app-login.php:150
+#: src/app/app-login.php:151
 msgid "Type your username or email and your password."
 msgstr "Digite seu usuário ou e-mail e sua senha."
 
-#: src/app/app-login.php:163
+#: src/app/app-login.php:164
 msgid "The username or password is incorrect."
 msgstr "Usuário ou senha incorretos."
 
@@ -325,43 +325,43 @@ msgstr "Boa tarde,"
 msgid "Good evening,"
 msgstr "Boa noite,"
 
-#: src/app/lock.php:90
+#: src/app/lock.php:107
 msgid "Confirm with your phone's screen lock…"
 msgstr "Confirme com o bloqueio de tela do celular…"
 
-#: src/app/lock.php:91
+#: src/app/lock.php:108
 msgid "Not unlocked. Try again, or sign out and in again."
 msgstr "Não destravou. Tente de novo, ou saia e entre de novo."
 
-#: src/app/lock.php:92
+#: src/app/lock.php:109
 msgid "Confirm with your phone's screen lock to turn the lock on…"
 msgstr "Confirme com o bloqueio de tela do celular para ativar a trava…"
 
-#: src/app/lock.php:93
+#: src/app/lock.php:110
 msgid "The app now locks with your phone's screen lock."
 msgstr "O app agora trava com o bloqueio de tela do celular."
 
-#: src/app/lock.php:94
+#: src/app/lock.php:111
 msgid "The lock was not turned on. Try again."
 msgstr "A trava não foi ativada. Tente de novo."
 
-#: src/app/lock.php:95
+#: src/app/lock.php:112
 msgid "This phone has no screen lock. That is highly unsafe: anyone holding the phone opens the app and everything in it. Turn the screen lock on in the phone's settings, then come back."
 msgstr "Este celular não tem bloqueio de tela. Isso é altamente inseguro: qualquer pessoa com o celular na mão abre o app e tudo o que há nele. Ative o bloqueio de tela nas configurações do celular e volte aqui."
 
-#: src/app/lock.php:96
+#: src/app/lock.php:113
 msgid "The app no longer locks on this phone."
 msgstr "O app não trava mais neste celular."
 
-#: src/app/lock.php:97 templates/screen-preferences.php:45
+#: src/app/lock.php:114 templates/screen-preferences.php:45
 msgid "Required for your account: it cannot be turned off."
 msgstr "Obrigatória para a sua conta: não pode ser desativada."
 
-#: src/app/login.php:145 templates/login.php:62
+#: src/app/login.php:146 templates/login.php:62
 msgid "Forgot your password?"
 msgstr "Esqueceu a senha?"
 
-#: src/app/login.php:161 templates/login.php:54
+#: src/app/login.php:162 templates/login.php:54
 msgid "Keep me signed in on this device"
 msgstr "Manter conectado neste aparelho"
 
@@ -525,39 +525,48 @@ msgstr "Sem conexão"
 msgid "This page needs the internet. Check the connection and try again."
 msgstr "Esta página precisa de internet. Confira a conexão e tente de novo."
 
-#: templates/offline.php:26 templates/partial-lock.php:33
+#: templates/offline.php:26 templates/partial-lock.php:35
 msgid "Try again"
 msgstr "Tentar de novo"
 
-#: templates/partial-lock.php:24
+#: templates/partial-lock.php:25
 msgid "The app is locked"
 msgstr "O app está travado"
 
-#: templates/partial-lock.php:25
+#: templates/partial-lock.php:26
 msgid "Lock the app with your phone's screen lock"
 msgstr "Trave o app com o bloqueio de tela do celular"
 
-#: templates/partial-lock.php:26
+#: templates/partial-lock.php:27
 msgid "This phone has no screen lock"
 msgstr "Este celular não tem bloqueio de tela"
 
-#: templates/partial-lock.php:28
+#: templates/partial-lock.php:29
 msgid "Unlock with your fingerprint, face or the phone's PIN."
 msgstr "Destrave com a digital, o rosto ou o PIN do celular."
 
-#: templates/partial-lock.php:29
+#: templates/partial-lock.php:30
 msgid "Required for your account. The phone asks for its own screen lock once, then every time the app opens or comes back after a few seconds away. No new password."
 msgstr "Obrigatória para a sua conta. O celular pede o próprio bloqueio de tela uma vez e, depois, sempre que o app abre ou volta após alguns segundos fora. Nenhuma senha nova."
 
 #: templates/partial-lock.php:31
+msgid "Your phone asks for its own screen lock once, then every time the app opens or comes back after a few seconds away, so no one else holding the phone opens it. No new password."
+msgstr "O celular pede o próprio bloqueio de tela uma vez e, depois, sempre que o app abrir ou voltar após alguns segundos fora, para que mais ninguém com o celular na mão abra o app. Sem senha nova."
+
+#: templates/partial-lock.php:33
 msgid "Unlock"
 msgstr "Destravar"
 
-#: templates/partial-lock.php:32
+#: templates/partial-lock.php:34
 msgid "Turn the lock on"
 msgstr "Ativar a trava"
 
-#: templates/partial-lock.php:34
+#: templates/partial-lock.php:36 templates/screen-home.php:140
+#: templates/site-banner.php:24
+msgid "Not now"
+msgstr "Agora não"
+
+#: templates/partial-lock.php:37
 msgid "Sign out and in again"
 msgstr "Sair e entrar de novo"
 
@@ -616,10 +625,6 @@ msgstr "Ainda não há notícias."
 #: templates/screen-home.php:123
 msgid "No pages yet. The pages chosen in the app's settings appear here."
 msgstr "Ainda não há páginas. As páginas escolhidas nas configurações do app aparecem aqui."
-
-#: templates/screen-home.php:140 templates/site-banner.php:24
-msgid "Not now"
-msgstr "Agora não"
 
 #: templates/screen-home.php:145
 msgid "Open it from your home screen, full screen, like any other app."

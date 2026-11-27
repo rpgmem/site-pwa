@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-27 22:49+0000\n"
+"POT-Creation-Date: 2026-11-27 23:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -281,15 +281,15 @@ msgstr ""
 msgid "The custom icon must be at least %2$d px wide; this image is %1$d px."
 msgstr ""
 
-#: src/app/app-login.php:145
+#: src/app/app-login.php:146
 msgid "This page expired. Try again."
 msgstr ""
 
-#: src/app/app-login.php:150
+#: src/app/app-login.php:151
 msgid "Type your username or email and your password."
 msgstr ""
 
-#: src/app/app-login.php:163
+#: src/app/app-login.php:164
 msgid "The username or password is incorrect."
 msgstr ""
 
@@ -326,43 +326,43 @@ msgstr ""
 msgid "Good evening,"
 msgstr ""
 
-#: src/app/lock.php:90
+#: src/app/lock.php:107
 msgid "Confirm with your phone's screen lock…"
 msgstr ""
 
-#: src/app/lock.php:91
+#: src/app/lock.php:108
 msgid "Not unlocked. Try again, or sign out and in again."
 msgstr ""
 
-#: src/app/lock.php:92
+#: src/app/lock.php:109
 msgid "Confirm with your phone's screen lock to turn the lock on…"
 msgstr ""
 
-#: src/app/lock.php:93
+#: src/app/lock.php:110
 msgid "The app now locks with your phone's screen lock."
 msgstr ""
 
-#: src/app/lock.php:94
+#: src/app/lock.php:111
 msgid "The lock was not turned on. Try again."
 msgstr ""
 
-#: src/app/lock.php:95
+#: src/app/lock.php:112
 msgid "This phone has no screen lock. That is highly unsafe: anyone holding the phone opens the app and everything in it. Turn the screen lock on in the phone's settings, then come back."
 msgstr ""
 
-#: src/app/lock.php:96
+#: src/app/lock.php:113
 msgid "The app no longer locks on this phone."
 msgstr ""
 
-#: src/app/lock.php:97 templates/screen-preferences.php:45
+#: src/app/lock.php:114 templates/screen-preferences.php:45
 msgid "Required for your account: it cannot be turned off."
 msgstr ""
 
-#: src/app/login.php:145 templates/login.php:62
+#: src/app/login.php:146 templates/login.php:62
 msgid "Forgot your password?"
 msgstr ""
 
-#: src/app/login.php:161 templates/login.php:54
+#: src/app/login.php:162 templates/login.php:54
 msgid "Keep me signed in on this device"
 msgstr ""
 
@@ -526,39 +526,48 @@ msgstr ""
 msgid "This page needs the internet. Check the connection and try again."
 msgstr ""
 
-#: templates/offline.php:26 templates/partial-lock.php:33
+#: templates/offline.php:26 templates/partial-lock.php:35
 msgid "Try again"
 msgstr ""
 
-#: templates/partial-lock.php:24
+#: templates/partial-lock.php:25
 msgid "The app is locked"
 msgstr ""
 
-#: templates/partial-lock.php:25
+#: templates/partial-lock.php:26
 msgid "Lock the app with your phone's screen lock"
 msgstr ""
 
-#: templates/partial-lock.php:26
+#: templates/partial-lock.php:27
 msgid "This phone has no screen lock"
 msgstr ""
 
-#: templates/partial-lock.php:28
+#: templates/partial-lock.php:29
 msgid "Unlock with your fingerprint, face or the phone's PIN."
 msgstr ""
 
-#: templates/partial-lock.php:29
+#: templates/partial-lock.php:30
 msgid "Required for your account. The phone asks for its own screen lock once, then every time the app opens or comes back after a few seconds away. No new password."
 msgstr ""
 
 #: templates/partial-lock.php:31
+msgid "Your phone asks for its own screen lock once, then every time the app opens or comes back after a few seconds away, so no one else holding the phone opens it. No new password."
+msgstr ""
+
+#: templates/partial-lock.php:33
 msgid "Unlock"
 msgstr ""
 
-#: templates/partial-lock.php:32
+#: templates/partial-lock.php:34
 msgid "Turn the lock on"
 msgstr ""
 
-#: templates/partial-lock.php:34
+#: templates/partial-lock.php:36 templates/screen-home.php:140
+#: templates/site-banner.php:24
+msgid "Not now"
+msgstr ""
+
+#: templates/partial-lock.php:37
 msgid "Sign out and in again"
 msgstr ""
 
@@ -616,10 +625,6 @@ msgstr ""
 
 #: templates/screen-home.php:123
 msgid "No pages yet. The pages chosen in the app's settings appear here."
-msgstr ""
-
-#: templates/screen-home.php:140 templates/site-banner.php:24
-msgid "Not now"
 msgstr ""
 
 #: templates/screen-home.php:145

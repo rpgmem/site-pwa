@@ -47,6 +47,7 @@ final class Login {
 		add_filter( 'login_display_language_dropdown', array( self::class, 'languageDropdown' ) );
 		add_filter( 'the_privacy_policy_link', array( self::class, 'privacyLink' ) );
 		add_filter( 'auth_cookie_expiration', array( self::class, 'sessionLength' ), 10, 3 );
+		add_filter( 'login_redirect', array( self::class, 'welcome' ), 10, 3 );
 		// Only on the login screen: gettext runs for every string of the site.
 		add_action( 'login_init', array( self::class, 'relabel' ) );
 	}
@@ -217,5 +218,23 @@ final class Login {
 		 */
 		$days = (int) apply_filters( 'site_pwa_session_days', self::SESSION_DAYS, (int) $user_id );
 		return $days > 0 ? $days * DAY_IN_SECONDS : (int) $length;
+	}
+
+	/**
+	 * A login from the app returns with the lock offered on the first
+	 * screen (#76), as the app's own sign-in does. Hooked at the default
+	 * priority, after which only plugins that move the person elsewhere
+	 * run; an address outside the app is left as it is.
+	 *
+	 * @param string             $to        Where WordPress sends the person.
+	 * @param string             $requested The address the login asked for.
+	 * @param \WP_User|\WP_Error $user      The result of the login.
+	 */
+	public static function welcome( $to, $requested = '', $user = null ): string {
+		$to = (string) $to;
+		if ( ! $user instanceof \WP_User || ! Settings::enabled() || 0 !== strpos( $to, Routes::url( 'home' ) ) ) {
+			return $to;
+		}
+		return add_query_arg( Lock::WELCOME, '1', $to );
 	}
 }

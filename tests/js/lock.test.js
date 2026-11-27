@@ -40,6 +40,7 @@ const MARKUP = `
 		<button data-site-pwa-lock="unlock"></button>
 		<button data-site-pwa-lock="setup" id="setup"></button>
 		<button data-site-pwa-lock="setup" id="retry"></button>
+		<button data-site-pwa-lock="later" id="later"></button>
 		<a href="#" data-site-pwa-lock="signout">out</a>
 	</div>
 	<main>
@@ -141,6 +142,54 @@ describe( 'lock.js', () => {
 		expect( JSON.parse( e.local.data.get( 'site-pwa-lock:k1' ) ) ).toEqual( { id: 'AQID' } );
 		expect( locked() ).toBe( false );
 		expect( lock.turnOff() ).toBe( false );
+	} );
+
+	it( 'offers the lock right after signing in, with Not now (#76)', async () => {
+		document.documentElement.classList.add( 'site-pwa-locked' );
+		const forget = vi.fn();
+		const e = env( { forget } );
+		const lock = start( { ...CONFIG, welcome: true }, e );
+		expect( await lock.ready ).toBe( 'setup' );
+		expect( overlay().hasAttribute( 'data-optional' ) ).toBe( true );
+		expect( forget ).toHaveBeenCalledTimes( 1 );
+
+		document.getElementById( 'later' ).click();
+		expect( locked() ).toBe( false );
+		expect( overlay().hidden ).toBe( true );
+		expect( e.credentials.create ).not.toHaveBeenCalled();
+		expect( lock.enabled() ).toBe( false );
+	} );
+
+	it( 'turning the lock on from the offer lets the person in', async () => {
+		const e = env();
+		const lock = start( { ...CONFIG, welcome: true }, e );
+		expect( await lock.ready ).toBe( 'setup' );
+		document.getElementById( 'setup' ).click();
+		await flush();
+		await flush();
+		expect( lock.enabled() ).toBe( true );
+		expect( locked() ).toBe( false );
+	} );
+
+	it( 'offers nothing new when the phone already has the lock, or it is required', async () => {
+		document.documentElement.classList.add( 'site-pwa-locked' );
+		const on = env( { local: memory( ON ) } );
+		expect( await start( { ...CONFIG, welcome: true }, on ).ready ).toBe( 'unlock' );
+		expect( overlay().hasAttribute( 'data-optional' ) ).toBe( false );
+
+		document.body.innerHTML = MARKUP;
+		document.documentElement.classList.add( 'site-pwa-locked' );
+		expect( await start( { ...CONFIG, welcome: true, required: true }, env() ).ready ).toBe( 'setup' );
+		expect( overlay().hasAttribute( 'data-optional' ) ).toBe( false, 'a required lock has no Not now' );
+	} );
+
+	it( 'offers the warning with Not now on a phone without a screen lock', async () => {
+		const e = env( { available: () => Promise.resolve( false ) } );
+		const lock = start( { ...CONFIG, welcome: true }, e );
+		expect( await lock.ready ).toBe( 'nolock' );
+		expect( overlay().hasAttribute( 'data-optional' ) ).toBe( true );
+		document.getElementById( 'later' ).click();
+		expect( locked() ).toBe( false );
 	} );
 
 	it( 'warns a phone without a screen lock that it is unsafe', async () => {
@@ -360,5 +409,20 @@ describe( 'lock.js', () => {
 		document.body.innerHTML = MARKUP;
 		const plain = boot( { ...win, localStorage: memory(), isSecureContext: false } );
 		expect( await plain.turnOn() ).toBe( 'nolock', 'no platform check outside a secure page' );
+
+		// The sign-in's argument leaves the address once read (#76).
+		document.body.innerHTML = MARKUP;
+		const replaceState = vi.fn();
+		boot( {
+			...win,
+			sitePwaLock: { ...CONFIG, welcome: true },
+			URL,
+			location: { assign, href: 'https://example.org/app/?site_pwa_welcome=1&p=3' },
+			history: { state: null, replaceState },
+		} );
+		expect( replaceState ).toHaveBeenCalledWith( null, '', 'https://example.org/app/?p=3' );
+
+		document.body.innerHTML = MARKUP;
+		expect( boot( { ...win, sitePwaLock: { ...CONFIG, welcome: true }, location: { assign } } ) ).not.toBeNull( 'a browser without URL keeps the argument' );
 	} );
 } );

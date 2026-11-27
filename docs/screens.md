@@ -175,7 +175,7 @@ add_filter( 'site_pwa_app_login', '__return_false' );
 
 ## Requiring the app lock
 
-The app locks with the phone's own screen lock (fingerprint, face or the phone's PIN) when it opens and when it comes back after ten seconds out of sight; it is optional, and More and Home invite the person to turn it on. A consumer makes it mandatory for an account with the `site_pwa_lock_required` filter: the app then shows nothing but the lock screen until it is turned on.
+The app locks with the phone's own screen lock (fingerprint, face or the phone's PIN) when it opens and when it comes back after ten seconds out of sight; it is optional, and More and Home invite the person to turn it on. The first screen after signing in from the app offers it before anything else, with Not now, and then shows the screen the person was going to, Home by default. A consumer makes it mandatory for an account with the `site_pwa_lock_required` filter: the app then shows nothing but the lock screen until it is turned on.
 
 ```php
 add_filter( 'site_pwa_lock_required', static fn( bool $required, WP_User $user ): bool => $required || user_can( $user, 'my_operator_capability' ), 10, 2 );
