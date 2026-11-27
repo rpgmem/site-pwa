@@ -41,7 +41,7 @@ final class Routes {
 	 * Bumped whenever the rules change, so an install that updated without
 	 * an activation still gets them: a GitHub update runs no activation hook.
 	 */
-	public const REVISION = 6;
+	public const REVISION = 7;
 
 	/**
 	 * Option holding the rules revision last flushed. Deleted by uninstall.php.
@@ -51,7 +51,7 @@ final class Routes {
 	/**
 	 * The routes and the path each one answers under the prefix.
 	 */
-	public const ROUTES = array( 'home', 'account', 'more', 'preferences', 'news', 'screen', 'post', 'offline', 'install', 'manifest' );
+	public const ROUTES = array( 'home', 'account', 'more', 'preferences', 'news', 'screen', 'post', 'offline', 'install', 'login', 'manifest' );
 
 	/**
 	 * The routes drawn inside the app frame; they need a signed-in user.
@@ -94,6 +94,7 @@ final class Routes {
 		add_rewrite_rule( '^' . $prefix . '/manifest\.webmanifest$', 'index.php?' . self::QUERY_VAR . '=manifest', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/offline/?$', 'index.php?' . self::QUERY_VAR . '=offline', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/install/?$', 'index.php?' . self::QUERY_VAR . '=install', 'top' );
+		add_rewrite_rule( '^' . $prefix . '/login/?$', 'index.php?' . self::QUERY_VAR . '=login', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/account/?$', 'index.php?' . self::QUERY_VAR . '=account', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/more/?$', 'index.php?' . self::QUERY_VAR . '=more', 'top' );
 		add_rewrite_rule( '^' . $prefix . '/preferences/?$', 'index.php?' . self::QUERY_VAR . '=preferences', 'top' );
@@ -129,7 +130,7 @@ final class Routes {
 	/**
 	 * The URL of a route.
 	 *
-	 * @param string $route `home`, `account`, `more`, `preferences`, `news`, `offline`, `install`, `manifest` or `sw`.
+	 * @param string $route `home`, `account`, `more`, `preferences`, `news`, `offline`, `install`, `login`, `manifest` or `sw`.
 	 */
 	public static function url( string $route ): string {
 		if ( 'sw' === $route ) {
@@ -143,6 +144,7 @@ final class Routes {
 			'news'        => '/news/',
 			'offline'     => '/offline/',
 			'install'     => '/install/',
+			'login'       => '/login/',
 			'manifest'    => '/manifest.webmanifest',
 		);
 		return home_url( '/' . self::prefix() . ( $path[ $route ] ?? '/' ) );
@@ -213,6 +215,12 @@ final class Routes {
 			);
 		}
 
+		// The app's own sign-in (#74), public like the install page and
+		// never cached: it carries a nonce and answers a sign-in.
+		if ( 'login' === $route ) {
+			return AppLogin::response();
+		}
+
 		// No page of the app may sit in a shared cache: a screen names the
 		// signed-in user, and the offline page is the worker's to keep.
 		$headers = array(
@@ -229,7 +237,7 @@ final class Routes {
 			}
 			return array(
 				'status'  => 302,
-				'headers' => $headers + array( 'Location' => wp_login_url( $back ) ),
+				'headers' => $headers + array( 'Location' => AppLogin::enabled() ? AppLogin::url( $back ) : wp_login_url( $back ) ),
 				'body'    => '',
 			);
 		}

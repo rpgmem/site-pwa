@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-26 17:34+0000\n"
+"POT-Creation-Date: 2026-11-27 22:48+0000\n"
 "PO-Revision-Date: 2026-11-22 00:00+0000\n"
 "Last-Translator: Alex Meusburger\n"
 "Language-Team: Português do Brasil\n"
@@ -144,7 +144,7 @@ msgstr "Página de instalação"
 msgid "Public, no login. The banner leads here, and the address can go on a poster, a QR code or an e-mail. It uses the app's name, icon and colours, and shows the install button, the iPhone steps or \"Open the app\" for each browser."
 msgstr "Pública, sem login. O banner leva para cá, e o endereço pode ir em cartaz, QR code ou e-mail. Usa o nome, o ícone e as cores do app, e mostra o botão de instalar, os passos do iPhone ou \"Abrir o app\" conforme o navegador."
 
-#: src/admin/settings-page.php:252 src/app/frame.php:503
+#: src/admin/settings-page.php:252 src/app/frame.php:524
 #: templates/screen-home.php:103 templates/screen-more.php:43
 #: templates/screen-news.php:22
 msgid "News"
@@ -170,7 +170,7 @@ msgstr "O site não tem páginas publicadas."
 msgid "In the app"
 msgstr "No app"
 
-#: src/admin/settings-page.php:281 templates/screen-post.php:43
+#: src/admin/settings-page.php:281 templates/screen-post.php:46
 msgid "Open on the site"
 msgstr "Abrir no site"
 
@@ -280,24 +280,36 @@ msgstr "O ícone personalizado precisa ser quadrado; esta imagem tem %1$d × %2$
 msgid "The custom icon must be at least %2$d px wide; this image is %1$d px."
 msgstr "O ícone personalizado precisa ter pelo menos %2$d px de lado; esta imagem tem %1$d px."
 
-#: src/app/frame.php:497 templates/screen-account.php:16
+#: src/app/app-login.php:145
+msgid "This page expired. Try again."
+msgstr "Esta página expirou. Tente de novo."
+
+#: src/app/app-login.php:150
+msgid "Type your username or email and your password."
+msgstr "Digite seu usuário ou e-mail e sua senha."
+
+#: src/app/app-login.php:163
+msgid "The username or password is incorrect."
+msgstr "Usuário ou senha incorretos."
+
+#: src/app/frame.php:518 templates/screen-account.php:16
 msgid "Account"
 msgstr "Conta"
 
-#: src/app/frame.php:499 src/app/navigation.php:51 templates/screen-more.php:55
+#: src/app/frame.php:520 src/app/navigation.php:52 templates/screen-more.php:55
 msgid "More"
 msgstr "Mais"
 
-#: src/app/frame.php:501 templates/screen-more.php:36
-#: templates/screen-preferences.php:16 templates/screen-preferences.php:18
+#: src/app/frame.php:522 templates/screen-more.php:36
+#: templates/screen-preferences.php:18 templates/screen-preferences.php:20
 msgid "Preferences"
 msgstr "Preferências"
 
-#: src/app/frame.php:506 src/app/frame.php:509
+#: src/app/frame.php:527 src/app/frame.php:530
 msgid "Not available"
 msgstr "Indisponível"
 
-#: src/app/frame.php:511 src/app/navigation.php:41 templates/screen-home.php:18
+#: src/app/frame.php:532 src/app/navigation.php:41 templates/screen-home.php:18
 msgid "Home"
 msgstr "Início"
 
@@ -341,15 +353,15 @@ msgstr "Este celular não tem bloqueio de tela. Isso é altamente inseguro: qual
 msgid "The app no longer locks on this phone."
 msgstr "O app não trava mais neste celular."
 
-#: src/app/lock.php:97 templates/screen-preferences.php:43
+#: src/app/lock.php:97 templates/screen-preferences.php:45
 msgid "Required for your account: it cannot be turned off."
 msgstr "Obrigatória para a sua conta: não pode ser desativada."
 
-#: src/app/login.php:134
+#: src/app/login.php:145 templates/login.php:62
 msgid "Forgot your password?"
 msgstr "Esqueceu a senha?"
 
-#: src/app/login.php:150
+#: src/app/login.php:161 templates/login.php:54
 msgid "Keep me signed in on this device"
 msgstr "Manter conectado neste aparelho"
 
@@ -482,6 +494,28 @@ msgstr "Procure Instalar app ou Adicionar à tela inicial no menu do navegador."
 #: templates/install.php:141
 msgid "Continue in the browser"
 msgstr "Continuar no navegador"
+
+#. translators: %s: the app's name
+#: templates/login.php:25
+#, php-format
+msgid "Sign in to %s"
+msgstr "Entrar em %s"
+
+#: templates/login.php:45
+msgid "Username or email"
+msgstr "Usuário ou e-mail"
+
+#: templates/login.php:49
+msgid "Password"
+msgstr "Senha"
+
+#: templates/login.php:59
+msgid "Sign in"
+msgstr "Entrar"
+
+#: templates/login.php:66
+msgid "Sign in on the site instead"
+msgstr "Entrar pela página do site"
 
 #: templates/offline.php:20 templates/offline.php:24
 msgid "No connection"
@@ -661,47 +695,47 @@ msgstr "Página %1$d de %2$d"
 msgid "Older news"
 msgstr "Notícias mais antigas"
 
-#: templates/screen-post.php:32
+#: templates/screen-post.php:35
 msgid "Copy this link:"
 msgstr "Copie este link:"
 
-#: templates/screen-post.php:32
+#: templates/screen-post.php:35
 msgid "Link copied."
 msgstr "Link copiado."
 
-#: templates/screen-post.php:35
+#: templates/screen-post.php:38
 msgid "Share"
 msgstr "Compartilhar"
 
-#: templates/screen-post.php:39
+#: templates/screen-post.php:42
 msgid "Copy link"
 msgstr "Copiar link"
 
-#: templates/screen-preferences.php:22
+#: templates/screen-preferences.php:24
 msgid "Appearance"
 msgstr "Aparência"
 
-#: templates/screen-preferences.php:23
+#: templates/screen-preferences.php:25
 msgid "On this device only. Automatic follows the phone."
 msgstr "Só neste aparelho. Automático segue o celular."
 
-#: templates/screen-preferences.php:29
+#: templates/screen-preferences.php:31
 msgid "Automatic"
 msgstr "Automático"
 
-#: templates/screen-preferences.php:30
+#: templates/screen-preferences.php:32
 msgid "Dark"
 msgstr "Escuro"
 
-#: templates/screen-preferences.php:31
+#: templates/screen-preferences.php:33
 msgid "Light"
 msgstr "Claro"
 
-#: templates/screen-preferences.php:41
+#: templates/screen-preferences.php:43
 msgid "Lock with the phone's screen lock"
 msgstr "Travar com o bloqueio do celular"
 
-#: templates/screen-preferences.php:42
+#: templates/screen-preferences.php:44
 msgid "Fingerprint, face or the phone's PIN when the app opens, and when it comes back after a few seconds away."
 msgstr "Digital, rosto ou PIN do celular quando o app abre e quando volta após alguns segundos fora."
 
@@ -712,4 +746,3 @@ msgstr "Instalar"
 #. Plugin header: Description
 msgid "Turns the site into an installable app: a home-screen icon, an app shell for signed-in users and screens other plugins register."
 msgstr "Transforma o site em um app instalável: um ícone na tela inicial, uma estrutura de app para quem está conectado e telas que outros plugins registram."
-

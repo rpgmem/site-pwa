@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SitePwa\Tests\Functional;
 
+use SitePwa\App\AppLogin;
 use SitePwa\App\Frame;
 use SitePwa\App\Navigation;
 use SitePwa\App\Routes;
@@ -250,7 +251,7 @@ final class ScreensTest extends WP_UnitTestCase {
 		$response = $this->open( 'presence' );
 
 		self::assertSame( 302, $response['status'] );
-		self::assertSame( wp_login_url( home_url( '/app/s/presence/' ) ), $response['headers']['Location'] );
+		self::assertSame( AppLogin::url( home_url( '/app/s/presence/' ) ), $response['headers']['Location'] );
 	}
 
 	public function test_the_bar_holds_home_three_nav_screens_and_more_and_the_rest_join_more(): void {

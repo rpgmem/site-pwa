@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SitePwa\Tests\Functional;
 
+use SitePwa\App\AppLogin;
 use SitePwa\App\Content;
 use SitePwa\App\Frame;
 use SitePwa\App\Routes;
@@ -98,7 +99,7 @@ final class ContentTest extends WP_UnitTestCase {
 		$response = $this->open( $id );
 
 		self::assertSame( 302, $response['status'] );
-		self::assertSame( wp_login_url( Content::url( $id ) ), $response['headers']['Location'] );
+		self::assertSame( AppLogin::url( Content::url( $id ) ), $response['headers']['Location'] );
 		self::assertSame( 'private, no-store', $response['headers']['Cache-Control'] );
 	}
 

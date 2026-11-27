@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Site PWA 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/rpgmem/site-pwa/issues\n"
-"POT-Creation-Date: 2026-11-26 17:34+0000\n"
+"POT-Creation-Date: 2026-11-27 22:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -145,7 +145,7 @@ msgstr ""
 msgid "Public, no login. The banner leads here, and the address can go on a poster, a QR code or an e-mail. It uses the app's name, icon and colours, and shows the install button, the iPhone steps or \"Open the app\" for each browser."
 msgstr ""
 
-#: src/admin/settings-page.php:252 src/app/frame.php:503
+#: src/admin/settings-page.php:252 src/app/frame.php:524
 #: templates/screen-home.php:103 templates/screen-more.php:43
 #: templates/screen-news.php:22
 msgid "News"
@@ -171,7 +171,7 @@ msgstr ""
 msgid "In the app"
 msgstr ""
 
-#: src/admin/settings-page.php:281 templates/screen-post.php:43
+#: src/admin/settings-page.php:281 templates/screen-post.php:46
 msgid "Open on the site"
 msgstr ""
 
@@ -281,24 +281,36 @@ msgstr ""
 msgid "The custom icon must be at least %2$d px wide; this image is %1$d px."
 msgstr ""
 
-#: src/app/frame.php:497 templates/screen-account.php:16
+#: src/app/app-login.php:145
+msgid "This page expired. Try again."
+msgstr ""
+
+#: src/app/app-login.php:150
+msgid "Type your username or email and your password."
+msgstr ""
+
+#: src/app/app-login.php:163
+msgid "The username or password is incorrect."
+msgstr ""
+
+#: src/app/frame.php:518 templates/screen-account.php:16
 msgid "Account"
 msgstr ""
 
-#: src/app/frame.php:499 src/app/navigation.php:51 templates/screen-more.php:55
+#: src/app/frame.php:520 src/app/navigation.php:52 templates/screen-more.php:55
 msgid "More"
 msgstr ""
 
-#: src/app/frame.php:501 templates/screen-more.php:36
-#: templates/screen-preferences.php:16 templates/screen-preferences.php:18
+#: src/app/frame.php:522 templates/screen-more.php:36
+#: templates/screen-preferences.php:18 templates/screen-preferences.php:20
 msgid "Preferences"
 msgstr ""
 
-#: src/app/frame.php:506 src/app/frame.php:509
+#: src/app/frame.php:527 src/app/frame.php:530
 msgid "Not available"
 msgstr ""
 
-#: src/app/frame.php:511 src/app/navigation.php:41 templates/screen-home.php:18
+#: src/app/frame.php:532 src/app/navigation.php:41 templates/screen-home.php:18
 msgid "Home"
 msgstr ""
 
@@ -342,15 +354,15 @@ msgstr ""
 msgid "The app no longer locks on this phone."
 msgstr ""
 
-#: src/app/lock.php:97 templates/screen-preferences.php:43
+#: src/app/lock.php:97 templates/screen-preferences.php:45
 msgid "Required for your account: it cannot be turned off."
 msgstr ""
 
-#: src/app/login.php:134
+#: src/app/login.php:145 templates/login.php:62
 msgid "Forgot your password?"
 msgstr ""
 
-#: src/app/login.php:150
+#: src/app/login.php:161 templates/login.php:54
 msgid "Keep me signed in on this device"
 msgstr ""
 
@@ -482,6 +494,28 @@ msgstr ""
 
 #: templates/install.php:141
 msgid "Continue in the browser"
+msgstr ""
+
+#. translators: %s: the app's name
+#: templates/login.php:25
+#, php-format
+msgid "Sign in to %s"
+msgstr ""
+
+#: templates/login.php:45
+msgid "Username or email"
+msgstr ""
+
+#: templates/login.php:49
+msgid "Password"
+msgstr ""
+
+#: templates/login.php:59
+msgid "Sign in"
+msgstr ""
+
+#: templates/login.php:66
+msgid "Sign in on the site instead"
 msgstr ""
 
 #: templates/offline.php:20 templates/offline.php:24
@@ -662,47 +696,47 @@ msgstr ""
 msgid "Older news"
 msgstr ""
 
-#: templates/screen-post.php:32
+#: templates/screen-post.php:35
 msgid "Copy this link:"
 msgstr ""
 
-#: templates/screen-post.php:32
+#: templates/screen-post.php:35
 msgid "Link copied."
 msgstr ""
 
-#: templates/screen-post.php:35
+#: templates/screen-post.php:38
 msgid "Share"
 msgstr ""
 
-#: templates/screen-post.php:39
+#: templates/screen-post.php:42
 msgid "Copy link"
 msgstr ""
 
-#: templates/screen-preferences.php:22
+#: templates/screen-preferences.php:24
 msgid "Appearance"
 msgstr ""
 
-#: templates/screen-preferences.php:23
+#: templates/screen-preferences.php:25
 msgid "On this device only. Automatic follows the phone."
 msgstr ""
 
-#: templates/screen-preferences.php:29
+#: templates/screen-preferences.php:31
 msgid "Automatic"
 msgstr ""
 
-#: templates/screen-preferences.php:30
+#: templates/screen-preferences.php:32
 msgid "Dark"
 msgstr ""
 
-#: templates/screen-preferences.php:31
+#: templates/screen-preferences.php:33
 msgid "Light"
 msgstr ""
 
-#: templates/screen-preferences.php:41
+#: templates/screen-preferences.php:43
 msgid "Lock with the phone's screen lock"
 msgstr ""
 
-#: templates/screen-preferences.php:42
+#: templates/screen-preferences.php:44
 msgid "Fingerprint, face or the phone's PIN when the app opens, and when it comes back after a few seconds away."
 msgstr ""
 

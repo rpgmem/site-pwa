@@ -113,9 +113,13 @@ final class AppRoutesTest extends WP_UnitTestCase {
 			$response = Routes::response( $route );
 
 			self::assertSame( 302, $response['status'] );
-			self::assertSame( wp_login_url( Routes::url( $route ) ), $response['headers']['Location'] );
+			self::assertSame( \SitePwa\App\AppLogin::url( Routes::url( $route ) ), $response['headers']['Location'], 'the app signs in on its own screen (#74)' );
 			self::assertSame( 'private, no-store', $response['headers']['Cache-Control'] );
 		}
+
+		add_filter( 'site_pwa_app_login', '__return_false' );
+		self::assertSame( wp_login_url( Routes::url( 'home' ) ), Routes::response( 'home' )['headers']['Location'], 'switched off, WordPress\'s login' );
+		remove_all_filters( 'site_pwa_app_login' );
 	}
 
 	public function test_a_screen_is_private_for_a_signed_in_user(): void {
