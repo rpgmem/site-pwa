@@ -6,6 +6,7 @@ namespace SitePwa\Tests\Functional;
 
 use SitePwa\App\Frame;
 use SitePwa\App\Lock;
+use SitePwa\App\Login;
 use SitePwa\App\Routes;
 use SitePwa\Settings;
 use WP_UnitTestCase;
@@ -74,6 +75,39 @@ final class LockTest extends WP_UnitTestCase {
 		self::assertStringContainsString( 'action=logout', $config['logout'] );
 		self::assertNotSame( '', $config['strings']['noLock'] );
 		self::assertStringNotContainsString( 'Maria', (string) wp_json_encode( $config ) );
+	}
+
+	// The first screen after signing in offers the lock (#76): the sign-in
+	// returns with the argument, and the head hides the screen until the
+	// script has offered it.
+	public function test_the_first_screen_after_signing_in_offers_the_lock(): void {
+		self::assertFalse( Lock::welcome() );
+		self::assertFalse( Lock::config( $this->user )['welcome'] );
+
+		$_GET[ Lock::WELCOME ] = '1';
+		self::assertTrue( Lock::welcome() );
+		self::assertTrue( Lock::config( $this->user )['welcome'] );
+		self::assertStringContainsString( '"welcome":true', Lock::headScript( $this->user ) );
+		self::assertStringContainsString( 'else if(c.welcome)', Lock::headScript( $this->user ) );
+
+		$_GET[ Lock::WELCOME ] = 'yes';
+		self::assertFalse( Lock::welcome(), 'only the value the sign-in writes' );
+		unset( $_GET[ Lock::WELCOME ] );
+	}
+
+	public function test_a_wordpress_login_from_the_app_also_offers_the_lock(): void {
+		$home = Routes::url( 'home' );
+		self::assertSame( add_query_arg( Lock::WELCOME, '1', $home ), Login::welcome( $home, $home, $this->user ) );
+		self::assertSame( 'https://example.org/wp-admin/', Login::welcome( 'https://example.org/wp-admin/', '', $this->user ), 'an address off the app is left alone' );
+		self::assertSame( $home, Login::welcome( $home, $home, new \WP_Error( 'x' ) ), 'a failed login is left alone' );
+		self::assertSame( 10, has_filter( 'login_redirect', array( Login::class, 'welcome' ) ) );
+	}
+
+	public function test_the_lock_screen_carries_not_now_for_the_offer(): void {
+		$html = $this->screen( 'home' );
+		self::assertStringContainsString( 'data-site-pwa-lock="later"', $html );
+		self::assertStringContainsString( 'site-pwa-lock-for-optional', $html );
+		self::assertStringContainsString( 'site-pwa-lock-for-required', $html );
 	}
 
 	public function test_the_head_marks_a_locked_app_before_the_first_paint(): void {

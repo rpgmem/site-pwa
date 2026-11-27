@@ -79,6 +79,9 @@
 		var grace = ( config.grace || 10 ) * 1000;
 		var busy = false;
 		var hiddenAt = 0;
+		// Right after signing in, the lock is offered before anything else,
+		// with Not now (#76); a required lock is asked for as always.
+		var offer = false;
 
 		function part( name ) {
 			return doc.querySelector( '[data-site-pwa-lock="' + name + '"]' );
@@ -136,6 +139,11 @@
 				return Promise.resolve( null );
 			}
 			overlay.hidden = false;
+			if ( offer ) {
+				overlay.setAttribute( 'data-optional', '' );
+			} else {
+				overlay.removeAttribute( 'data-optional' );
+			}
 			say( '' );
 			if ( enabled() ) {
 				overlay.setAttribute( 'data-mode', 'unlock' );
@@ -152,6 +160,7 @@
 		}
 
 		function release() {
+			offer = false;
 			root.classList.remove( LOCKED );
 			var overlay = part( 'overlay' );
 			if ( overlay ) {
@@ -376,6 +385,10 @@
 					} );
 				} );
 			} );
+			var later = part( 'later' );
+			if ( later ) {
+				later.addEventListener( 'click', release );
+			}
 			var out = part( 'signout' );
 			if ( out ) {
 				out.addEventListener( 'click', function ( event ) {
@@ -415,8 +428,14 @@
 			}
 		}
 
+		offer = !! config.welcome && ! enabled() && ! config.required;
+		if ( config.welcome && env.forget ) {
+			// The address keeps no trace of the sign-in: a reload or a
+			// shared link must not offer the lock again.
+			env.forget();
+		}
 		var ready = Promise.resolve( null );
-		if ( root.classList.contains( LOCKED ) && guarded() ) {
+		if ( offer || ( root.classList.contains( LOCKED ) && guarded() ) ) {
 			ready = lock();
 		} else {
 			// Nothing to guard, or unlocked recently: never leave the page hidden.
@@ -475,6 +494,15 @@
 			},
 			go: function ( url ) {
 				win.location.assign( url );
+			},
+			forget: function () {
+				try {
+					var url = new win.URL( win.location.href );
+					url.searchParams.delete( 'site_pwa_welcome' );
+					win.history.replaceState( win.history.state, '', url.toString() );
+				} catch {
+					// An old browser keeps the argument; it only offers the lock.
+				}
 			},
 		} );
 		return win.SitePwaLock;

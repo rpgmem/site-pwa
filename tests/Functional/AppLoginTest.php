@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SitePwa\Tests\Functional;
 
 use SitePwa\App\AppLogin;
+use SitePwa\App\Lock;
 use SitePwa\App\Login;
 use SitePwa\App\Routes;
 use SitePwa\Settings;
@@ -115,7 +116,7 @@ final class AppLoginTest extends WP_UnitTestCase {
 		);
 
 		self::assertSame( 302, $response['status'] );
-		self::assertSame( Routes::url( 'account' ), $response['headers']['Location'] );
+		self::assertSame( add_query_arg( Lock::WELCOME, '1', Routes::url( 'account' ) ), $response['headers']['Location'], 'the first screen offers the lock (#76)' );
 		self::assertGreaterThanOrEqual( $before + Login::SESSION_DAYS * DAY_IN_SECONDS, $expires, 'the app\'s long session (#72)' );
 	}
 

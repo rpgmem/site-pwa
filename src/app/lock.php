@@ -44,6 +44,13 @@ final class Lock {
 	public const NUDGE_DAYS = 7;
 
 	/**
+	 * Query argument the app's own sign-in adds to the address it returns
+	 * to, so the first screen after signing in offers the lock (#76). The
+	 * script takes it off the address once read.
+	 */
+	public const WELCOME = 'site_pwa_welcome';
+
+	/**
 	 * Whether the lock is mandatory for this account.
 	 *
 	 * @param \WP_User $user The signed-in user.
@@ -63,6 +70,15 @@ final class Lock {
 	}
 
 	/**
+	 * Whether this screen is the first one after signing in on the app's
+	 * own sign-in, which offers the lock before anything else (#76).
+	 */
+	public static function welcome(): bool {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- a display hint with no effect on data; it only decides whether the lock is offered.
+		return isset( $_GET[ self::WELCOME ] ) && '1' === sanitize_text_field( wp_unslash( (string) $_GET[ self::WELCOME ] ) );
+	}
+
+	/**
 	 * The key this account's lock is stored under on the device: the same
 	 * phone may serve more than one account, and each keeps its own.
 	 *
@@ -76,12 +92,13 @@ final class Lock {
 	 * What the script needs, and the head check reads before the first paint.
 	 *
 	 * @param \WP_User $user The signed-in user.
-	 * @return array{key: string, required: bool, grace: int, nudgeDays: int, name: string, logout: string, strings: array<string, string>}
+	 * @return array{key: string, required: bool, welcome: bool, grace: int, nudgeDays: int, name: string, logout: string, strings: array<string, string>}
 	 */
 	public static function config( \WP_User $user ): array {
 		return array(
 			'key'       => self::key( $user ),
 			'required'  => self::required( $user ),
+			'welcome'   => self::welcome(),
 			'grace'     => self::GRACE,
 			'nudgeDays' => self::NUDGE_DAYS,
 			'name'      => Settings::get()['name'],
@@ -112,6 +129,7 @@ final class Lock {
 			array(
 				'key'      => $config['key'],
 				'required' => $config['required'],
+				'welcome'  => $config['welcome'],
 				'grace'    => $config['grace'],
 			)
 		);
@@ -119,6 +137,7 @@ final class Lock {
 			. "try{s=JSON.parse(localStorage.getItem('site-pwa-lock:'+c.key)||'null');}catch(e){}"
 			. "try{o=parseInt(sessionStorage.getItem('site-pwa-lock-seen:'+c.key)||'0',10);}catch(e){}"
 			. 'if((s&&s.id)||c.required){if(!o||Date.now()-o>c.grace*1000){d.classList.add(\'site-pwa-locked\');}}'
+			. 'else if(c.welcome){d.classList.add(\'site-pwa-locked\');}'
 			. '}catch(e){}';
 	}
 

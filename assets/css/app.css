@@ -1298,7 +1298,8 @@ html:not([data-site-pwa-scheme="light"]) .site-pwa-scheme-dark .site-pwa-header-
 	display: none;
 }
 
-.site-pwa-lock-signout {
+.site-pwa-lock-signout,
+.site-pwa-lock .site-pwa-link-button {
 	color: var(--site-pwa-accent-text);
 	font-size: 14px;
 }
@@ -1312,6 +1313,11 @@ html:not([data-site-pwa-scheme="light"]) .site-pwa-scheme-dark .site-pwa-header-
 .site-pwa-lock[data-mode="nolock"] .site-pwa-lock-for-setup,
 .site-pwa-lock-nudge[data-mode="invite"] .site-pwa-lock-for-nolock,
 .site-pwa-lock-nudge[data-mode="nolock"] .site-pwa-lock-for-invite {
+	display: none;
+}
+
+.site-pwa-lock:not([data-optional]) .site-pwa-lock-for-optional,
+.site-pwa-lock[data-optional] .site-pwa-lock-for-required {
 	display: none;
 }
 
