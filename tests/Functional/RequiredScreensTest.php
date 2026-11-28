@@ -124,8 +124,10 @@ final class RequiredScreensTest extends WP_UnitTestCase {
 
 		unset( $_GET[ Screens::NEXT ] );
 		$plain = $this->open( 'screen', 'details' );
-		self::assertSame( 200, $plain['status'], 'opened from More, it is an ordinary screen' );
+		self::assertSame( 200, $plain['status'], 'opened at its address, it is an ordinary screen' );
 		self::assertStringContainsString( 'class="site-pwa-nav"', $plain['body'] );
+		self::assertStringNotContainsString( '/app/s/details/', $plain['body'], 'a step, never listed (#82)' );
+		self::assertSame( array( 'presence' ), array_column( Screens::visible(), 'id' ) );
 		self::assertStringNotContainsString( 'site-pwa-required-note', $plain['body'] );
 		self::assertSame( 200, $this->open( 'home' )['status'] );
 	}

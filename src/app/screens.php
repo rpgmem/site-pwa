@@ -137,16 +137,33 @@ final class Screens {
 	}
 
 	/**
-	 * The screens the current user may open, ordered by position, then label.
+	 * The screens the current user may open and the app lists, ordered by
+	 * position, then label. A required screen is a step, not a destination:
+	 * it is never listed (#82), and opens at its address.
 	 *
 	 * @param string|null $place `nav`, `more`, or null for both.
 	 * @return list<Screen>
 	 */
 	public static function visible( ?string $place = null ): array {
+		return array_values(
+			array_filter(
+				self::openable(),
+				static fn( array $screen ): bool => null === $screen['required'] && ( null === $place || $place === $screen['place'] )
+			)
+		);
+	}
+
+	/**
+	 * Every screen the current user may open, listed or not, ordered by
+	 * position, then label.
+	 *
+	 * @return list<Screen>
+	 */
+	private static function openable(): array {
 		$screens = array_values(
 			array_filter(
 				self::all(),
-				static fn( array $screen ): bool => ( null === $place || $place === $screen['place'] ) && current_user_can( $screen['capability'] )
+				static fn( array $screen ): bool => current_user_can( $screen['capability'] )
 			)
 		);
 		usort(
@@ -258,7 +275,7 @@ final class Screens {
 		}
 		if ( ! array_key_exists( $user->ID, self::$pending ) ) {
 			self::$pending[ $user->ID ] = null;
-			foreach ( self::visible() as $screen ) {
+			foreach ( self::openable() as $screen ) {
 				if ( null !== $screen['required'] && self::stillRequired( $screen, $user ) ) {
 					self::$pending[ $user->ID ] = $screen;
 					break;
